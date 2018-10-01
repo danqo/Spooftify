@@ -17,14 +17,14 @@ namespace Spooftify
     /// <summary>
     /// Interaction logic for Spooftify.xaml
     /// </summary>
-    public partial class Spooftify : Window
+    public partial class SpooftifyMain : Window
     {
         private PlaylistsPage playlistsPage;
         private PlayPage playPage;
         private ProfilePage profilePage;
         private SearchPage searchPage;
 
-        public Spooftify()
+        public SpooftifyMain()
         {
             InitializeComponent();
             PlaylistButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyHomeActive.png"));

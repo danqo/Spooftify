@@ -12,10 +12,10 @@ namespace Spooftify
 
         public bool explicitShutdown = false;
         public Login LoginPage { get => loginPage; set => loginPage = value; }
-        public Spooftify MainPage { get => mainPage; set => mainPage = value; }
+        public SpooftifyMain MainPage { get => mainPage; set => mainPage = value; }
 
         private Login loginPage;
-        private Spooftify mainPage;
+        private SpooftifyMain mainPage;
 
         public ApplicationManager()
         {
@@ -38,7 +38,7 @@ namespace Spooftify
 
         public void SignIn()
         {
-            mainPage = new Spooftify();
+            mainPage = new SpooftifyMain();
             mainPage.Show();
         }
 
