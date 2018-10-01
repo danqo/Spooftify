@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1
+namespace Spooftify
 {
     public class Playlist
     {
-        public IList<Song> Songs { get => mSongs; set => mSongs = value; }
+        public ObservableCollection<Song> Songs { get => mSongs; set => mSongs = value; }
         public string Name { get => mName; set => mName = value; }
 
-        private IList<Song> mSongs;
+        private ObservableCollection<Song> mSongs;
         private string mName;
 
         public Playlist(string name)
         {
             mName = name;
-            mSongs = new List<Song>();
+            mSongs = new ObservableCollection<Song>();
         }
 
         public void addSong(Song newSong)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
-namespace WpfApp1
+namespace Spooftify
 {
     public class ApplicationManager
     {
