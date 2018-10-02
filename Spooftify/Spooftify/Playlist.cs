@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,21 +10,20 @@ namespace Spooftify
 {
     public class Playlist
     {
-        public ObservableCollection<Song> Songs { get => mSongs; set => mSongs = value; }
+        public IList<Song> Songs { get => mSongs; set => mSongs = value; }
         public string Name { get => mName; set => mName = value; }
 
-        private ObservableCollection<Song> mSongs;
+        private IList<Song> mSongs;
         private string mName;
 
         public Playlist(string name)
         {
             mName = name;
-            mSongs = new ObservableCollection<Song>();
+            mSongs = new List<Song>();
         }
 
         public void addSong(Song newSong)
         {
-           
             mSongs.Add(newSong);
         }
 

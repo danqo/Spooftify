@@ -19,6 +19,9 @@ namespace Spooftify
     /// </summary>
     public partial class SpooftifyMain : Window
     {
+        //public Playlist CurrPlaylist { get => currPlaylist; set => currPlaylist = value; }
+
+        //private Playlist currPlaylist;
         private PlaylistsPage playlistsPage;
         private PlayPage playPage;
         private ProfilePage profilePage;
@@ -33,12 +36,19 @@ namespace Spooftify
             profilePage = new ProfilePage();
             searchPage = new SearchPage();
             PageFrame.Content = playlistsPage;
+            //currPlaylist = AccountManager.instance.CurrentPlaylist;
+            //PlayPageButton.IsEnabled = AccountManager.instance.CurrentPlaylist != null; // color
             // save the pages, start on home page, bind play page enabled to currplaylist is not null for accountmanager
             // set frame = home, disable playlist button
             // children can reference this page's nav bar
         }
 
         private void PlaylistsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadPlaylistsPage();
+        }
+
+        public void LoadPlaylistsPage()
         {
             PageFrame.Content = playlistsPage;
             SetNavImagesDefault();
@@ -50,13 +60,10 @@ namespace Spooftify
 
         private void PlayPageButton_Click(object sender, RoutedEventArgs e)
         {
-            PageFrame.Content = playPage;
-            SetNavImagesDefault();
-            PlayPageButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyPlayActive.png"));
-            ResetPages();
+            LoadPlayPage();
         }
 
-        public void PlaylistChosen()
+        public void LoadPlayPage()
         {
             PageFrame.Content = playPage;
             SetNavImagesDefault();
@@ -65,6 +72,11 @@ namespace Spooftify
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadSearchPage();
+        }
+
+        public void LoadSearchPage()
         {
             PageFrame.Content = searchPage;
             SetNavImagesDefault();
@@ -100,6 +112,7 @@ namespace Spooftify
         private void ResetPages()
         {
             playlistsPage.Reset();
+            playPage.Reset();
             searchPage.Reset();
         }
 

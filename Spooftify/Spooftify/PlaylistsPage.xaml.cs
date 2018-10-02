@@ -26,30 +26,54 @@ namespace Spooftify
 
         public PlaylistsPage()
         {
-            
             InitializeComponent();
-            PlaylistListBox.ItemsSource = AccountManager.instance.Acct.Playlists;   //observable collection?
-            //PlaylistListBox.SetBinding
+            PlaylistListBox.ItemsSource = AccountManager.instance.Acct.Playlists;
         }
 
         private void AddPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            // check for duplicate
-            // AddPlaylistMsg.Visibility = Visibility.Visible;
-        }
-
-        private void AddPlaylistTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
+            if (AccountManager.instance.Acct.Playlists.FirstOrDefault(x => x.Name.Equals(AddPlaylistTextBox.Text)) == null)
             {
                 AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
                 PlaylistListBox.Items.Refresh();
                 AddPlaylistTextBox.Text = "";
+                AddPlaylistMsg.Content = addedPlaylistMsg;
+                AddPlaylistMsg.Visibility = Visibility.Visible;
             }
-            // check for duplicate
-            // AddPlaylistMsg.Visibility = Visibility.Visible;
+            else
+            {
+                AddPlaylistMsg.Content = duplicatePlaylistMsg;
+                AddPlaylistMsg.Visibility = Visibility.Visible;
+            }
         }
+
+        private void AddPlaylistTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                if (AccountManager.instance.Acct.Playlists.FirstOrDefault(x => x.Name.Equals(AddPlaylistTextBox.Text)) == null)
+                {
+                    AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
+                    PlaylistListBox.Items.Refresh();
+                    AddPlaylistTextBox.Text = "";
+                    AddPlaylistMsg.Content = addedPlaylistMsg;
+                    AddPlaylistMsg.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    AddPlaylistMsg.Content = duplicatePlaylistMsg;
+                    AddPlaylistMsg.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        /**
+         * Double clicking method
+         * Sets Account manager's currplaylist to selecteditem in listbox
+         * load play page
+         * 
+         * play page is bound to currplaylist
+         */
 
         private void AddPlaylistTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -64,6 +88,7 @@ namespace Spooftify
         {
             AddPlaylistMsg.Visibility = Visibility.Hidden;
             AddPlaylistTextBox.Text = "";
+            PlaylistListBox.Items.Refresh();
         }
     }
 }
