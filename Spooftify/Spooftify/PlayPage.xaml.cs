@@ -24,5 +24,10 @@ namespace Spooftify
         {
             InitializeComponent();
         }
+
+        public void Reset()
+        {
+
+        }
     }
 }
