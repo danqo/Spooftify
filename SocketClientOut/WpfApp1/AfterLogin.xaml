@@ -1,0 +1,84 @@
+﻿<Window x:Class="WpfApp1.AfterLogin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        xmlns:windowsFrom="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:activeXControl="clr-namespace:AxWMPLib;assembly=AxInterop.WMPLib"
+        Title="AfterLogin" Height="450" Width="800" MinHeight="300" MinWidth="680" Closing="Window_Closing">
+    <Grid Background="white">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="179*"/>
+            <ColumnDefinition Width="217*"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.ColumnSpan="2" >
+            <StackPanel Background="Black">
+                <Button Name="profileButton" Click="Button_Profile">
+                    <StackPanel>
+                        <Image x:Name="profile"  Width="73" Height="77" Stretch="Uniform"    />
+                    </StackPanel>
+                </Button>
+                <Label x:Name="username" Background="Green" Foreground="LightGray" HorizontalContentAlignment="Center" FontWeight="Bold">username</Label>
+                <StackPanel x:Name="allPlaylist"  Height="197" Selector.SelectionChanged="ListBox_SelectionChanged"  Background="Black" MouseRightButtonUp="Mouse_RightButtonClickPlaylist" />
+                <Button x:Name="pauseResume" Content="Pause" Foreground="LightGray" Click="PausePlayingClick" HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="Green" RenderTransformOrigin="0.615,14.223" Height="27" Width="60" Margin="10" >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button x:Name="stopPlay" Content="Stop" Foreground="LightGray" Click="StopPlayingClick" HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="Green" RenderTransformOrigin="0.615,14.223" Height="27" Width="60" Margin="10" >
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="10"/>
+                    </Style>
+                </Button.Resources>
+                </Button>
+                <Button Content="Add Playlist" Foreground="LightGray" Click="AddPlaylist_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="Green" RenderTransformOrigin="0.615,14.223" Height="27" >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+
+            <Grid DockPanel.Dock="Top" Background="Black">
+                <Button HorizontalAlignment="Left" Click="OpenAddingPlayList" FontSize="20" Foreground="LightGray" Background="Green" Margin="10" Width="150" Height="40" Content="Edit Playlists">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="20"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <!--
+                <Button HorizontalAlignment="Center" FontSize="20" Foreground="LightGray" Background="Green" Width="150" Height="40" Content="Search" Click="Search_Click">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="20"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                -->
+                <Button HorizontalAlignment="Right" FontSize="20" Foreground="LightGray" Background="Green" Margin="10" Width="150" Height="40" Content="Logout" Click="Button_Logout">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="20"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+            </Grid>
+
+            <WindowsFormsHost x:Name="winsFormHost">
+                <activeXControl:AxWindowsMediaPlayer x:Name="media">
+                </activeXControl:AxWindowsMediaPlayer>
+            </WindowsFormsHost>
+        </DockPanel>
+
+    </Grid>
+
+</Window>
