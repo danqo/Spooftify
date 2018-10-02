@@ -39,10 +39,12 @@ namespace WpfApp1
             while (true)
             {
                 var request = udpServer.Receive(ref remoteEP);
+                
                 Console.WriteLine("Receiving a request: " + Encoding.ASCII.GetString(request));
-                if (Encoding.ASCII.GetString(request) == "port")
+                if (Encoding.ASCII.GetString(request) == "connect")
                 {
                     portAddress = udpServer.Receive(ref remoteEP);
+                    Console.WriteLine("Connection Established");
                     //privateUDP();
                     ThreadStart privateThread = new ThreadStart(privateUDP);
                     Thread childThread = new Thread(privateThread);
@@ -218,6 +220,7 @@ namespace WpfApp1
                 if(Encoding.ASCII.GetString(request) == "logout")
                 {
                     privatePort.Close();
+                    Console.WriteLine("Disconnecting user");
                     break;
                 }
 
@@ -253,7 +256,12 @@ namespace WpfApp1
                     //b.Show();
                     break;
                 }
-
+               
+            }
+            if (counter == 0)
+            {
+                Console.WriteLine("Incorrect username or password. Access denied");
+                privatePort.Send(Encoding.ASCII.GetBytes("denied"), 6, privateEP);
 
             }
         }

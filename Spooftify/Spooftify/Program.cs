@@ -15,7 +15,7 @@ namespace WpfApp1
     {
         public static bool buffering;
         private static PlaybackState currentState;
-        public static UdpClient client = new UdpClient();
+        public static UdpClient client ;
         //public static TcpClient tcpClient ;
         public static IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         public static BufferedWaveProvider bufferedWaveProvider = null;
@@ -26,13 +26,13 @@ namespace WpfApp1
 
         public static void connectionEstablish()
         {
+            client =  new UdpClient();
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000); // endpoint where server is listening
 
             var buffer = new byte[16384 * 4];
 
             if (!client.Client.Connected)
             {
-                client = new UdpClient();
                 client.Connect(ep);
             }
         }
@@ -45,7 +45,7 @@ namespace WpfApp1
             Random rnd = new Random();
             int port = rnd.Next(10000, 11000);
             string sPort = port.ToString();
-            client.Send(Encoding.ASCII.GetBytes("port"), 4);
+            client.Send(Encoding.ASCII.GetBytes("connect"), 7);
             client.Send(Encoding.ASCII.GetBytes(sPort), 5);
             client.Close();
             ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
