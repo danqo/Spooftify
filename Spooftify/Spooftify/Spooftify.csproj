@@ -144,6 +144,9 @@
     <None Include="UserJson\AllSongs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="UserJson\nnguyen682.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="UserJson\omponce.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

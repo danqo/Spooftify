@@ -1,0 +1,20 @@
+{
+  "Username": "nnguyen682",
+  "Name": "Nhan Nguyen",
+  "Email": "nhannguyen683@gmail.com",
+  "Birthday": "03/07/1994",
+  "Playlists": [
+    {
+      "Name": "nhanList",
+      "Songs": [
+        {
+          "Title": "BangBangBang",
+          "Artist": "BigBang",
+          "Extension": ".mp3",
+          "Album": "Made Series"
+        }
+      ]
+    }
+  ],
+  "AvatarURI": "nnguyen682.png"
+}
