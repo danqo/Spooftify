@@ -1,0 +1,45 @@
+{
+  "users": [
+    {
+      "mUsername": "omponce",
+      "mPassword": "cecs327",
+      "mName": "Oscar Ponce",
+      "mEmail": "omponce@gmail.com",
+      "mBirthday": "03/15/1985",
+      "mPlaylists": [
+        {
+          "mName": "cecs327 playlist",
+          "mSongs": [
+            {
+              "mTitle": "BangBangBang",
+              "mArtist": "BigBang",
+              "mExtension": ".mp3",
+              "mAlbum": "Made Series"
+            }
+          ]
+        }
+      ]
+    },
+    {
+
+      "mUsername": "nnguyen682",
+      "mPassword": "nhannguyen1",
+      "mName": "Nhan Nguyen",
+      "mEmail": "nhannguyen683@gmail.com",
+      "mBirthday": "03/07/1994",
+      "mPlaylists": [
+        {
+          "mName": "nhanList",
+          "mSongs": [
+            {
+              "mTitle": "Baam",
+              "mArtist": "MoMoLand",
+              "mExtension": ".mp3",
+              "mAlbum": "Fun to the World"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
