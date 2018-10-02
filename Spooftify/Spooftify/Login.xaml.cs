@@ -34,16 +34,37 @@ namespace Spooftify
 
         private void SignIn_Click(object sender, RoutedEventArgs e)
         {
-            if (ApplicationManager.instance.IsValidSignIn(user.Text,pass.Password))
+            if (user.Text == "" || pass.Password == "")
             {
-                AccountManager.instance.LoadAccount(user.Text);
-                Reset();
-                this.Hide();
-                ApplicationManager.instance.SignIn();
+                MessageBox.Show("id or password can't be empty");
+
             }
             else
             {
-                InvalidLogin.Visibility = Visibility.Visible;
+                //SocketClientOut.accountEstablish();
+                SocketClientOut.connectionEstablish();
+                SocketClientOut.privatePort();
+                SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("login"));
+                SocketClientOut.sendIdAndPassword(Encoding.ASCII.GetBytes(user.Text), Encoding.ASCII.GetBytes(pass.Password));
+                var access = SocketClientOut.receiveAccess();
+                if (Encoding.ASCII.GetString(access) == "granted")
+                {
+
+                    AccountManager.instance.LoadAccount(user.Text);
+                    var st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                    Account x = JsonConvert.DeserializeObject<Account>(st);
+                    st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                    allSongs = JsonConvert.DeserializeObject<Playlist>(st);
+                    Reset();
+                    this.Hide();
+                    //b.Show();
+                    ApplicationManager.instance.SignIn();
+                }
+                else if (Encoding.ASCII.GetString(access) == "denied")
+                {
+
+                    InvalidLogin.Visibility = Visibility.Visible;
+                }
             }
         }
 

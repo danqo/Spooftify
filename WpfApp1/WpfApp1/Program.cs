@@ -214,9 +214,13 @@ namespace WpfApp1
                 if (Encoding.ASCII.GetString(request) == "login")
                     login(privatePort, privateEP);
                 if (Encoding.ASCII.GetString(request) == "playMusic")
-                {
                     playMusic(privatePort, privateEP);
+                if(Encoding.ASCII.GetString(request) == "logout")
+                {
+                    privatePort.Close();
+                    break;
                 }
+
             }
         }
         public static void login(UdpClient privatePort, IPEndPoint privateEP)

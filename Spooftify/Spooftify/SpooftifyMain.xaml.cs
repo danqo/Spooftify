@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using WpfApp1;
 namespace Spooftify
 {
     /// <summary>
@@ -82,6 +82,9 @@ namespace Spooftify
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
+
+            
+            SocketClientOut.logout();
             AccountManager.instance.SaveAccount();
             ApplicationManager.instance.Logout();
         }

@@ -36,6 +36,10 @@ namespace WpfApp1
                 client.Connect(ep);
             }
         }
+        public static void logout()
+        {
+            SocketClientOut.client.Send(Encoding.ASCII.GetBytes("logout"), 6);
+        }
         public static void privatePort()
         {
             Random rnd = new Random();
@@ -110,7 +114,7 @@ namespace WpfApp1
                 if (decomp == null)
                 {
                     WaveFormat waveFormat = new Mp3WaveFormat(frame.SampleRate, frame.ChannelMode == ChannelMode.Mono ? 1 : 2,
-                   frame.FrameLength, frame.BitRate);
+                    frame.FrameLength, frame.BitRate);
                     decomp = new AcmMp3FrameDecompressor(waveFormat);
                     bufferedWaveProvider = new BufferedWaveProvider(decomp.OutputFormat);
                     bufferedWaveProvider.BufferDuration =
