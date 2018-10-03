@@ -23,7 +23,7 @@ namespace Spooftify
     {
         ApplicationManager applicationManager;
         AccountManager accountManager;
-        public static Playlist allSongs;
+
         public Login()
         {
             InitializeComponent();
@@ -36,8 +36,7 @@ namespace Spooftify
         {
             if (user.Text == "" || pass.Password == "")
             {
-                MessageBox.Show("id or password can't be empty");
-
+                InvalidLogin.Visibility = Visibility.Visible;
             }
             else
             {
@@ -55,7 +54,7 @@ namespace Spooftify
                     Account x = JsonConvert.DeserializeObject<Account>(st);
                     AccountManager.instance.LoadAccount(x);
                     st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    allSongs = JsonConvert.DeserializeObject<Playlist>(st);
+                    AccountManager.instance.AllSongs = JsonConvert.DeserializeObject<Playlist>(st);
                     Reset();
                     this.Hide();
                     //b.Show();
@@ -75,8 +74,7 @@ namespace Spooftify
             {
                 if (user.Text == "" || pass.Password == "")
                 {
-                    MessageBox.Show("id or password can't be empty");
-
+                    InvalidLogin.Visibility = Visibility.Visible;
                 }
                 else
                 {
@@ -93,7 +91,7 @@ namespace Spooftify
                         Account x = JsonConvert.DeserializeObject<Account>(st);
                         AccountManager.instance.LoadAccount(x);
                         st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                        allSongs = JsonConvert.DeserializeObject<Playlist>(st);
+                        AccountManager.instance.AllSongs = JsonConvert.DeserializeObject<Playlist>(st);
                         Reset();
                         this.Hide();
                         //b.Show();

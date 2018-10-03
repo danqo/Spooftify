@@ -16,6 +16,11 @@ using System.Windows.Shapes;
 
 namespace Spooftify
 {
+    /*
+     *
+     * set currplaylist to null if the playlist to delete is curr playlist
+     */
+
     /// <summary>
     /// Interaction logic for PlaylistsPage.xaml
     /// </summary>
@@ -67,14 +72,6 @@ namespace Spooftify
             }
         }
 
-        /**
-         * Double clicking method
-         * Sets Account manager's currplaylist to selecteditem in listbox
-         * load play page
-         * 
-         * play page is bound to currplaylist
-         */
-
         private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (PlaylistListBox.SelectedItem != null)
@@ -92,7 +89,7 @@ namespace Spooftify
                 textBox.Tag = (!String.IsNullOrWhiteSpace(textBox.Text)).ToString();
             }
         }
-        // set currplaylist to null if the playlist to delete is curr playlist
+
         public void Reset()
         {
             AddPlaylistMsg.Visibility = Visibility.Hidden;

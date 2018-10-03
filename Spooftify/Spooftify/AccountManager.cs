@@ -13,9 +13,11 @@ namespace Spooftify
         public static AccountManager instance;
 
         public Account Acct { get => acct; set => acct = value; }
+        public Playlist AllSongs { get => allSongs; set => allSongs = value; }
         public Playlist CurrentPlaylist { get => currentPlaylist; set => currentPlaylist = value; }
 
         private Account acct;
+        private Playlist allSongs;
         private Playlist currentPlaylist;
 
         public AccountManager()
@@ -23,15 +25,11 @@ namespace Spooftify
             instance = this;
         }
 
-        public void LoadAccount(String username)
-        {
-            //string acctJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", username)));
-            //acct = JsonConvert.DeserializeObject<Account>(acctJson);
-        }
         public void LoadAccount(Account x)
         {
             acct = x;
         }
+
         public void SaveAccount()
         {
             if(acct != null)

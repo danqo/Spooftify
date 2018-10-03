@@ -41,6 +41,7 @@ namespace Spooftify
             // save the pages, start on home page, bind play page enabled to currplaylist is not null for accountmanager
             // set frame = home, disable playlist button
             // children can reference this page's nav bar
+            // playpage button bound to not currplaylist != null
         }
 
         private void PlaylistsButton_Click(object sender, RoutedEventArgs e)
@@ -55,8 +56,6 @@ namespace Spooftify
             PlaylistButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyHomeActive.png"));
             ResetPages();
         }
-
-        // bind button enabled to currplaylist
 
         private void PlayPageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -94,8 +93,6 @@ namespace Spooftify
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-
-            
             SocketClientOut.logout();
             AccountManager.instance.SaveAccount();
             ApplicationManager.instance.Logout();

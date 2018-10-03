@@ -21,26 +21,13 @@ namespace Spooftify
     /// </summary>
     public partial class SearchPage : Page
     {
+        private Playlist searchQuery;
+
         public SearchPage()
         {
             InitializeComponent();
-            LoadAllSongs();
-        }
-
-        private void LoadAllSongs()
-        {
-            var newMediaFileList = new List<Song>();
-            foreach (var b in Login.allSongs.Songs)
-            {
-                ListBoxItem itm = new ListBoxItem();
-                itm.Content = b;
-                itm.Foreground = Brushes.LightGray;
-                itm.FontSize = 24;
-
-                SearchListBox.Items.Add(itm);
-
-            }
-
+            searchQuery = AccountManager.instance.AllSongs;
+            SearchListBox.ItemsSource = searchQuery.Songs;
         }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -61,8 +48,10 @@ namespace Spooftify
         {
             AddSongMsg.Visibility = Visibility.Hidden;
             SearchTextBox.Text = "";
+            searchQuery = AccountManager.instance.AllSongs;
         }
 
+        // fix
         private void SearchListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count != 0)
