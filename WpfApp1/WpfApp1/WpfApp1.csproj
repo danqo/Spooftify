@@ -199,7 +199,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="UserJson\AllSongs.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="UserJson\nnguyen682.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -207,6 +207,7 @@
     <None Include="UserJson\omponce.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="UserJson\UsernamesPasswords.json" />
     <None Include="WpfApp1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -276,9 +277,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MusicLibrary\%28G%29I-DLE-LaTaTa.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MusicLibrary\BigBang-BangBangBang.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="MusicLibrary\BigBang-BangBangBang.mp3">

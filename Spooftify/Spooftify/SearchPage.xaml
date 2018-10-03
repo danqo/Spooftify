@@ -54,58 +54,7 @@
             </ComboBox>
         </StackPanel>
         <Label Grid.Row="3" x:Name="AddSongMsg" Content="Song added!" Foreground="Tomato" FontSize="24" HorizontalAlignment="Center" Visibility="Hidden"/>
-        <ListBox Grid.Row="4" x:Name="SearchListBox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black">
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
+        <ListBox Grid.Row="4" x:Name="SearchListBox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" SelectionChanged="SearchListBox_SelectionChanged">
         </ListBox>
     </Grid>
 </Page>

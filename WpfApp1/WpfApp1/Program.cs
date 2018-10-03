@@ -53,6 +53,7 @@ namespace WpfApp1
                     childThread.Start();
 
                 }
+                /*
                 if (Encoding.ASCII.GetString(request) == "login")
                 {
 
@@ -102,7 +103,7 @@ namespace WpfApp1
                     Song sendingSong = null;
                     try
                     {
-                        sendingSong = allSongs.mSongs.Where(x => x.ToString() == Encoding.ASCII.GetString(nameOfTheSong)).Single();
+                        sendingSong = allSongs.Songs.Where(x => x.ToString() == Encoding.ASCII.GetString(nameOfTheSong)).Single();
                     }
                     catch
                     {
@@ -151,6 +152,7 @@ namespace WpfApp1
                         Console.WriteLine("Total packet sent: " + total);
                     }
                 }
+                */
             }
 
             /* 
@@ -281,7 +283,7 @@ namespace WpfApp1
             Song sendingSong = null;
             try
             {
-                sendingSong = allSongs.mSongs.Where(x => x.ToString() == Encoding.ASCII.GetString(nameOfTheSong)).Single();
+                sendingSong = allSongs.Songs.Where(x => x.ToString() == Encoding.ASCII.GetString(nameOfTheSong)).Single();
             }
             catch
             {

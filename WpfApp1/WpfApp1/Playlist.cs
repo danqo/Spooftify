@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace WpfApp1
 {
     public class Playlist
     {
-        public string mName;
-        public IList<Song> mSongs;
+        public IList<Song> Songs { get => mSongs; set => mSongs = value; }
+        public string Name { get => mName; set => mName = value; }
+
+        private IList<Song> mSongs;
+        private string mName;
 
         public Playlist(string name)
         {
@@ -19,7 +23,6 @@ namespace WpfApp1
 
         public void addSong(Song newSong)
         {
-           
             mSongs.Add(newSong);
         }
 
@@ -29,3 +32,5 @@ namespace WpfApp1
         }
     }
 }
+
+
