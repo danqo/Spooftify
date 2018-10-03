@@ -34,7 +34,7 @@ namespace WpfApp1
         }
         public override string ToString()
         {
-            return mArtist + " - " + mTitle + " - " + Album;
+            return String.Format("{0} ({1}) - {2}", mArtist, mAlbum, mTitle);
         }
     }
 }

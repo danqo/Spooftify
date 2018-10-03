@@ -90,7 +90,7 @@ namespace Spooftify
         {
             if (e.AddedItems.Count != 0)
             {
-                string songName = ((ListBoxItem)e.AddedItems[0]).Content.ToString();
+                string songName = ((SearchListBox.SelectedItem) as Song).ToString();
                 SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                 SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
                 //SocketClientOut.sendSongName(Encoding.ASCII.GetBytes("haha"));
