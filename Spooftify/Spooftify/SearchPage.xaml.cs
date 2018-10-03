@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1;
 using System.Threading;
+
 namespace Spooftify
 {
     /// <summary>

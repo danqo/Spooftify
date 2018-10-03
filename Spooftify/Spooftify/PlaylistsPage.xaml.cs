@@ -26,8 +26,8 @@ namespace Spooftify
     /// </summary>
     public partial class PlaylistsPage : Page
     {
-        private const string duplicatePlaylistMsg = "Playlist with that name already exists!";
-        private const string addedPlaylistMsg = "Playlist added!";
+        private const string DUPLICATE_PLAYLIST_MSG = "Playlist with that name already exists!";
+        private const string ADDED_PLAYLIST_MSG = "Playlist added!";
 
         public PlaylistsPage()
         {
@@ -42,12 +42,14 @@ namespace Spooftify
                 AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
                 PlaylistListBox.Items.Refresh();
                 AddPlaylistTextBox.Text = "";
-                AddPlaylistMsg.Content = addedPlaylistMsg;
+                AddPlaylistMsg.Content = ADDED_PLAYLIST_MSG;
+                AddPlaylistMsg.Foreground = Brushes.Green;
                 AddPlaylistMsg.Visibility = Visibility.Visible;
             }
             else
             {
-                AddPlaylistMsg.Content = duplicatePlaylistMsg;
+                AddPlaylistMsg.Content = DUPLICATE_PLAYLIST_MSG;
+                AddPlaylistMsg.Foreground = Brushes.Tomato;
                 AddPlaylistMsg.Visibility = Visibility.Visible;
             }
         }
@@ -61,12 +63,14 @@ namespace Spooftify
                     AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
                     PlaylistListBox.Items.Refresh();
                     AddPlaylistTextBox.Text = "";
-                    AddPlaylistMsg.Content = addedPlaylistMsg;
+                    AddPlaylistMsg.Content = ADDED_PLAYLIST_MSG;
+                    AddPlaylistMsg.Foreground = Brushes.Green;
                     AddPlaylistMsg.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    AddPlaylistMsg.Content = duplicatePlaylistMsg;
+                    AddPlaylistMsg.Content = DUPLICATE_PLAYLIST_MSG;
+                    AddPlaylistMsg.Foreground = Brushes.Tomato;
                     AddPlaylistMsg.Visibility = Visibility.Visible;
                 }
             }
