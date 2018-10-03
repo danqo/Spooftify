@@ -23,6 +23,11 @@ namespace Spooftify
         public ProfilePage()
         {
             InitializeComponent();
+            UsernameLabel.Content = AccountManager.instance.Acct.Username;
+            AvatarImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + AccountManager.instance.Acct.AvatarURI));
+            NameLabel.Content = AccountManager.instance.Acct.Name;
+            EmailLabel.Content = AccountManager.instance.Acct.Email;
+            BirthdayLabel.Content = AccountManager.instance.Acct.Birthday;
         }
     }
 }
