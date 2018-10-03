@@ -83,7 +83,6 @@ namespace Spooftify
                     var access = SocketClientOut.receiveAccess();
                     if (Encoding.ASCII.GetString(access) == "granted")
                     {
-
                         var st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                         Account x = JsonConvert.DeserializeObject<Account>(st);
                         AccountManager.instance.LoadAccount(x);
@@ -96,8 +95,6 @@ namespace Spooftify
                     }
                     else if (Encoding.ASCII.GetString(access) == "denied")
                     {
-
-                        InvalidLogin.Visibility = Visibility.Visible;
                         InvalidLogin.Visibility = Visibility.Visible;
                     }
                 }
