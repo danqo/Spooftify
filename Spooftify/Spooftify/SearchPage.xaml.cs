@@ -82,10 +82,11 @@ namespace Spooftify
             AddSongMsg.Visibility = Visibility.Hidden;
             SearchTextBox.Text = "";
             searchQuery = AccountManager.instance.AllSongs;
+            SearchListBox.ItemsSource = searchQuery.Songs;
             SearchListBox.Items.Refresh();
         }
 
-        // fix
+        // used by nhan to test, should be empty
         private void SearchListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count != 0)
