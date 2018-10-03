@@ -107,6 +107,7 @@
     <Compile Include="Song.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserCollection.cs" />
+    <Compile Include="UserJson\Account.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -200,6 +201,12 @@
     <Content Include="UserJson\AllSongs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="UserJson\nnguyen682.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="UserJson\omponce.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="WpfApp1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

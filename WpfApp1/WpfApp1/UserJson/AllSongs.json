@@ -1,155 +1,155 @@
 {
-  "mName": "allSongs",
-  "mSongs": [
+  "Name": "All Songs",
+  "Songs": [
     {
-      "mTitle": "BangBangBang",
-      "mArtist": "BigBang",
-      "mExtension": ".mp3",
-      "mAlbum": "Made Series"
+      "Title": "BangBangBang",
+      "Artist": "BigBang",
+      "Extension": ".mp3",
+      "Album": "Made Series"
     },
     {
-      "mTitle": "Baam",
-      "mArtist": "MoMoLand",
-      "mExtension": ".mp3",
-      "mAlbum": "Fun to the World"
+      "Title": "Baam",
+      "Artist": "MoMoLand",
+      "Extension": ".mp3",
+      "Album": "Fun to the World"
     },
     {
-      "mTitle": "LaTaTa",
-      "mArtist": "(G)I-DLE",
-      "mExtension": ".mp3",
-      "mAlbum": "I Am"
+      "Title": "LaTaTa",
+      "Artist": "(G)I-DLE",
+      "Extension": ".mp3",
+      "Album": "I Am"
     },
     {
-      "mTitle": "BangBangBang",
-      "mArtist": "BigBang",
-      "mExtension": ".mp4",
-      "mAlbum": "Made Series"
+      "Title": "BangBangBang",
+      "Artist": "BigBang",
+      "Extension": ".mp4",
+      "Album": "Made Series"
     },
     {
-      "mTitle": "SLOW DANCING IN THE DARK",
-      "mArtist": "Joji",
-      "mExtension": ".mp4",
-      "mAlbum": "BALLADS 1"
+      "Title": "SLOW DANCING IN THE DARK",
+      "Artist": "Joji",
+      "Extension": ".mp4",
+      "Album": "BALLADS 1"
     },
     {
-      "mTitle": "Pumped Up Kicks",
-      "mArtist": "Foster the People",
-      "mExtension": ".mp3",
-      "mAlbum": "Torches"
+      "Title": "Pumped Up Kicks",
+      "Artist": "Foster the People",
+      "Extension": ".mp3",
+      "Album": "Torches"
     },
     {
-      "mTitle": "Selfish High Heels",
-      "mArtist": "Yung Bae",
-      "mExtension": ".mp3",
-      "mAlbum": "N/A"
+      "Title": "Selfish High Heels",
+      "Artist": "Yung Bae",
+      "Extension": ".mp3",
+      "Album": "N/A"
     },
     {
-      "mTitle": "Kaancepts",
-      "mArtist": "KAAN",
-      "mExtension": ".mp3",
-      "mAlbum": "N/A"
+      "Title": "Kaancepts",
+      "Artist": "KAAN",
+      "Extension": ".mp3",
+      "Album": "N/A"
     },
     {
-      "mTitle": "STARGAZING",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "STARGAZING",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "CAROUSEL",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "CAROUSEL",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "SICKO MODE",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "SICKO MODE",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "R.I.P. SCREW",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "R.I.P. SCREW",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "STOP TRYING TO BE GOD",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "STOP TRYING TO BE GOD",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "NO BYSTANDERS",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "NO BYSTANDERS",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "SKELETONS",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "SKELETONS",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "WAKE UP",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "WAKE UP",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "5% TNT",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "5% TNT",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "NC-17",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "NC-17",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "ASTROTHUNDER",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "ASTROTHUNDER",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "YOSEMITE",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "YOSEMITE",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "CAN'T SAY",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "CAN'T SAY",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "WHO_ WHAT_",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "WHO_ WHAT_",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "BUTTERFLY EFFECT",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "BUTTERFLY EFFECT",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "HOUSTONFORNICATION",//not playing
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "HOUSTONFORNICATION",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     },
     {
-      "mTitle": "COFFEE BEAN",
-      "mArtist": "Travis Scott",
-      "mExtension": ".mp3",
-      "mAlbum": "ASTROWORLD"
+      "Title": "COFFEE BEAN",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD"
     }
   ]
 }

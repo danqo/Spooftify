@@ -25,10 +25,13 @@ namespace Spooftify
 
         public void LoadAccount(String username)
         {
-            string acctJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", username)));
-            acct = JsonConvert.DeserializeObject<Account>(acctJson);
+            //string acctJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", username)));
+            //acct = JsonConvert.DeserializeObject<Account>(acctJson);
         }
-
+        public void LoadAccount(Account x)
+        {
+            acct = x;
+        }
         public void SaveAccount()
         {
             if(acct != null)

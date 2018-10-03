@@ -50,9 +50,10 @@ namespace Spooftify
                 if (Encoding.ASCII.GetString(access) == "granted")
                 {
 
-                    AccountManager.instance.LoadAccount(user.Text);
+                    
                     var st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                     Account x = JsonConvert.DeserializeObject<Account>(st);
+                    AccountManager.instance.LoadAccount(x);
                     st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                     allSongs = JsonConvert.DeserializeObject<Playlist>(st);
                     Reset();
@@ -88,9 +89,9 @@ namespace Spooftify
                     if (Encoding.ASCII.GetString(access) == "granted")
                     {
 
-                        AccountManager.instance.LoadAccount(user.Text);
                         var st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                         Account x = JsonConvert.DeserializeObject<Account>(st);
+                        AccountManager.instance.LoadAccount(x);
                         st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                         allSongs = JsonConvert.DeserializeObject<Playlist>(st);
                         Reset();
@@ -101,6 +102,7 @@ namespace Spooftify
                     else if (Encoding.ASCII.GetString(access) == "denied")
                     {
 
+                        InvalidLogin.Visibility = Visibility.Visible;
                         InvalidLogin.Visibility = Visibility.Visible;
                     }
                 }

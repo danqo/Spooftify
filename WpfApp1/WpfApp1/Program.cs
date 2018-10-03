@@ -9,6 +9,8 @@ using System.IO;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using System.Threading;
+using WpfApp1.UserJson;
+
 namespace WpfApp1
 {
     class SocketServerOut
@@ -69,7 +71,9 @@ namespace WpfApp1
                         {
                             Console.WriteLine("Correct username and password. Access granted");
                             udpServer.Send(Encoding.ASCII.GetBytes("granted"), 7, remoteEP);
-                            var b = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(x));
+                            string acctJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", id)));
+                            Account a = JsonConvert.DeserializeObject<Account>(acctJson);
+                            var b = Encoding.ASCII.GetBytes(acctJson);
                             udpServer.Send(b, b.Length, remoteEP);
 
 
@@ -245,7 +249,9 @@ namespace WpfApp1
                 {
                     Console.WriteLine("Correct username and password. Access granted");
                     privatePort.Send(Encoding.ASCII.GetBytes("granted"), 7, privateEP);
-                    var b = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(x));
+                    string acctJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", id)));
+                    var b = Encoding.ASCII.GetBytes(acctJson);
+                    //var b = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(x));
                     privatePort.Send(b, b.Length, privateEP);
 
 

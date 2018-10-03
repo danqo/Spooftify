@@ -1,0 +1,20 @@
+﻿{
+  "Username": "omponce",
+  "Name": "Oscar Ponce",
+  "Email": "oscar.morales-ponce@csulb.edu",
+  "Birthday": "03/15/1985",
+  "Playlists": [
+    {
+      "Name": "cecs327 playlist",
+      "Songs": [
+        {
+          "Title": "BangBangBang",
+          "Artist": "BigBang",
+          "Extension": ".mp3",
+          "Album": "Made Series"
+        }
+      ]
+    }
+  ],
+  "AvatarURI": "omponce.png"
+}
