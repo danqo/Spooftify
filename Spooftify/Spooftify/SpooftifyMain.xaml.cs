@@ -19,9 +19,16 @@ namespace Spooftify
     /// </summary>
     public partial class SpooftifyMain : Window
     {
-        //public Playlist CurrPlaylist { get => currPlaylist; set => currPlaylist = value; }
+        private BitmapImage HomeActive = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyHomeActive.png"));
+        private BitmapImage HomeDefault = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyHomeDefault.png"));
+        private BitmapImage PlayPageActive = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyPlayActive.png"));
+        private BitmapImage PlayPageDefault = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyPlayDefault.png"));
+        private BitmapImage PlayPageDisabled = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyPlayDisabled.png"));
+        private BitmapImage SearchActive = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifySearchActive.png"));
+        private BitmapImage SearchDefault = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifySearchDefault.png"));
+        private BitmapImage ProfileActive = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyProfileActive.png"));
+        private BitmapImage ProfileDefault = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyProfileDefault.png"));
 
-        //private Playlist currPlaylist;
         private PlaylistsPage playlistsPage;
         private PlayPage playPage;
         private ProfilePage profilePage;
@@ -30,18 +37,11 @@ namespace Spooftify
         public SpooftifyMain()
         {
             InitializeComponent();
-            PlaylistButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyHomeActive.png"));
             playlistsPage = new PlaylistsPage();
             playPage = new PlayPage();
             profilePage = new ProfilePage();
             searchPage = new SearchPage();
             PageFrame.Content = playlistsPage;
-            //currPlaylist = AccountManager.instance.CurrentPlaylist;
-            //PlayPageButton.IsEnabled = AccountManager.instance.CurrentPlaylist != null; // color
-            // save the pages, start on home page, bind play page enabled to currplaylist is not null for accountmanager
-            // set frame = home, disable playlist button
-            // children can reference this page's nav bar
-            // playpage button bound to not currplaylist != null
         }
 
         private void PlaylistsButton_Click(object sender, RoutedEventArgs e)
@@ -53,7 +53,7 @@ namespace Spooftify
         {
             PageFrame.Content = playlistsPage;
             SetNavImagesDefault();
-            PlaylistButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyHomeActive.png"));
+            PlaylistButtonImage.Source = HomeActive;
             ResetPages();
         }
 
@@ -66,7 +66,7 @@ namespace Spooftify
         {
             PageFrame.Content = playPage;
             SetNavImagesDefault();
-            PlayPageButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyPlayActive.png"));
+            PlayPageButtonImage.Source = PlayPageActive;
             ResetPages();
         }
 
@@ -79,7 +79,7 @@ namespace Spooftify
         {
             PageFrame.Content = searchPage;
             SetNavImagesDefault();
-            SearchButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifySearchActive.png"));
+            SearchButtonImage.Source = SearchActive;
             ResetPages();
         }
 
@@ -87,7 +87,7 @@ namespace Spooftify
         {
             PageFrame.Content = profilePage;
             SetNavImagesDefault();
-            ProfileButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyProfileActive.png"));
+            ProfileButtonImage.Source = ProfileActive;
             ResetPages();
         }
 
@@ -100,13 +100,20 @@ namespace Spooftify
 
         private void SetNavImagesDefault()
         {
-            PlaylistButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyHomeDefault.png"));
-            PlayPageButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyPlayDefault.png"));
-            SearchButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifySearchDefault.png"));
-            ProfileButtonImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/SpooftifyProfileDefault.png"));
+            TogglePlayPageButton();
+            PlaylistButtonImage.Source = HomeDefault;
+            SearchButtonImage.Source = SearchDefault;
+            ProfileButtonImage.Source = ProfileDefault;
         }
 
-        private void ResetPages()
+        // call this if a playlist is deleted
+        public void TogglePlayPageButton()
+        {
+            PlayPageButton.IsEnabled = AccountManager.instance.CurrentPlaylist != null;
+            PlayPageButtonImage.Source = PlayPageButton.IsEnabled ? PlayPageDefault : PlayPageDisabled;
+        }
+
+        public void ResetPages()
         {
             playlistsPage.Reset();
             playPage.Reset();

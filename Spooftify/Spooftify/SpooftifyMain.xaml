@@ -6,6 +6,34 @@
         xmlns:local="clr-namespace:Spooftify"
         mc:Ignorable="d"
         Title="Spooftify" MinHeight="700" MinWidth="600" Height="700" Width="600" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="DisabledButtonStyle">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter x:Name="MyContentPresenter" 
+                                          Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="Images/SpooftifyPlayDisabled.png" Stretch="Uniform"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="9*" />
@@ -13,7 +41,7 @@
         </Grid.RowDefinitions>
         <Frame x:Name="PageFrame" Grid.Row="0" NavigationUIVisibility="Hidden"/>
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="3">
-            <Grid x:Name="Nav" Grid.Row="1">
+            <Grid x:Name="Nav" Grid.Row="1" Background="#1B1B1B">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
@@ -21,19 +49,19 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="PlaylistsButton" Click="PlaylistsButton_Click" Background="#1B1B1B" Grid.Column="0">
-                    <Image x:Name="PlaylistButtonImage" Source="Images/SpooftifyHomeDefault.png" Stretch="Uniform"/>
+                <Button x:Name="PlaylistsButton" Click="PlaylistsButton_Click" Background="#1B1B1B" Grid.Column="0" BorderThickness="0">
+                    <Image x:Name="PlaylistButtonImage" Source="Images/SpooftifyHomeActive.png" Stretch="Uniform"/>
                 </Button>
-                <Button x:Name="PlayPageButton" Click="PlayPageButton_Click" Background="#1B1B1B" Grid.Column="1">
-                    <Image x:Name="PlayPageButtonImage" Source="Images/SpooftifyPlayDefault.png" Stretch="Uniform"/>
+                <Button x:Name="PlayPageButton" Click="PlayPageButton_Click" Background="#1B1B1B" Grid.Column="1" Style="{StaticResource DisabledButtonStyle}" IsEnabled="False">
+                    <Image x:Name="PlayPageButtonImage" Source="Images/SpooftifyPlayDisabled.png" Stretch="Uniform"/>
                 </Button>
-                <Button x:Name="SearchButton" Click="SearchButton_Click" Background="#1B1B1B" Grid.Column="2">
+                <Button x:Name="SearchButton" Click="SearchButton_Click" Background="#1B1B1B" Grid.Column="2" BorderThickness="0">
                     <Image x:Name="SearchButtonImage" Source="Images/SpooftifySearchDefault.png" Stretch="Uniform"/>
                 </Button>
-                <Button x:Name="ProfileButton" Click="ProfileButton_Click" Background="#1B1B1B" Grid.Column="3">
+                <Button x:Name="ProfileButton" Click="ProfileButton_Click" Background="#1B1B1B" Grid.Column="3" BorderThickness="0">
                     <Image x:Name="ProfileButtonImage" Source="Images/SpooftifyProfileDefault.png" Stretch="Uniform"/>
                 </Button>
-                <Button x:Name="LogoutButton" Click="LogoutButton_Click" Background="#1B1B1B" Grid.Column="4">
+                <Button x:Name="LogoutButton" Click="LogoutButton_Click" Background="#1B1B1B" Grid.Column="4" BorderThickness="0">
                     <Image x:Name="LogoutButtonImage" Source="Images/SpooftifyLogout.png" Stretch="Uniform"/>
                 </Button>
             </Grid>
