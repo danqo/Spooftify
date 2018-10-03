@@ -24,7 +24,8 @@ namespace Spooftify
 
         public void addSong(Song newSong)
         {
-            mSongs.Add(newSong);
+            Song s = new Song(newSong);
+            mSongs.Add(s);
         }
 
         public void deleteSong(Song song)

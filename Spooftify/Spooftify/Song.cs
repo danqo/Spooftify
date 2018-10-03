@@ -35,6 +35,13 @@ namespace Spooftify
             mArtist = artist;
             mExtension = extension;
         }
+        public Song(Song s)
+        {
+            mTitle = s.Title;
+            mArtist = s.Artist;
+            mExtension = s.Extension;
+            mAlbum = s.Album;
+        }
         public override string ToString()
         {
             return String.Format("{0} ({1}) - {2}", mArtist, mAlbum, mTitle);

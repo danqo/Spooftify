@@ -37,11 +37,44 @@ namespace Spooftify
             {
                 textBox.Tag = (!String.IsNullOrWhiteSpace(textBox.Text)).ToString();
             }
+            FilterSearch();
         }
 
         private void SearchByComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // check combobox contents with SelectedItem property
+            FilterSearch();
+        }
+
+        private void FilterSearch()
+        {
+            if(String.IsNullOrWhiteSpace(SearchTextBox.Text))
+            {
+                searchQuery = AccountManager.instance.AllSongs;
+            }
+            else
+            {
+                searchQuery = new Playlist("searchQuery");
+                foreach(Song s in AccountManager.instance.AllSongs.Songs)
+                {
+                    if(SearchByComboBox.SelectedItem.ToString().Equals("System.Windows.Controls.ComboBoxItem: Title") && s.Title.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                    {
+                        searchQuery.addSong(s);
+                    }
+                    if (SearchByComboBox.SelectedItem.ToString().Equals("System.Windows.Controls.ComboBoxItem: Artist") && s.Artist.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                    {
+                        searchQuery.addSong(s);
+                    }
+                    if (SearchByComboBox.SelectedItem.ToString().Equals("System.Windows.Controls.ComboBoxItem: Album") && s.Album.ToLower().Contains(SearchTextBox.Text.ToLower()))
+                    {
+                        searchQuery.addSong(s);
+                    }
+                }
+            }
+            if(SearchListBox != null)
+            {
+                SearchListBox.ItemsSource = searchQuery.Songs;
+                SearchListBox.Items.Refresh();
+            }
         }
 
         public void Reset()
@@ -49,6 +82,7 @@ namespace Spooftify
             AddSongMsg.Visibility = Visibility.Hidden;
             SearchTextBox.Text = "";
             searchQuery = AccountManager.instance.AllSongs;
+            SearchListBox.Items.Refresh();
         }
 
         // fix

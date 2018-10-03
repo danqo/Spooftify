@@ -31,6 +31,7 @@ namespace Spooftify
             {
                 PlaylistName.Content = AccountManager.instance.CurrentPlaylist.Name;
                 SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
+                SongListbox.Items.Refresh();
             }
         }
     }
