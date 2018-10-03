@@ -27,7 +27,12 @@ namespace Spooftify
 
         public void Reset()
         {
-
+            if (AccountManager.instance.CurrentPlaylist != null)
+            {
+                PlaylistName.Content = AccountManager.instance.CurrentPlaylist.Name;
+                SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
+                System.Diagnostics.Debug.WriteLine(SongListbox.ItemsSource.ToString());
+            }
         }
     }
 }

@@ -75,6 +75,15 @@ namespace Spooftify
          * play page is bound to currplaylist
          */
 
+        private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (PlaylistListBox.SelectedItem != null)
+            {
+                AccountManager.instance.CurrentPlaylist = PlaylistListBox.SelectedItem as Playlist;
+                ApplicationManager.instance.MainPage.LoadPlayPage();
+            }
+        }
+
         private void AddPlaylistTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;

@@ -15,59 +15,15 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" x:Name="PlaylistName" Content="Playlist #1" HorizontalContentAlignment="Center" Background="#1B1B1B" Foreground="LightGray" FontSize="36" FontWeight="DemiBold"/>
-        
+
         <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black">
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBlock Foreground="LightGray" FontSize="24">Item 1</TextBlock>
-            </ListBoxItem>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Display}" Foreground="LightGray" FontSize="24"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
     </Grid>
 </Page>

@@ -31,5 +31,10 @@ namespace Spooftify
         {
             mSongs.Remove(song);
         }
+
+        public override string ToString()
+        {
+            return mName;
+        }
     }
 }

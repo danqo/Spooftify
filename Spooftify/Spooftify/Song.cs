@@ -13,6 +13,7 @@ namespace Spooftify
         public string Extension { get => mExtension; set => mExtension = value; }
         public string Album { get => mAlbum; set => mAlbum = value; }
         public string Directory { get => mArtist + "-" + mTitle + mExtension; }
+        public string Display { get => ToString(); }
 
         private string mTitle;
         private string mArtist;
@@ -36,7 +37,7 @@ namespace Spooftify
         }
         public override string ToString()
         {
-            return mArtist + " - " + mTitle + " - " + Album;
+            return String.Format("{0} ({1}) - {2}", mArtist, mAlbum, mTitle);
            // return mArtist + " - " + mTitle + String.Format("({})", mAlbum) + (mExtension == ".mp3"? " - Music" : " - Music Video");
         }
     }
