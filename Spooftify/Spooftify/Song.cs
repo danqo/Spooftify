@@ -38,7 +38,6 @@ namespace Spooftify
         public override string ToString()
         {
             return String.Format("{0} ({1}) - {2}", mArtist, mAlbum, mTitle);
-           // return mArtist + " - " + mTitle + String.Format("({})", mAlbum) + (mExtension == ".mp3"? " - Music" : " - Music Video");
         }
     }
 }
