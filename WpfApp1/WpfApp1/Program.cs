@@ -33,7 +33,7 @@ namespace WpfApp1
             //udpServer.Client.Bind(remoteEP);
             //udpServer.Client.Listen(200);
             //udpServer.Client.Accept();
-            string mediaFolder = System.IO.Path.Combine("pack://application:,,,/", "MusicLibrary");
+            string mediaFolder = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "MusicLibrary");
             byte[] data;
 
             string st = File.ReadAllText(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\Users.json"));
@@ -275,7 +275,7 @@ namespace WpfApp1
         }
         public static void playMusic(UdpClient privatePort, IPEndPoint privateEP)
         {
-            string mediaFolder = System.IO.Path.Combine("pack://application:,,,/", "MusicLibrary");
+            string mediaFolder = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "MusicLibrary");
             byte[] data;
             int count1 = 0;
             var buffer1 = new byte[16384 * 4];
