@@ -68,6 +68,7 @@ namespace Spooftify
             else if (Encoding.ASCII.GetString(access) == "ServerTimeOut")
             {
                 connectionError = true;
+                SocketClientOut.client.Close();
                 return false;
             }
             return false;

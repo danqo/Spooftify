@@ -25,6 +25,7 @@ namespace Spooftify
         AccountManager accountManager;
 
         private const string CONNECTION_FAILURE = "Could not connect to the host. Please try later.";
+        private const string EMPTY_USER_PASS = "Username or password cannot be empty!";
         private const string INVALID_LOGIN = "Incorrect username or password!";
 
         public Login()
@@ -37,7 +38,12 @@ namespace Spooftify
 
         private void SignIn_Click(object sender, RoutedEventArgs e)
         {
-            if ((user.Text == "" || pass.Password == "") || !ApplicationManager.instance.SignIn(user.Text, pass.Password))
+            if (String.IsNullOrWhiteSpace(user.Text) || String.IsNullOrWhiteSpace(pass.Password))
+            {
+                InvalidLogin.Content = EMPTY_USER_PASS;
+                InvalidLogin.Visibility = Visibility.Visible;
+            }
+            else if (!ApplicationManager.instance.SignIn(user.Text, pass.Password))
             {
                 InvalidLogin.Content = ApplicationManager.instance.connectionError ? CONNECTION_FAILURE : INVALID_LOGIN;
                 InvalidLogin.Visibility = Visibility.Visible;
@@ -48,7 +54,12 @@ namespace Spooftify
         {
             if (e.Key == Key.Enter)
             {
-                if ((user.Text == "" || pass.Password == "") || !ApplicationManager.instance.SignIn(user.Text, pass.Password))
+                if (String.IsNullOrWhiteSpace(user.Text) || String.IsNullOrWhiteSpace(pass.Password))
+                {
+                    InvalidLogin.Content = EMPTY_USER_PASS;
+                    InvalidLogin.Visibility = Visibility.Visible;
+                }
+                else if (!ApplicationManager.instance.SignIn(user.Text, pass.Password))
                 {
                     InvalidLogin.Content = ApplicationManager.instance.connectionError ? CONNECTION_FAILURE : INVALID_LOGIN;
                     InvalidLogin.Visibility = Visibility.Visible;
