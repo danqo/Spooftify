@@ -8,6 +8,12 @@
       d:DesignHeight="630" d:DesignWidth="600"
       Title="PlayPage">
 
+    <Page.Resources>
+        <ContextMenu x:Key="playlistContextMenu">
+            <MenuItem Header="Remove" Click="MenuItem_Remove_Click"/>
+        </ContextMenu>
+    </Page.Resources>
+    
     <Grid Background="Black">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -15,8 +21,7 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" x:Name="PlaylistName" Content="Playlist #1" HorizontalContentAlignment="Center" Background="#1B1B1B" Foreground="LightGray" FontSize="36" FontWeight="DemiBold"/>
-
-        <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" SelectionChanged="SongListbox_SelectionChanged"  MouseDoubleClick="SongListbox_MouseLeftButtonUp">
+        <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" MouseDoubleClick="SongListbox_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

@@ -12,9 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Forms;
 using WpfApp1;
-using ListBox = System.Windows.Controls.ListBox;
 using System.Threading;
 
 namespace Spooftify
@@ -41,40 +39,30 @@ namespace Spooftify
 
         private void SongListbox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var b = ((ListBox)sender).SelectedItem as Song;
-            if (b != null)
+            HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
+            if (r.VisualHit.GetType() != typeof(TextBlock) && r.VisualHit.GetType() != typeof(Border))
             {
-                ContextMenuStrip cMS = new ContextMenuStrip();
-                cMS.Name = "Playlist Control";
-                ToolStripMenuItem RemoveSong = new ToolStripMenuItem("Remove");
-                RemoveSong.Tag = b;
-                //RemoveSong.Tag
-                RemoveSong.Click += RemoveSongCLick;
-                cMS.Items.Add(RemoveSong);
-                System.Drawing.Point pt = System.Windows.Forms.Cursor.Position;
-                cMS.Show(pt);
+                SongListbox.SelectedItem = null;
             }
-
+            else
+            {
+                ContextMenu cm = this.FindResource("playlistContextMenu") as ContextMenu;
+                cm.PlacementTarget = sender as ListBox;
+                cm.IsOpen = true;
+            }
         }
 
-        private void RemoveSongCLick(object sender, EventArgs e)
+        private void MenuItem_Remove_Click(object sender, RoutedEventArgs e)
         {
-            var b = sender as ToolStripMenuItem;
-            AccountManager.instance.CurrentPlaylist.deleteSong((Song)b.Tag);
-            SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
-            SongListbox.Items.Refresh();
-            //selectedListBox = ListofListBox.Where(x => (string)x.Tag == selectedPlaylist.mName).Single();
-            //SearchWindow b = new SearchWindow();
-            //b.Show();
+            if (SongListbox.SelectedItem != null)
+            {
+                AccountManager.instance.CurrentPlaylist.deleteSong(SongListbox.SelectedItem as Song);
+                SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
+                SongListbox.Items.Refresh();
+            }
         }
 
-        private void SongListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-
-        }
-
-        private void SongListbox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void SongListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
                 
                 if (SocketClientOut.waveOut == null)
