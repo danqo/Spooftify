@@ -131,7 +131,7 @@ namespace WpfApp1
                 if (Encoding.ASCII.GetString(receivedData) == "done")
                     break;
                 else
-                    client.Send(Encoding.ASCII.GetBytes("more"), 4);
+                    client.Send(Encoding.ASCII.GetBytes("more"), 4);    // Nhan change value here
             
                 Mp3Frame frame;
                 Stream ms = new MemoryStream();
