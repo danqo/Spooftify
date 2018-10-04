@@ -91,7 +91,8 @@ namespace Spooftify
             if (explicitShutdown)
             {
                 //AccountManager.instance.SaveAccount();
-                SocketClientOut.logout();
+                if(AccountManager.instance.Acct != null)
+                    SocketClientOut.logout();
                 Application.Current.Shutdown();
             }
             return explicitShutdown;
