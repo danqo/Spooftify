@@ -24,6 +24,7 @@ namespace Spooftify
         private const string ADDED_PLAYLIST_MSG = "Playlist added!";
         private const string DUPLICATE_PLAYLIST_MSG = "Playlist with that name already exists!";
         private const string EMPTY_NAME_MSG = "Playlist name cannot be empty!";
+        private const string REMOVED_PLAYLIST_MSG = "Playlist removed!";
 
         public PlaylistsPage()
         {
@@ -117,13 +118,16 @@ namespace Spooftify
         {
             if (PlaylistListBox.SelectedItem != null)
             {
-                if ((PlaylistListBox.SelectedItem as Playlist).Name.Equals(AccountManager.instance.CurrentPlaylist.Name))
+                if (AccountManager.instance.CurrentPlaylist != null && (PlaylistListBox.SelectedItem as Playlist).Name.Equals(AccountManager.instance.CurrentPlaylist.Name))
                 {
                     AccountManager.instance.CurrentPlaylist = null;
                 }
                 AccountManager.instance.Acct.Playlists.Remove(PlaylistListBox.SelectedItem as Playlist);
                 RefreshPlaylists();
                 ApplicationManager.instance.MainPage.TogglePlayPageButton();
+                AddPlaylistMsg.Content = REMOVED_PLAYLIST_MSG;
+                AddPlaylistMsg.Foreground = Brushes.Green;
+                AddPlaylistMsg.Visibility = Visibility.Visible;
             }
         }
 
