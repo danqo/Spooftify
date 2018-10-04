@@ -42,15 +42,18 @@ namespace Spooftify
         private void SongListbox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             var b = ((ListBox)sender).SelectedItem as Song;
-            ContextMenuStrip cMS = new ContextMenuStrip();
-            cMS.Name = "Playlist Control";
-            ToolStripMenuItem RemoveSong = new ToolStripMenuItem("Remove");
-            RemoveSong.Tag = b;
-            //RemoveSong.Tag
-            RemoveSong.Click += RemoveSongCLick;
-            cMS.Items.Add(RemoveSong);
-            System.Drawing.Point pt = System.Windows.Forms.Cursor.Position;
-            cMS.Show(pt);
+            if (b != null)
+            {
+                ContextMenuStrip cMS = new ContextMenuStrip();
+                cMS.Name = "Playlist Control";
+                ToolStripMenuItem RemoveSong = new ToolStripMenuItem("Remove");
+                RemoveSong.Tag = b;
+                //RemoveSong.Tag
+                RemoveSong.Click += RemoveSongCLick;
+                cMS.Items.Add(RemoveSong);
+                System.Drawing.Point pt = System.Windows.Forms.Cursor.Position;
+                cMS.Show(pt);
+            }
 
         }
 
@@ -67,12 +70,16 @@ namespace Spooftify
 
         private void SongListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
 
-            if (e.AddedItems.Count != 0)
-            {
+        }
+
+        private void SongListbox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+                
                 if (SocketClientOut.waveOut == null)
                 {
-                    var b = e.OriginalSource as ListBox;
+                    var b = sender as ListBox;
                     string songName = b.SelectedItem.ToString();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
@@ -94,8 +101,8 @@ namespace Spooftify
                 {
                     SocketClientOut.stopSong();
                     SocketClientOut.waveOut.Dispose();
-                    var b = e.OriginalSource as ListBox;
-                    string songName = b.SelectedItem.ToString();
+                var b = sender as ListBox;
+                string songName = b.SelectedItem.ToString();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
@@ -112,7 +119,7 @@ namespace Spooftify
                         System.Windows.MessageBox.Show(msg);
                     }
                 }
-            }
+            
         }
     }
 }
