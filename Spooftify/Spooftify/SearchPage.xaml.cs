@@ -90,25 +90,6 @@ namespace Spooftify
         // used by nhan to test, should be empty
         private void SearchListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count != 0)
-            {
-                string songName = ((SearchListBox.SelectedItem) as Song).ToString();
-                SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                if (msg == "granted")
-                {
-                    ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                    Thread receiveThread = new Thread(receiveStart);
-                    SocketClientOut.buffering = true;
-                    receiveThread.Start();
-                    //SocketClientOut.playSong();
-                }
-                else
-                {
-                    MessageBox.Show(msg);
-                }
-            }
         }
     }
 }

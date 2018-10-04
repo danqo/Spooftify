@@ -225,7 +225,8 @@ namespace WpfApp1
                     playMusic(privatePort, privateEP);
                 if(Encoding.ASCII.GetString(request) == "logout")
                 {
-                    privatePort.Close();
+
+                    logout(privatePort, privateEP);
                     Console.WriteLine("Disconnecting user");
                     break;
                 }
@@ -333,6 +334,15 @@ namespace WpfApp1
                 Console.WriteLine("------Stop Sending------");
 
             }
+        }
+        public static void logout(UdpClient privatePort, IPEndPoint privateEP)
+        {
+
+            var b = privatePort.Receive(ref privateEP);
+            Account acct = JsonConvert.DeserializeObject<Account>(Encoding.ASCII.GetString(b));
+            File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", acct.Username)), JsonConvert.SerializeObject(acct));
+            Console.WriteLine("Saving account changes to json");
+            privatePort.Close();
         }
     }
 }

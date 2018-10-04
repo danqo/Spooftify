@@ -64,10 +64,12 @@ namespace Spooftify
 
         private void SongListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-                
+            var b = sender as ListBox;
+            if (b.SelectedItem != null)
+            {
                 if (SocketClientOut.waveOut == null)
                 {
-                    var b = sender as ListBox;
+
                     string songName = b.SelectedItem.ToString();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
@@ -89,8 +91,8 @@ namespace Spooftify
                 {
                     SocketClientOut.stopSong();
                     SocketClientOut.waveOut.Dispose();
-                var b = sender as ListBox;
-                string songName = b.SelectedItem.ToString();
+                    b = sender as ListBox;
+                    string songName = b.SelectedItem.ToString();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
@@ -107,7 +109,7 @@ namespace Spooftify
                         System.Windows.MessageBox.Show(msg);
                     }
                 }
-            
+            }
         }
     }
 }

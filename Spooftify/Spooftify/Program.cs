@@ -9,6 +9,10 @@ using System.IO;
 using NAudio.Wave;
 using System.Threading;
 using System.Windows;
+using Spooftify;
+using Newtonsoft.Json;
+using System.Windows.Threading;
+
 namespace WpfApp1
 {
     class SocketClientOut
@@ -39,6 +43,9 @@ namespace WpfApp1
         public static void logout()
         {
             SocketClientOut.client.Send(Encoding.ASCII.GetBytes("logout"), 6);
+            string c = JsonConvert.SerializeObject(AccountManager.instance.Acct);
+            var send = Encoding.ASCII.GetBytes(c);
+            SocketClientOut.client.Send(send, send.Length);
         }
         public static void privatePort()
         {
@@ -100,8 +107,9 @@ namespace WpfApp1
                     if (buffering == false)
                         break;
                 }
-                var receivedData = client.Receive(ref ep);
-
+                byte[] receivedData = new byte[2000];
+                if (!receiveData(ref receivedData))
+                    break;
                   
                 if (Encoding.ASCII.GetString(receivedData) == "done")
                     break;
@@ -152,6 +160,24 @@ namespace WpfApp1
             } while (buffering);
 
             
+        }
+        public static bool receiveData(ref byte[] data)
+        {
+            
+            try
+            {
+                data = client.Receive(ref ep);
+            }
+
+            catch(System.Net.Sockets.SocketException)
+            {
+                MessageBox.Show("connection was interrupted");
+                if (waveOut.PlaybackState == PlaybackState.Playing || waveOut.PlaybackState == PlaybackState.Paused)
+                    waveOut.Stop();
+                return false;
+            }
+            
+            return true;
         }
         public static void stopSong()
         {
@@ -225,69 +251,8 @@ namespace WpfApp1
         }
             
         
-        public static void PlayMp3FromUrl(object state)
-        {
         
-
-
-            /*
-            Stream ms = new MemoryStream();
-            ms.Write(buffer, 0, 64000);
-            ms.Position = 0;
-            WaveStream blockAlignedStream = new BlockAlignReductionStream(
-                WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms)));
-            WaveOut waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback());
-            waveOut.Init(blockAlignedStream);
-            waveOut.Play();
-            while (waveOut.PlaybackState == PlaybackState.Playing)
-            {
-                System.Threading.Thread.Sleep(100);
-            }*/
-            /*
-        BufferedWaveProvider bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 2));
-        bufferedWaveProvider.Read(buffer, 0, buffer.Length);
-        WaveOut waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback());
-        waveOut.Init(bufferedWaveProvider);
-        waveOut.Play();
-        while (waveOut.PlaybackState == PlaybackState.Playing)
-        {
-            System.Threading.Thread.Sleep(100);
-        }*/
-            /*
-            using (Stream ms = new MemoryStream())
-            {
-                
-                using (Stream stream = WebRequest.Create(url)
-                    .GetResponse().GetResponseStream())
-                {
-                    byte[] buffer = new byte[32768];
-                    int read;
-                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        ms.Write(buffer, 0, read);
-                    }
-                }
-                ms.Write(buffer, 0, 64000);
-                
-                ms.Position = 0;
-                using (WaveStream blockAlignedStream =
-                    new BlockAlignReductionStream(
-                        WaveFormatConversionStream.CreatePcmStream(
-                            new Mp3FileReader(ms))))
-                {
-                    
-                    using (WaveOut waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback()))
-                    {
-                        
-                        waveOut.Init(blockAlignedStream);
-                        waveOut.Play();
-                        while (waveOut.PlaybackState == PlaybackState.Playing)
-                        {
-                            System.Threading.Thread.Sleep(100);
-                        }
-                    }
-                }*/
-        }
+        
     }
     }
 
