@@ -117,7 +117,10 @@ namespace Spooftify
         {
             if (PlaylistListBox.SelectedItem != null)
             {
-                AccountManager.instance.CurrentPlaylist = null;
+                if ((PlaylistListBox.SelectedItem as Playlist).Name.Equals(AccountManager.instance.CurrentPlaylist.Name))
+                {
+                    AccountManager.instance.CurrentPlaylist = null;
+                }
                 AccountManager.instance.Acct.Playlists.Remove(PlaylistListBox.SelectedItem as Playlist);
                 RefreshPlaylists();
                 ApplicationManager.instance.MainPage.TogglePlayPageButton();
