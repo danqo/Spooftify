@@ -42,6 +42,21 @@ namespace WpfApp1
         }
         public static void logout()
         {
+            buffering = false;
+
+            if (waveOut.PlaybackState == PlaybackState.Paused || waveOut.PlaybackState == PlaybackState.Playing)
+            {
+                waveOut.Stop();
+                client.Send(Encoding.ASCII.GetBytes("no more"), 7);
+
+                byte[] b = new byte[100];
+                do
+                {
+                    b = client.Receive(ref ep);
+                } while (Encoding.ASCII.GetString(b) != "done");
+
+                //client.Receive(ref ep);
+            }
             SocketClientOut.client.Send(Encoding.ASCII.GetBytes("logout"), 6);
             string c = JsonConvert.SerializeObject(AccountManager.instance.Acct);
             var send = Encoding.ASCII.GetBytes(c);

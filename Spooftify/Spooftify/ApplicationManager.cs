@@ -90,7 +90,8 @@ namespace Spooftify
             explicitShutdown = MessageBox.Show("Are you sure you want to exit?", "Exit", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes;
             if (explicitShutdown)
             {
-                AccountManager.instance.SaveAccount();
+                //AccountManager.instance.SaveAccount();
+                SocketClientOut.logout();
                 Application.Current.Shutdown();
             }
             return explicitShutdown;
