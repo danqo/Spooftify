@@ -21,8 +21,9 @@ namespace Spooftify
     /// </summary>
     public partial class PlaylistsPage : Page
     {
-        private const string DUPLICATE_PLAYLIST_MSG = "Playlist with that name already exists!";
         private const string ADDED_PLAYLIST_MSG = "Playlist added!";
+        private const string DUPLICATE_PLAYLIST_MSG = "Playlist with that name already exists!";
+        private const string EMPTY_NAME_MSG = "Playlist name cannot be empty!";
 
         public PlaylistsPage()
         {
@@ -32,7 +33,13 @@ namespace Spooftify
 
         private void AddPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
-            if (AccountManager.instance.Acct.Playlists.FirstOrDefault(x => x.Name.Equals(AddPlaylistTextBox.Text)) == null)
+            if (String.IsNullOrWhiteSpace(AddPlaylistTextBox.Text))
+            {
+                AddPlaylistMsg.Content = EMPTY_NAME_MSG;
+                AddPlaylistMsg.Foreground = Brushes.Tomato;
+                AddPlaylistMsg.Visibility = Visibility.Visible;
+            }
+            else if (AccountManager.instance.Acct.FindPlaylist(AddPlaylistTextBox.Text) == null)
             {
                 AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
                 RefreshPlaylists();
@@ -53,7 +60,13 @@ namespace Spooftify
         {
             if(e.Key == Key.Enter)
             {
-                if (AccountManager.instance.Acct.Playlists.FirstOrDefault(x => x.Name.Equals(AddPlaylistTextBox.Text)) == null)
+                if(String.IsNullOrWhiteSpace(AddPlaylistTextBox.Text))
+                {
+                    AddPlaylistMsg.Content = EMPTY_NAME_MSG;
+                    AddPlaylistMsg.Foreground = Brushes.Tomato;
+                    AddPlaylistMsg.Visibility = Visibility.Visible;
+                }
+                else if (AccountManager.instance.Acct.FindPlaylist(AddPlaylistTextBox.Text) == null)
                 {
                     AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
                     RefreshPlaylists();

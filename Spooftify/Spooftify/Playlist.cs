@@ -33,9 +33,23 @@ namespace Spooftify
             mSongs.Remove(song);
         }
 
+        public void RemoveEquivSong(Song s)
+        {
+            Song equivSong = mSongs.FirstOrDefault(x => x.IsSame(s));
+            if (equivSong != null)
+            {
+                mSongs.Remove(equivSong);
+            }
+        }
+
         public override string ToString()
         {
             return mName;
+        }
+
+        public bool ContainsSong(Song s)
+        {
+            return mSongs.FirstOrDefault(x => x.IsSame(s)) != null;
         }
     }
 }
