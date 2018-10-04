@@ -34,34 +34,9 @@ namespace Spooftify
 
         private void SignIn_Click(object sender, RoutedEventArgs e)
         {
-            if (user.Text == "" || pass.Password == "")
+            if ((user.Text == "" || pass.Password == "") || !ApplicationManager.instance.SignIn(user.Text, pass.Password))
             {
                 InvalidLogin.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                //SocketClientOut.accountEstablish();
-                SocketClientOut.connectionEstablish();
-                SocketClientOut.privatePort();
-                SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("login"));
-                SocketClientOut.sendIdAndPassword(Encoding.ASCII.GetBytes(user.Text), Encoding.ASCII.GetBytes(pass.Password));
-                var access = SocketClientOut.receiveAccess();
-                if (Encoding.ASCII.GetString(access) == "granted")
-                {
-                    var st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    Account x = JsonConvert.DeserializeObject<Account>(st);
-                    AccountManager.instance.LoadAccount(x);
-                    st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    AccountManager.instance.AllSongs = JsonConvert.DeserializeObject<Playlist>(st);
-                    Reset();
-                    this.Hide();
-                    //b.Show();
-                    ApplicationManager.instance.SignIn();
-                }
-                else if (Encoding.ASCII.GetString(access) == "denied")
-                {
-                    InvalidLogin.Visibility = Visibility.Visible;
-                }
             }
         }
 
@@ -69,39 +44,14 @@ namespace Spooftify
         {
             if (e.Key == Key.Enter)
             {
-                if (user.Text == "" || pass.Password == "")
+                if ((user.Text == "" || pass.Password == "") || !ApplicationManager.instance.SignIn(user.Text, pass.Password))
                 {
                     InvalidLogin.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    //SocketClientOut.accountEstablish();
-                    SocketClientOut.connectionEstablish();
-                    SocketClientOut.privatePort();
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("login"));
-                    SocketClientOut.sendIdAndPassword(Encoding.ASCII.GetBytes(user.Text), Encoding.ASCII.GetBytes(pass.Password));
-                    var access = SocketClientOut.receiveAccess();
-                    if (Encoding.ASCII.GetString(access) == "granted")
-                    {
-                        var st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                        Account x = JsonConvert.DeserializeObject<Account>(st);
-                        AccountManager.instance.LoadAccount(x);
-                        st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                        AccountManager.instance.AllSongs = JsonConvert.DeserializeObject<Playlist>(st);
-                        Reset();
-                        this.Hide();
-                        //b.Show();
-                        ApplicationManager.instance.SignIn();
-                    }
-                    else if (Encoding.ASCII.GetString(access) == "denied")
-                    {
-                        InvalidLogin.Visibility = Visibility.Visible;
-                    }
                 }
             }
         }
 
-        private void Reset()
+        public void Reset()
         {
             user.Text = "";
             pass.Password = "";

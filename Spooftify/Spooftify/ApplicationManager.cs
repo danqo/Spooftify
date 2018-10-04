@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Windows;
+using WpfApp1;
 
 namespace Spooftify
 {
@@ -36,10 +38,32 @@ namespace Spooftify
             return false;
         }
 
-        public void SignIn()
+        public bool SignIn(string username, string password)
         {
-            mainPage = new SpooftifyMain();
-            mainPage.Show();
+            //SocketClientOut.accountEstablish();
+            SocketClientOut.connectionEstablish();
+            SocketClientOut.privatePort();
+            SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("login"));
+            SocketClientOut.sendIdAndPassword(Encoding.ASCII.GetBytes(username), Encoding.ASCII.GetBytes(password));
+            var access = SocketClientOut.receiveAccess();
+            if (Encoding.ASCII.GetString(access) == "granted")
+            {
+                var st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                Account x = JsonConvert.DeserializeObject<Account>(st);
+                AccountManager.instance.LoadAccount(x);
+                st = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                AccountManager.instance.AllSongs = JsonConvert.DeserializeObject<Playlist>(st);
+                loginPage.Reset();
+                loginPage.Hide();
+                mainPage = new SpooftifyMain();
+                mainPage.Show();
+                return true;
+            }
+            else if (Encoding.ASCII.GetString(access) == "denied")
+            {
+                return false;
+            }
+            return false;
         }
 
         public void Logout()
