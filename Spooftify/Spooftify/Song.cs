@@ -29,12 +29,14 @@ namespace Spooftify
             mTitle = title;
             mArtist = artist;
         }
+
         public Song(string title, string artist, string extension)
         {
             mTitle = title;
             mArtist = artist;
             mExtension = extension;
         }
+
         public Song(Song s)
         {
             mTitle = s.Title;
@@ -42,9 +44,15 @@ namespace Spooftify
             mExtension = s.Extension;
             mAlbum = s.Album;
         }
+
         public override string ToString()
         {
             return String.Format("{0} ({1}) - {2}", mArtist, mAlbum, mTitle);
+        }
+
+        public bool IsSame(Song s)
+        {
+            return mTitle.Equals(s.Title) && mArtist.Equals(s.Artist) && mAlbum.Equals(s.Album);
         }
     }
 }

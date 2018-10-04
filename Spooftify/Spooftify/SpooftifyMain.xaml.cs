@@ -94,6 +94,7 @@ namespace Spooftify
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             //AccountManager.instance.SaveAccount();
+            
             SocketClientOut.logout();
             ApplicationManager.instance.Logout();
         }

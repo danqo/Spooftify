@@ -21,5 +21,20 @@ namespace Spooftify
         private string email;
         private string birthday;
         private string avatarURI;
+
+        public Account()
+        {
+            username = "";
+            name = "";
+            email = "";
+            birthday = "";
+            avatarURI = "";
+            playlists = new List<Playlist>();
+        }
+
+        public Playlist FindPlaylist(String playlistName)
+        {
+            return playlists.FirstOrDefault(x => x.Name.Equals(playlistName));
+        }
     }
 }

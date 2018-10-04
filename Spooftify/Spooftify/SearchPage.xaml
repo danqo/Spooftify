@@ -53,8 +53,8 @@
                 <ComboBoxItem Content="Album"/>
             </ComboBox>
         </StackPanel>
-        <Label Grid.Row="3" x:Name="AddSongMsg" Content="Song added!" Foreground="Tomato" FontSize="24" HorizontalAlignment="Center" Visibility="Hidden"/>
-        <ListBox Grid.Row="4" x:Name="SearchListBox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" SelectionChanged="SearchListBox_SelectionChanged">
+        <Label Grid.Row="3" x:Name="AddRemoveSongMsg" Content="Song added!" Foreground="Green" FontSize="18" HorizontalAlignment="Center" Visibility="Hidden"/>
+        <ListBox Grid.Row="4" x:Name="SearchListBox" MouseRightButtonUp="SearchListBox_MouseRightButtonUp" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

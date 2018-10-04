@@ -42,6 +42,23 @@ namespace WpfApp1
         }
         public static void logout()
         {
+            buffering = false;
+            if (waveOut != null)
+            {
+                if (waveOut.PlaybackState == PlaybackState.Paused || waveOut.PlaybackState == PlaybackState.Playing)
+                {
+                    waveOut.Stop();
+                    client.Send(Encoding.ASCII.GetBytes("no more"), 7);
+
+                    byte[] b = new byte[100];
+                    do
+                    {
+                        b = client.Receive(ref ep);
+                    } while (Encoding.ASCII.GetString(b) != "done");
+
+                    //client.Receive(ref ep);
+                }
+            }
             SocketClientOut.client.Send(Encoding.ASCII.GetBytes("logout"), 6);
             string c = JsonConvert.SerializeObject(AccountManager.instance.Acct);
             var send = Encoding.ASCII.GetBytes(c);
@@ -114,7 +131,7 @@ namespace WpfApp1
                 if (Encoding.ASCII.GetString(receivedData) == "done")
                     break;
                 else
-                    client.Send(Encoding.ASCII.GetBytes("more"), 4);
+                    client.Send(Encoding.ASCII.GetBytes("more"), 4);    // Nhan change value here
             
                 Mp3Frame frame;
                 Stream ms = new MemoryStream();
