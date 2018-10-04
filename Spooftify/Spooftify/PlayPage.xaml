@@ -21,6 +21,51 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" x:Name="PlaylistName" Content="Playlist #1" HorizontalContentAlignment="Center" Background="#1B1B1B" Foreground="LightGray" FontSize="36" FontWeight="DemiBold"/>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <Image/>
+                    <Label Content="Previous Song" Foreground="White" HorizontalAlignment="Center"/>
+                    <Label x:Name="prevTitle" Content="Title: " Foreground="White"/>
+                    <Label x:Name="prevArtist" Content="Artist: " Foreground="White"/>
+                    <Label x:Name="prevAlbum" Content="Album: " Foreground="White"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <Image/>
+                    <Label Content="Current Song" Foreground="White" HorizontalAlignment="Center"/>
+                    <Label x:Name="curTitle" Content="Title: " Foreground="White"/>
+                    <Label x:Name="curArtist" Content="Artist: " Foreground="White"/>
+                    <Label x:Name="curAlbum" Content="Album: " Foreground="White"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <Image/>
+                    <Label Content="Next Song" Foreground="White" HorizontalAlignment="Center"/>
+                    <Label x:Name="nextTitle" Content="Title: " Foreground="White"/>
+                    <Label x:Name="nextArtist" Content="Artist: " Foreground="White"/>
+                    <Label x:Name="nextAlbum" Content="Album: " Foreground="White"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="1">
+                <Slider Width="500">
+                </Slider>
+                <StackPanel Orientation="Horizontal" Margin="9,9,9,9" HorizontalAlignment="Center">
+                    <Button Content="Previous" Margin="5,5,5,5"/>
+                    <Button Content="Play" Margin="5,5,5,5"/>
+                    <Button Content="Stop" Margin="5,5,5,5"/>
+                    <Button Content="Next" Margin="5,5,5,5"/>
+                </StackPanel>
+
+            </StackPanel>
+        </Grid>
         <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" MouseDoubleClick="SongListbox_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
