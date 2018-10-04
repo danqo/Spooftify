@@ -95,7 +95,6 @@ namespace Spooftify
                 string songName = ((SearchListBox.SelectedItem) as Song).ToString();
                 SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                 SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                //SocketClientOut.sendSongName(Encoding.ASCII.GetBytes("haha"));
                 var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                 if (msg == "granted")
                 {
