@@ -8,6 +8,12 @@
       d:DesignHeight="630" d:DesignWidth="600"
       Title="PlaylistsPage">
 
+    <Page.Resources>
+        <ContextMenu x:Key="playlistContextMenu">
+            <MenuItem Header="Remove" Click="MenuItem_Remove_Click"/>
+        </ContextMenu>
+    </Page.Resources>
+    
     <Grid Background="Black">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -15,7 +21,7 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Playlists" HorizontalContentAlignment="Center" Background="#1B1B1B" Foreground="LightGray" FontSize="36" FontWeight="DemiBold"/>
-        <ListBox Grid.Row="1" x:Name="PlaylistListBox" ItemsSource="{Binding Playlists}" MouseDoubleClick="PlaylistListBox_MouseDoubleClick" Background="Black" MaxWidth="600" Padding="12" BorderBrush="Black">
+        <ListBox Grid.Row="1" x:Name="PlaylistListBox" ItemsSource="{Binding Playlists}" MouseDoubleClick="PlaylistListBox_MouseDoubleClick" MouseRightButtonUp="PlaylistListBox_MouseRightButtonUp" Background="Black" MaxWidth="600" Padding="12" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

@@ -16,11 +16,6 @@ using System.Windows.Shapes;
 
 namespace Spooftify
 {
-    /*
-     *
-     * set currplaylist to null if the playlist to delete is curr playlist
-     */
-
     /// <summary>
     /// Interaction logic for PlaylistsPage.xaml
     /// </summary>
@@ -40,7 +35,7 @@ namespace Spooftify
             if (AccountManager.instance.Acct.Playlists.FirstOrDefault(x => x.Name.Equals(AddPlaylistTextBox.Text)) == null)
             {
                 AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
-                PlaylistListBox.Items.Refresh();
+                RefreshPlaylists();
                 AddPlaylistTextBox.Text = "";
                 AddPlaylistMsg.Content = ADDED_PLAYLIST_MSG;
                 AddPlaylistMsg.Foreground = Brushes.Green;
@@ -61,7 +56,7 @@ namespace Spooftify
                 if (AccountManager.instance.Acct.Playlists.FirstOrDefault(x => x.Name.Equals(AddPlaylistTextBox.Text)) == null)
                 {
                     AccountManager.instance.Acct.Playlists.Add(new Playlist(AddPlaylistTextBox.Text));
-                    PlaylistListBox.Items.Refresh();
+                    RefreshPlaylists();
                     AddPlaylistTextBox.Text = "";
                     AddPlaylistMsg.Content = ADDED_PLAYLIST_MSG;
                     AddPlaylistMsg.Foreground = Brushes.Green;
@@ -78,9 +73,8 @@ namespace Spooftify
 
         private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            
             HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
-            if (r.VisualHit.GetType() != typeof(TextBlock))
+            if (r.VisualHit.GetType() != typeof(TextBlock) && r.VisualHit.GetType() != typeof(Border))
             {
                 PlaylistListBox.SelectedItem = null;
             }
@@ -88,6 +82,32 @@ namespace Spooftify
             {
                 AccountManager.instance.CurrentPlaylist = PlaylistListBox.SelectedItem as Playlist;
                 ApplicationManager.instance.MainPage.LoadPlayPage();
+            }
+        }
+
+        private void PlaylistListBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
+            if (r.VisualHit.GetType() != typeof(TextBlock) && r.VisualHit.GetType() != typeof(Border))
+            {
+                PlaylistListBox.SelectedItem = null;
+            }
+            else
+            {
+                ContextMenu cm = this.FindResource("playlistContextMenu") as ContextMenu;
+                cm.PlacementTarget = sender as ListBox;
+                cm.IsOpen = true;
+            }
+        }
+
+        private void MenuItem_Remove_Click(object sender, RoutedEventArgs e)
+        {
+            if (PlaylistListBox.SelectedItem != null)
+            {
+                AccountManager.instance.CurrentPlaylist = null;
+                AccountManager.instance.Acct.Playlists.Remove(AccountManager.instance.Acct.Playlists.FirstOrDefault(x => x.Name.Equals((PlaylistListBox.SelectedItem as Playlist).Name)));
+                RefreshPlaylists();
+                ApplicationManager.instance.MainPage.TogglePlayPageButton();
             }
         }
 
@@ -100,11 +120,17 @@ namespace Spooftify
             }
         }
 
+        private void RefreshPlaylists()
+        {
+            PlaylistListBox.SelectedItem = null;
+            PlaylistListBox.Items.Refresh();
+        }
+
         public void Reset()
         {
             AddPlaylistMsg.Visibility = Visibility.Hidden;
             AddPlaylistTextBox.Text = "";
-            PlaylistListBox.Items.Refresh();
+            RefreshPlaylists();
         }
     }
 }

@@ -93,8 +93,8 @@ namespace Spooftify
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            SocketClientOut.logout();
             AccountManager.instance.SaveAccount();
+            SocketClientOut.logout();
             ApplicationManager.instance.Logout();
         }
 
@@ -106,11 +106,11 @@ namespace Spooftify
             ProfileButtonImage.Source = ProfileDefault;
         }
 
-        // call this if a playlist is deleted
         public void TogglePlayPageButton()
         {
             PlayPageButton.IsEnabled = AccountManager.instance.CurrentPlaylist != null;
             PlayPageButtonImage.Source = PlayPageButton.IsEnabled ? PlayPageDefault : PlayPageDisabled;
+            // stop playing the music if the playlist deleted is the active one
         }
 
         public void ResetPages()
