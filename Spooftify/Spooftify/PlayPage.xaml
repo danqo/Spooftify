@@ -23,8 +23,8 @@
         <Label Grid.Row="0" x:Name="PlaylistName" Content="Playlist #1" HorizontalContentAlignment="Center" Background="#1B1B1B" Foreground="LightGray" FontSize="36" FontWeight="DemiBold"/>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -34,36 +34,56 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
                     <Image/>
-                    <Label Content="Previous Song" Foreground="White" HorizontalAlignment="Center"/>
-                    <Label x:Name="prevTitle" Content="Title: " Foreground="White"/>
-                    <Label x:Name="prevArtist" Content="Artist: " Foreground="White"/>
-                    <Label x:Name="prevAlbum" Content="Album: " Foreground="White"/>
+                    <Label Content="Previous Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="16" />
+                    <Label x:Name="prevTitle" Content="Title: " Foreground="LightGray" FontSize="16" />
+                    <Label x:Name="prevArtist" Content="Artist: " Foreground="LightGray" FontSize="16" />
+                    <Label x:Name="prevAlbum" Content="Album: " Foreground="LightGray" FontSize="16" />
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Image/>
-                    <Label Content="Current Song" Foreground="White" HorizontalAlignment="Center"/>
-                    <Label x:Name="curTitle" Content="Title: " Foreground="White"/>
-                    <Label x:Name="curArtist" Content="Artist: " Foreground="White"/>
-                    <Label x:Name="curAlbum" Content="Album: " Foreground="White"/>
+                    <Label Content="Current Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="16" />
+                    <Label x:Name="currTitle" Content="Title: " Foreground="LightGray" FontSize="16" />
+                    <Label x:Name="currArtist" Content="Artist: " Foreground="LightGray" FontSize="16" />
+                    <Label x:Name="currAlbum" Content="Album: " Foreground="LightGray" FontSize="16" />
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <Image/>
-                    <Label Content="Next Song" Foreground="White" HorizontalAlignment="Center"/>
-                    <Label x:Name="nextTitle" Content="Title: " Foreground="White"/>
-                    <Label x:Name="nextArtist" Content="Artist: " Foreground="White"/>
-                    <Label x:Name="nextAlbum" Content="Album: " Foreground="White"/>
+                    <Label Content="Next Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="16" />
+                    <Label x:Name="nextTitle" Content="Title: " Foreground="LightGray" FontSize="16" />
+                    <Label x:Name="nextArtist" Content="Artist: " Foreground="LightGray" FontSize="16" />
+                    <Label x:Name="nextAlbum" Content="Album: " Foreground="LightGray" FontSize="16" />
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="1">
-                <Slider Width="500">
+                <Slider x:Name="SeekBar" Width="500">
                 </Slider>
-                <StackPanel Orientation="Horizontal" Margin="9,9,9,9" HorizontalAlignment="Center">
-                    <Button Content="Previous" Margin="5,5,5,5"/>
-                    <Button Content="Play" Margin="5,5,5,5"/>
-                    <Button Content="Stop" Margin="5,5,5,5"/>
-                    <Button Content="Next" Margin="5,5,5,5"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label x:Name="CurrentTimestampLabel" Content="00:00" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
+                    <Label x:Name="Separator" Content="/" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
+                    <Label x:Name="TotalTimestampLabel" Content="00:00" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
                 </StackPanel>
-
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                    <Button x:Name="PlayerControlPrev" Margin="5" Click="PlayerControlPrev_Click" Background="Black" BorderThickness="0">
+                        <Viewbox Height="30">
+                            <Image x:Name="PlayerPrevImage" Source="Images/SpooftifyPrevButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="PlayerControlPlayPause" Margin="5" Background="Black" BorderThickness="0">
+                        <Viewbox Height="30">
+                            <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="PlayerControlStop" Margin="5" Background="Black" BorderThickness="0">
+                        <Viewbox Height="30">
+                            <Image x:Name="PlayerStopImage" Source="Images/SpooftifyStopButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="PlayerControlNext" Margin="5" Background="Black" BorderThickness="0">
+                        <Viewbox Height="30">
+                            <Image x:Name="PlayerNextImage" Source="Images/SpooftifyNextButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </Button>
+                </StackPanel>
             </StackPanel>
         </Grid>
         <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" MouseDoubleClick="SongListbox_MouseDoubleClick">

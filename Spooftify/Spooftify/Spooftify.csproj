@@ -192,5 +192,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SpooftifyNextButton.png" />
+    <Resource Include="Images\SpooftifyPauseButton.png" />
+    <Resource Include="Images\SpooftifyPlayButton.png" />
+    <Resource Include="Images\SpooftifyPrevButton.png" />
+    <Resource Include="Images\SpooftifyStopButton.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
