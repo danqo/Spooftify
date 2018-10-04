@@ -97,9 +97,12 @@ namespace WpfApp1
                 if(bufferedWaveProvider != null &&bufferedWaveProvider.BufferedDuration.TotalSeconds > 10)
                 {
                     Thread.Sleep(1000);
+                    if (buffering == false)
+                        break;
                 }
                 var receivedData = client.Receive(ref ep);
 
+                  
                 if (Encoding.ASCII.GetString(receivedData) == "done")
                     break;
                 else
@@ -134,9 +137,15 @@ namespace WpfApp1
                     //playThread.Start();
                     
                 }
-                int decompressed = decomp.DecompressFrame(frame, buffer, 0);
+                try
+                {
+                    int decompressed = decomp.DecompressFrame(frame, buffer, 0);
                     bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
-
+                }
+                catch
+                {
+                    break;
+                }
               
 
                 count++;
@@ -146,11 +155,19 @@ namespace WpfApp1
         }
         public static void stopSong()
         {
-
-            if (waveOut.PlaybackState == PlaybackState.Paused || waveOut.PlaybackState == PlaybackState.Playing)
+            buffering = false;
+            
+           if (waveOut.PlaybackState == PlaybackState.Paused || waveOut.PlaybackState == PlaybackState.Playing)
             {
-                client.Send(Encoding.ASCII.GetBytes("no more"), 7);
                 waveOut.Stop();
+                client.Send(Encoding.ASCII.GetBytes("no more"), 7);
+
+                byte[] b = new byte[100];
+                do
+                {
+                    b = client.Receive(ref ep);
+                } while (Encoding.ASCII.GetString(b) != "done");
+                
                 //client.Receive(ref ep);
             }
         }

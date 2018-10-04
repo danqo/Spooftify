@@ -328,8 +328,9 @@ namespace WpfApp1
                     mp3Frame = reader.ReadNextFrame();
 
                 }
-                udpServer.Send(Encoding.ASCII.GetBytes("done"), 4, privateEP);
+                privatePort.Send(Encoding.ASCII.GetBytes("done"), 4, privateEP);
                 Console.WriteLine("Total packet sent: " + total);
+                Console.WriteLine("------Stop Sending------");
 
             }
         }

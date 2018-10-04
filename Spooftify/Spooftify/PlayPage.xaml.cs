@@ -13,8 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
-
+using WpfApp1;
 using ListBox = System.Windows.Controls.ListBox;
+using System.Threading;
 
 namespace Spooftify
 {
@@ -67,6 +68,51 @@ namespace Spooftify
         private void SongListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+            if (e.AddedItems.Count != 0)
+            {
+                if (SocketClientOut.waveOut == null)
+                {
+                    var b = e.OriginalSource as ListBox;
+                    string songName = b.SelectedItem.ToString();
+                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
+                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                    if (msg == "granted")
+                    {
+                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                        Thread receiveThread = new Thread(receiveStart);
+                        SocketClientOut.buffering = true;
+                        receiveThread.Start();
+                        //SocketClientOut.playSong();
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show(msg);
+                    }
+                }
+                else
+                {
+                    SocketClientOut.stopSong();
+                    SocketClientOut.waveOut.Dispose();
+                    var b = e.OriginalSource as ListBox;
+                    string songName = b.SelectedItem.ToString();
+                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
+                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                    if (msg == "granted")
+                    {
+                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                        Thread receiveThread = new Thread(receiveStart);
+                        SocketClientOut.buffering = true;
+                        receiveThread.Start();
+                        //SocketClientOut.playSong();
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show(msg);
+                    }
+                }
+            }
         }
     }
 }
