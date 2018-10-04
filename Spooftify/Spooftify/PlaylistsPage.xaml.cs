@@ -78,6 +78,12 @@ namespace Spooftify
 
         private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            
+            HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
+            if (r.VisualHit.GetType() != typeof(TextBlock))
+            {
+                PlaylistListBox.SelectedItem = null;
+            }
             if (PlaylistListBox.SelectedItem != null)
             {
                 AccountManager.instance.CurrentPlaylist = PlaylistListBox.SelectedItem as Playlist;
