@@ -24,6 +24,9 @@ namespace Spooftify
         ApplicationManager applicationManager;
         AccountManager accountManager;
 
+        private const string CONNECTION_FAILURE = "Could not connect to the host. Please try later.";
+        private const string INVALID_LOGIN = "Incorrect username or password!";
+
         public Login()
         {
             InitializeComponent();
@@ -36,6 +39,7 @@ namespace Spooftify
         {
             if ((user.Text == "" || pass.Password == "") || !ApplicationManager.instance.SignIn(user.Text, pass.Password))
             {
+                InvalidLogin.Content = ApplicationManager.instance.connectionError ? CONNECTION_FAILURE : INVALID_LOGIN;
                 InvalidLogin.Visibility = Visibility.Visible;
             }
         }
@@ -46,6 +50,7 @@ namespace Spooftify
             {
                 if ((user.Text == "" || pass.Password == "") || !ApplicationManager.instance.SignIn(user.Text, pass.Password))
                 {
+                    InvalidLogin.Content = ApplicationManager.instance.connectionError ? CONNECTION_FAILURE : INVALID_LOGIN;
                     InvalidLogin.Visibility = Visibility.Visible;
                 }
             }

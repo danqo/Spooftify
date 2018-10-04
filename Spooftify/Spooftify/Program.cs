@@ -202,9 +202,7 @@ namespace WpfApp1
             }
             catch
             {
-                MessageBox.Show("can't connect to the host, please try again later");
-               
-                
+                //MessageBox.Show("can't connect to the host, please try again later");
             }
             return Encoding.ASCII.GetBytes("ServerTimeOut");
         }

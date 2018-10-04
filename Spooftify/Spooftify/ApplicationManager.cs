@@ -12,6 +12,7 @@ namespace Spooftify
     {
         public static ApplicationManager instance;
 
+        public bool connectionError = false;
         public bool explicitShutdown = false;
         public Login LoginPage { get => loginPage; set => loginPage = value; }
         public SpooftifyMain MainPage { get => mainPage; set => mainPage = value; }
@@ -40,6 +41,7 @@ namespace Spooftify
 
         public bool SignIn(string username, string password)
         {
+            connectionError = false;
             //SocketClientOut.accountEstablish();
             SocketClientOut.connectionEstablish();
             SocketClientOut.privatePort();
@@ -61,6 +63,11 @@ namespace Spooftify
             }
             else if (Encoding.ASCII.GetString(access) == "denied")
             {
+                return false;
+            }
+            else if (Encoding.ASCII.GetString(access) == "ServerTimeOut")
+            {
+                connectionError = true;
                 return false;
             }
             return false;
