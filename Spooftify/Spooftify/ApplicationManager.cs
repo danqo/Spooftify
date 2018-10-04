@@ -92,7 +92,9 @@ namespace Spooftify
             {
                 //AccountManager.instance.SaveAccount();
                 if(AccountManager.instance.Acct != null)
+                {
                     SocketClientOut.logout();
+                }
                 Application.Current.Shutdown();
             }
             return explicitShutdown;
