@@ -29,6 +29,7 @@ namespace Spooftify
         public PlayPage()
         {
             InitializeComponent();
+           
         }
 
         public void Reset()
@@ -123,6 +124,7 @@ namespace Spooftify
 
         private void PlayerControlStop_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            
             if (SocketClientOut.waveOut != null)
             {
                 if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
@@ -134,9 +136,55 @@ namespace Spooftify
             }
         }
 
-        private void PlayerControlStop_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void StackPanel_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        private void PlayerPlayPauseImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (SocketClientOut.waveOut != null)
+            {
+                if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
+                {
+                    SocketClientOut.buffering = false;
+                    SocketClientOut.pauseSong();
+                    PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
+                    //pauseResume.Content = "Resume";
+                }
+                else if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+                {
+                    SocketClientOut.buffering = true;
+                    ThreadStart receiveStart = new ThreadStart(SocketClientOut.resumeSong);
+                    Thread receiveThread = new Thread(receiveStart);
+                    receiveThread.Start();
+                    PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPlayButton.png"));
+                    //pauseResume.Content = "Pause";
+                }
+            }
+            else
+            {
+                if(SongListbox.SelectedItem != null)
+                {
+                    string songName = SongListbox.SelectedItem.ToString();
+                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
+                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                    if (msg == "granted")
+                    {
+                        PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
+                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                        Thread receiveThread = new Thread(receiveStart);
+                        SocketClientOut.buffering = true;
+                        receiveThread.Start();
+                        //SocketClientOut.playSong();
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show(msg);
+                    }
+                }
+            }
         }
     }
 }

@@ -70,7 +70,7 @@
                     </Button>
                     <Button x:Name="PlayerControlPlayPause" Margin="5" Background="Black" BorderThickness="0">
                         <Viewbox Height="30">
-                            <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonUp="PlayerPlayPauseImage_MouseLeftButtonUp"/>
                         </Viewbox>
                     </Button>
                     <Button x:Name="PlayerControlStop" Margin="5" Background="Black" BorderThickness="0" >
