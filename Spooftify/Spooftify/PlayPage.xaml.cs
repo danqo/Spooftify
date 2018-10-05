@@ -212,12 +212,6 @@ namespace Spooftify
             System.Diagnostics.Debug.WriteLine("Next Clicked");
         }
 
-        private void PlayerPlayPauseImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
-
-        }
-
         private void SeekBar_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
 

@@ -104,28 +104,22 @@
                     <Label x:Name="TotalTimestampLabel" Content="00:00" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
-                    <Button x:Name="PlayerControlPrev" Margin="5" Click="PlayerControlPrev_Click" Background="Black" BorderThickness="0">
+                    <Button x:Name="PlayerControlPrev" Click="PlayerControlPrev_Click" Margin="5" Background="Black" BorderThickness="0">
                         <Viewbox Height="30">
                             <Image x:Name="PlayerPrevImage" Source="Images/SpooftifyPrevButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
                     </Button>
-
-                    <Button x:Name="PlayerControlPlayPause" Margin="5" Click="PlayerControlPlayPause_Click" Background="Black" BorderThickness="0">
-
+                    <Button x:Name="PlayerControlPlayPause" Click="PlayerControlPlayPause_Click" Margin="5" Background="Black" BorderThickness="0">
                         <Viewbox Height="30">
-                            <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonUp="PlayerPlayPauseImage_MouseLeftButtonUp"/>
+                            <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
                     </Button>
-
-                    <Button x:Name="PlayerControlStop" Margin="5" Click="PlayerControlStop_Click" Background="Black" BorderThickness="0">
-
+                    <Button x:Name="PlayerControlStop" Click="PlayerControlStop_Click" Margin="5" Background="Black" BorderThickness="0">
                         <Viewbox Height="30">
                             <Image x:Name="PlayerStopImage" Source="Images/SpooftifyStopButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
                     </Button>
-
-                    <Button x:Name="PlayerControlNext" Margin="5" Click="PlayerControlNext_Click" Background="Black" BorderThickness="0">
-
+                    <Button x:Name="PlayerControlNext" Click="PlayerControlNext_Click" Margin="5" Background="Black" BorderThickness="0">
                         <Viewbox Height="30">
                             <Image x:Name="PlayerNextImage" Source="Images/SpooftifyNextButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
