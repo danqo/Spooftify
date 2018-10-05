@@ -112,12 +112,9 @@ namespace WpfApp1
 
             int count = 0;
             var buffer = new byte[16384 * 4];
-            // then receive data
             do
             {
-                //if(bufferedWaveProvider != null &&
-                //        bufferedWaveProvider.BufferLength - bufferedWaveProvider.BufferedBytes
-                //      < bufferedWaveProvider.WaveFormat.AverageBytesPerSecond / 4)
+
                 if(bufferedWaveProvider != null &&bufferedWaveProvider.BufferedDuration.TotalSeconds > 10)
                 {
                     Thread.Sleep(1000);
@@ -147,11 +144,6 @@ namespace WpfApp1
                     bufferedWaveProvider = new BufferedWaveProvider(decomp.OutputFormat);
                     bufferedWaveProvider.BufferDuration =
                         TimeSpan.FromSeconds(20);
-                    //var volumeProvider = new VolumeWaveProvider16(bufferedWaveProvider);
-                    //volumeProvider.Volume = 1;
-                    
-                    // allow us to get well ahead of ourselves
-                    //this.bufferedWaveProvider.BufferedDuration = 250;
                 }
                 if (bufferedWaveProvider.BufferedDuration.TotalSeconds > 5 && waveOut.PlaybackState == PlaybackState.Stopped && buffering == true)
                 {

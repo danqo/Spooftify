@@ -120,5 +120,23 @@ namespace Spooftify
         {
 
         }
+
+        private void PlayerControlStop_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (SocketClientOut.waveOut != null)
+            {
+                if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+                {
+                    SocketClientOut.buffering = false;
+                    SocketClientOut.stopSong();
+
+                }
+            }
+        }
+
+        private void PlayerControlStop_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

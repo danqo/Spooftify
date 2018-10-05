@@ -73,9 +73,9 @@
                             <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
                     </Button>
-                    <Button x:Name="PlayerControlStop" Margin="5" Background="Black" BorderThickness="0">
-                        <Viewbox Height="30">
-                            <Image x:Name="PlayerStopImage" Source="Images/SpooftifyStopButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Button x:Name="PlayerControlStop" Margin="5" Background="Black" BorderThickness="0" >
+                        <Viewbox Height="30" >
+                            <Image x:Name="PlayerStopImage" Source="Images/SpooftifyStopButton.png" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonUp="PlayerControlStop_MouseLeftButtonUp" />
                         </Viewbox>
                     </Button>
                     <Button x:Name="PlayerControlNext" Margin="5" Background="Black" BorderThickness="0">
