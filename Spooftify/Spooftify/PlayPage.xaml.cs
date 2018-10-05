@@ -22,6 +22,10 @@ namespace Spooftify
     /// </summary>
     public partial class PlayPage : Page
     {
+        private const string ALBUM_LABEL = "Album: ";
+        private const string ARTIST_LABEL = "Artist: ";
+        private const string TITLE_LABEL = "Title: ";
+
         public PlayPage()
         {
             InitializeComponent();
@@ -110,6 +114,11 @@ namespace Spooftify
                     }
                 }
             }
+        }
+
+        private void PlayerControlPrev_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
