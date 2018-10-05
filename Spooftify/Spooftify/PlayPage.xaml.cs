@@ -118,25 +118,32 @@ namespace Spooftify
 
         private void PlayerControlPrev_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Diagnostics.Debug.WriteLine("Prev Clicked");
         }
 
-        private void PlayerControlStop_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void PlayerControlPlayPause_Click(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("Play Pause Clicked");
+        }
+
+        private void PlayerControlStop_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Stop Clicked");
+            /* Nhan's code
             if (SocketClientOut.waveOut != null)
             {
                 if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
                 {
                     SocketClientOut.buffering = false;
                     SocketClientOut.stopSong();
-
                 }
             }
+             */
         }
 
-        private void PlayerControlStop_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void PlayerControlNext_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Diagnostics.Debug.WriteLine("Next Clicked");
         }
     }
 }
