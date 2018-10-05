@@ -17,10 +17,9 @@ namespace WpfApp1
 {
     class SocketClientOut
     {
-        public static bool buffering;
-        private static PlaybackState currentState;
+        public static bool buffering; 
         public static UdpClient client ;
-        //public static TcpClient tcpClient ;
+        
         public static IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         public static BufferedWaveProvider bufferedWaveProvider = null;
         public static WaveOut waveOut = null;
@@ -85,14 +84,11 @@ namespace WpfApp1
                     MessageBox.Show("Failed to establish private connection");
                 }
             }
-            //client.Send(Encoding.ASCII.GetBytes("Hello"), 5);
 
         }
         public static  void sendActionRequest(byte[] requestAction)
         {
             client.Send(requestAction, requestAction.Length);
-           //tcpClient.Client = client.Client;
-            //tcpClient.Client.Send(requestAction);
         }
         public static void sendIdAndPassword(byte[] id, byte[] password)
         {
@@ -114,10 +110,10 @@ namespace WpfApp1
             var buffer = new byte[16384 * 4];
             do
             {
-
-                if(bufferedWaveProvider != null &&bufferedWaveProvider.BufferedDuration.TotalSeconds > 10)
+                
+                if(bufferedWaveProvider != null &&bufferedWaveProvider.BufferedDuration.TotalSeconds > 5)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
                     if (buffering == false)
                         break;
                 }
@@ -129,7 +125,7 @@ namespace WpfApp1
                     break;
                 else
                     client.Send(Encoding.ASCII.GetBytes("more"), 4);    // Nhan change value here
-            
+                
                 Mp3Frame frame;
                 Stream ms = new MemoryStream();
                 
@@ -149,9 +145,6 @@ namespace WpfApp1
                 {
                     waveOut.Init(bufferedWaveProvider);
                     waveOut.Play();
-                    //ThreadStart play = new ThreadStart(playSong);
-                    //Thread playThread = new Thread(play);
-                    //playThread.Start();
                     
                 }
                 try
