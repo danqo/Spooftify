@@ -23,15 +23,18 @@ namespace Spooftify
     public partial class PlayPage : Page
     {
         Thread receiveThread;
-        private const string ALBUM_LABEL = "Album: ";
-        private const string ARTIST_LABEL = "Artist: ";
-        private const string TITLE_LABEL = "Title: ";
+
+        private BitmapImage PlayButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPlayButton.png"));
+        private BitmapImage PauseButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
+        private BitmapImage StopButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyStopButton.png"));
+        private BitmapImage PrevButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPrevButton.png"));
+        private BitmapImage NextButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyNextButton.png"));
+
         private Song curSong;
 
         public PlayPage()
         {
             InitializeComponent();
-           
         }
 
         public void Reset()
@@ -89,7 +92,7 @@ namespace Spooftify
                         TimeSpan total = new TimeSpan();
                         TimeSpan.TryParse(msg, out total);
                         TotalTimestampLabel.Content = total.Minutes+ ":" + total.Seconds;
-                        PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
@@ -121,7 +124,7 @@ namespace Spooftify
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                     if (msg == "granted")
                     {
-                        PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
@@ -152,7 +155,7 @@ namespace Spooftify
                 {
                     SocketClientOut.buffering = false;
                     SocketClientOut.pauseSong();
-                    PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPlayButton.png"));
+                    PlayerPlayPauseImage.Source = PlayButtonImg;
                     
                 }
                 else if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
@@ -161,8 +164,8 @@ namespace Spooftify
                     ThreadStart receiveStart = new ThreadStart(SocketClientOut.resumeSong);
                     Thread receiveThread = new Thread(receiveStart);
                     receiveThread.Start();
-                    
-                    PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
+
+                    PlayerPlayPauseImage.Source = PauseButtonImg;
                     //pauseResume.Content = "Pause";
                 }
             }
@@ -176,7 +179,7 @@ namespace Spooftify
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                     if (msg == "granted")
                     {
-                        PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
@@ -193,21 +196,19 @@ namespace Spooftify
 
         private void PlayerControlStop_Click(object sender, RoutedEventArgs e)
         {
-
             if (SocketClientOut.waveOut != null)
             {
                 if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
                 {
                     SocketClientOut.buffering = false;
                     SocketClientOut.stopSong();
+                    PlayerPlayPauseImage.Source = PlayButtonImg;
                 }
             }
-             
         }
 
 
         private void PlayerControlNext_Click(object sender, RoutedEventArgs e)
-
         {
             System.Diagnostics.Debug.WriteLine("Next Clicked");
         }
