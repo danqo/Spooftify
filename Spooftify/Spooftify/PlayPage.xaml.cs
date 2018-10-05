@@ -75,18 +75,23 @@ namespace Spooftify
             {
                 if (SocketClientOut.waveOut == null)
                 {
-
+                    SocketClientOut.buffering = true;
                     string songName = b.SelectedItem.ToString();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                     if (msg == "granted")
                     {
+                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                        TimeSpan total = new TimeSpan();
+                        TimeSpan.TryParse(msg, out total);
+                        TotalTimestampLabel.Content = total.Minutes+ ":" + total.Seconds;
                         PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                    
-                        SocketClientOut.buffering = true;
+                       
                         receiveThread.Start();
                         int a = receiveThread.ManagedThreadId;
                        
@@ -100,6 +105,8 @@ namespace Spooftify
 
                 else
                 {
+                    if (SocketClientOut.buffering == true)
+                        Thread.Sleep(150);
                     SocketClientOut.stopSong();
                     SocketClientOut.waveOut.Dispose();
                     b = sender as ListBox;

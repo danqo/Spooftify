@@ -136,18 +136,31 @@ namespace WpfApp1
                 frame = Mp3Frame.LoadFromStream(ms, true);
                 if (decomp == null)
                 {
-                    WaveFormat waveFormat = new Mp3WaveFormat(frame.SampleRate, frame.ChannelMode == ChannelMode.Mono ? 1 : 2,
+                    try
+                    {
+                        WaveFormat waveFormat = new Mp3WaveFormat(frame.SampleRate, frame.ChannelMode == ChannelMode.Mono ? 1 : 2,
                     frame.FrameLength, frame.BitRate);
-                    decomp = new AcmMp3FrameDecompressor(waveFormat);
+                        decomp = new AcmMp3FrameDecompressor(waveFormat);
+                    }
+                    catch
+                    {
+                        break;
+                    }
                     bufferedWaveProvider = new BufferedWaveProvider(decomp.OutputFormat);
                     bufferedWaveProvider.BufferDuration =
                         TimeSpan.FromSeconds(20);
                 }
                 if (bufferedWaveProvider.BufferedDuration.TotalSeconds > 5 && waveOut.PlaybackState == PlaybackState.Stopped && buffering == true)
                 {
-                    waveOut.Init(bufferedWaveProvider);
-                    waveOut.Play();
-                    
+                    try
+                    {
+                        waveOut.Init(bufferedWaveProvider);
+                        waveOut.Play();
+                    }
+                    catch
+                    {
+                        break;
+                    }
                 }
                 try
                 {

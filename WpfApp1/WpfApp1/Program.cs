@@ -142,7 +142,8 @@ namespace WpfApp1
             {
 
                 Mp3FileReader reader = new Mp3FileReader(mediaFolder + "\\" + sendingSong.Directory);
-               
+                var b = Encoding.ASCII.GetBytes(reader.TotalTime.ToString());
+                privatePort.Send(b, b.Length, privateEP);
                 //reader.CurrentTime = TimeSpan.FromSeconds(20);
                 Mp3Frame mp3Frame = reader.ReadNextFrame();
                 
