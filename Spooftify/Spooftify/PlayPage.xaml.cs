@@ -26,6 +26,7 @@ namespace Spooftify
         private const string ALBUM_LABEL = "Album: ";
         private const string ARTIST_LABEL = "Artist: ";
         private const string TITLE_LABEL = "Title: ";
+        private Song curSong;
 
         public PlayPage()
         {
@@ -77,6 +78,7 @@ namespace Spooftify
                 {
                     SocketClientOut.buffering = true;
                     string songName = b.SelectedItem.ToString();
+                    curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
@@ -90,8 +92,10 @@ namespace Spooftify
                         PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
-                   
-                       
+                        SocketClientOut.buffering = true;
+                        currTitle.Content = curSong.Title;
+                        currArtist.Content = curSong.Artist;
+                        currAlbum.Content = curSong.Album;
                         receiveThread.Start();
                         int a = receiveThread.ManagedThreadId;
                        
@@ -111,6 +115,7 @@ namespace Spooftify
                     SocketClientOut.waveOut.Dispose();
                     b = sender as ListBox;
                     string songName = b.SelectedItem.ToString();
+                    curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
@@ -120,6 +125,9 @@ namespace Spooftify
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
+                        currTitle.Content = curSong.Title;
+                        currArtist.Content = curSong.Artist;
+                        currAlbum.Content = curSong.Album;
                         receiveThread.Start();
                         //SocketClientOut.playSong();
                     }
@@ -207,7 +215,17 @@ namespace Spooftify
         private void PlayerPlayPauseImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            
+
+        }
+
+        private void SeekBar_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void SeekBar_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
