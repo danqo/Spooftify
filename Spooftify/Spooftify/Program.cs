@@ -23,6 +23,7 @@ namespace WpfApp1
         public static IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         public static BufferedWaveProvider bufferedWaveProvider = null;
         public static WaveOut waveOut = null;
+        public static Thread current = null;
         public static IMp3FrameDecompressor decomp;
         //got helps from erszcz on stackoverflow
         
@@ -105,12 +106,13 @@ namespace WpfApp1
         {
             waveOut = new WaveOut();
             decomp = null;
-
+            
+            
             int count = 0;
             var buffer = new byte[16384 * 4];
             do
             {
-                
+                current = Thread.CurrentThread;
                 if(bufferedWaveProvider != null &&bufferedWaveProvider.BufferedDuration.TotalSeconds > 5)
                 {
                     Thread.Sleep(200);
@@ -203,18 +205,28 @@ namespace WpfApp1
         {
             buffering = false;
             waveOut.Pause();
+            if (current != null)
+            {
+                current.Abort();
+                current.Abort();
+                
+            }
+            
         }
         public static void resumeSong()
         {
             buffering = true;
             waveOut.Resume();
-          
+            
             var buffer = new byte[16384 * 4];
             do
             {
+                current = Thread.CurrentThread;
                 if (bufferedWaveProvider != null && bufferedWaveProvider.BufferedDuration.TotalSeconds > 10)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
+                    if (buffering == false)
+                        break;
                 }
                 var receivedData = client.Receive(ref ep);
                 if (Encoding.ASCII.GetString(receivedData) == "done")
@@ -228,8 +240,16 @@ namespace WpfApp1
                 ms.Write(receivedData, 0, receivedData.Length);
                 ms.Position = 0;
                 frame = Mp3Frame.LoadFromStream(ms, true);
-                int decompressed = decomp.DecompressFrame(frame, buffer, 0);
-                bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                try
+                {
+                    int decompressed = decomp.DecompressFrame(frame, buffer, 0);
+                    bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                }
+                catch
+                {
+                    break;
+                }
+                
                
             } while (buffering);
         }

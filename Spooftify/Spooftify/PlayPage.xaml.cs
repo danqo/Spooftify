@@ -137,7 +137,6 @@ namespace Spooftify
                 {
                     SocketClientOut.buffering = false;
                     SocketClientOut.pauseSong();
-                    Thread.Sleep(500);
                     PlayerPlayPauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPlayButton.png"));
                     
                 }
