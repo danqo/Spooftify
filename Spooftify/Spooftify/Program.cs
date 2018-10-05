@@ -17,13 +17,13 @@ namespace WpfApp1
 {
     class SocketClientOut
     {
-        public static bool buffering;
-        private static PlaybackState currentState;
+        public static bool buffering; 
         public static UdpClient client ;
-        //public static TcpClient tcpClient ;
+        
         public static IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         public static BufferedWaveProvider bufferedWaveProvider = null;
         public static WaveOut waveOut = null;
+        public static Thread current = null;
         public static IMp3FrameDecompressor decomp;
         //got helps from erszcz on stackoverflow
         
@@ -85,14 +85,11 @@ namespace WpfApp1
                     MessageBox.Show("Failed to establish private connection");
                 }
             }
-            //client.Send(Encoding.ASCII.GetBytes("Hello"), 5);
 
         }
         public static  void sendActionRequest(byte[] requestAction)
         {
             client.Send(requestAction, requestAction.Length);
-           //tcpClient.Client = client.Client;
-            //tcpClient.Client.Send(requestAction);
         }
         public static void sendIdAndPassword(byte[] id, byte[] password)
         {
@@ -109,18 +106,16 @@ namespace WpfApp1
         {
             waveOut = new WaveOut();
             decomp = null;
-
+            
+            
             int count = 0;
             var buffer = new byte[16384 * 4];
-            // then receive data
             do
             {
-                //if(bufferedWaveProvider != null &&
-                //        bufferedWaveProvider.BufferLength - bufferedWaveProvider.BufferedBytes
-                //      < bufferedWaveProvider.WaveFormat.AverageBytesPerSecond / 4)
-                if(bufferedWaveProvider != null &&bufferedWaveProvider.BufferedDuration.TotalSeconds > 10)
+                current = Thread.CurrentThread;
+                if(bufferedWaveProvider != null &&bufferedWaveProvider.BufferedDuration.TotalSeconds > 5)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
                     if (buffering == false)
                         break;
                 }
@@ -132,7 +127,7 @@ namespace WpfApp1
                     break;
                 else
                     client.Send(Encoding.ASCII.GetBytes("more"), 4);    // Nhan change value here
-            
+                
                 Mp3Frame frame;
                 Stream ms = new MemoryStream();
                 
@@ -147,19 +142,11 @@ namespace WpfApp1
                     bufferedWaveProvider = new BufferedWaveProvider(decomp.OutputFormat);
                     bufferedWaveProvider.BufferDuration =
                         TimeSpan.FromSeconds(20);
-                    //var volumeProvider = new VolumeWaveProvider16(bufferedWaveProvider);
-                    //volumeProvider.Volume = 1;
-                    
-                    // allow us to get well ahead of ourselves
-                    //this.bufferedWaveProvider.BufferedDuration = 250;
                 }
                 if (bufferedWaveProvider.BufferedDuration.TotalSeconds > 5 && waveOut.PlaybackState == PlaybackState.Stopped && buffering == true)
                 {
                     waveOut.Init(bufferedWaveProvider);
                     waveOut.Play();
-                    //ThreadStart play = new ThreadStart(playSong);
-                    //Thread playThread = new Thread(play);
-                    //playThread.Start();
                     
                 }
                 try
@@ -218,18 +205,28 @@ namespace WpfApp1
         {
             buffering = false;
             waveOut.Pause();
+            if (current != null)
+            {
+                current.Abort();
+                current.Abort();
+                
+            }
+            
         }
         public static void resumeSong()
         {
             buffering = true;
             waveOut.Resume();
-          
+            
             var buffer = new byte[16384 * 4];
             do
             {
+                current = Thread.CurrentThread;
                 if (bufferedWaveProvider != null && bufferedWaveProvider.BufferedDuration.TotalSeconds > 10)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
+                    if (buffering == false)
+                        break;
                 }
                 var receivedData = client.Receive(ref ep);
                 if (Encoding.ASCII.GetString(receivedData) == "done")
@@ -243,8 +240,16 @@ namespace WpfApp1
                 ms.Write(receivedData, 0, receivedData.Length);
                 ms.Position = 0;
                 frame = Mp3Frame.LoadFromStream(ms, true);
-                int decompressed = decomp.DecompressFrame(frame, buffer, 0);
-                bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                try
+                {
+                    int decompressed = decomp.DecompressFrame(frame, buffer, 0);
+                    bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                }
+                catch
+                {
+                    break;
+                }
+                
                
             } while (buffering);
         }

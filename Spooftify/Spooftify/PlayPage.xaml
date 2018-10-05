@@ -109,17 +109,29 @@
                             <Image x:Name="PlayerPrevImage" Source="Images/SpooftifyPrevButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
                     </Button>
+<<<<<<< HEAD
                     <Button x:Name="PlayerControlPlayPause" Click="PlayerControlPlayPause_Click" Margin="5" Background="Black" BorderThickness="0">
+=======
+                    <Button x:Name="PlayerControlPlayPause" Margin="5" Click="PlayerControlPlayPause_Click" Background="Black" BorderThickness="0">
+>>>>>>> a7a524f119d72346e806644f434053492be2e4e4
                         <Viewbox Height="30">
-                            <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Image x:Name="PlayerPlayPauseImage" Source="Images/SpooftifyPlayButton.png" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonUp="PlayerPlayPauseImage_MouseLeftButtonUp"/>
                         </Viewbox>
                     </Button>
+<<<<<<< HEAD
                     <Button x:Name="PlayerControlStop" Click="PlayerControlStop_Click" Margin="5" Background="Black" BorderThickness="0">
+=======
+                    <Button x:Name="PlayerControlStop" Margin="5" Click="PlayerControlStop_Click" Background="Black" BorderThickness="0">
+>>>>>>> a7a524f119d72346e806644f434053492be2e4e4
                         <Viewbox Height="30">
                             <Image x:Name="PlayerStopImage" Source="Images/SpooftifyStopButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
                     </Button>
+<<<<<<< HEAD
                     <Button x:Name="PlayerControlNext" Click="PlayerControlNext_Click" Margin="5" Background="Black" BorderThickness="0">
+=======
+                    <Button x:Name="PlayerControlNext" Margin="5" Click="PlayerControlNext_Click" Background="Black" BorderThickness="0">
+>>>>>>> a7a524f119d72346e806644f434053492be2e4e4
                         <Viewbox Height="30">
                             <Image x:Name="PlayerNextImage" Source="Images/SpooftifyNextButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
