@@ -97,7 +97,7 @@
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="1">
-                <Slider x:Name="SeekBar" Width="500" Minimum="0"  VerticalAlignment="Center" PreviewMouseDown="SeekBar_PreviewMouseDown" PreviewMouseUp="SeekBar_PreviewMouseUp"/>
+                <Slider x:Name="SeekBar" Width="500" Minimum="0" VerticalAlignment="Center" PreviewMouseDown="SeekBar_PreviewMouseDown" PreviewMouseUp="SeekBar_PreviewMouseUp"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Label x:Name="CurrentTimestampLabel" Content="00:00" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
                     <Label x:Name="Separator" Content="/" Foreground="LightGray" FontSize="16" Visibility="Visible"/>

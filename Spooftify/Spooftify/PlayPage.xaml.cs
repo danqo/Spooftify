@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1;
 using System.Threading;
+using System.Timers;
 
 namespace Spooftify
 {
@@ -32,9 +33,16 @@ namespace Spooftify
 
         private Song curSong;
 
+        private System.Timers.Timer myTimer;
+        private int seconds = 0;
+        private int minutes = 0;
+
         public PlayPage()
         {
             InitializeComponent();
+            myTimer = new System.Timers.Timer();
+            myTimer.Elapsed += new ElapsedEventHandler(DisplayTimeEvent);
+            myTimer.Interval = 1000; // 1000 ms is one second
         }
 
         public void Reset()
@@ -74,6 +82,7 @@ namespace Spooftify
 
         private void SongListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            SeekBar.Value = 0;
             var b = sender as ListBox;
             if (b.SelectedItem != null)
             {
@@ -99,6 +108,11 @@ namespace Spooftify
                         currTitle.Content = curSong.Title;
                         currArtist.Content = curSong.Artist;
                         currAlbum.Content = curSong.Album;
+                        
+                        myTimer.Start();
+                        SeekBar.Minimum = 0;
+                        SeekBar.Maximum = (total.Minutes*60)+total.Seconds;
+                        SeekBar.TickFrequency = 1;
                         receiveThread.Start();
                         int a = receiveThread.ManagedThreadId;
                        
@@ -125,12 +139,21 @@ namespace Spooftify
                     if (msg == "granted")
                     {
                         PlayerPlayPauseImage.Source = PauseButtonImg;
+                        TimeSpan total = new TimeSpan();
+                        TimeSpan.TryParse(msg, out total);
+                        TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
                         currTitle.Content = curSong.Title;
                         currArtist.Content = curSong.Artist;
                         currAlbum.Content = curSong.Album;
+                        System.Timers.Timer myTimer = new System.Timers.Timer();
+                        myTimer.Start();
+                        SeekBar.Minimum = 0;
+                        SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                        SeekBar.TickFrequency = 1;
+                        
                         receiveThread.Start();
                         //SocketClientOut.playSong();
                     }
@@ -140,6 +163,23 @@ namespace Spooftify
                     }
                 }
             }
+        }
+
+        public void DisplayTimeEvent(object source, ElapsedEventArgs e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                SeekBar.Value += 1;
+                seconds += 1;
+                if (seconds == 60)
+                {
+                    seconds = 0;
+                    minutes += 1;
+                }
+                CurrentTimestampLabel.Content = minutes + ":" + seconds;
+            });
+            
+
         }
 
         private void PlayerControlPrev_Click(object sender, RoutedEventArgs e)
@@ -154,6 +194,7 @@ namespace Spooftify
                 if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
                 {
                     SocketClientOut.buffering = false;
+                    SeekBar.TickFrequency = 0;
                     SocketClientOut.pauseSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                     
@@ -163,6 +204,7 @@ namespace Spooftify
                     SocketClientOut.buffering = true;
                     ThreadStart receiveStart = new ThreadStart(SocketClientOut.resumeSong);
                     Thread receiveThread = new Thread(receiveStart);
+                    SeekBar.TickFrequency = 1;
                     receiveThread.Start();
 
                     PlayerPlayPauseImage.Source = PauseButtonImg;
@@ -183,6 +225,7 @@ namespace Spooftify
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
+                        SeekBar.TickFrequency = 1;
                         receiveThread.Start();
                     }
                     else
@@ -201,6 +244,8 @@ namespace Spooftify
                 if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
                 {
                     SocketClientOut.buffering = false;
+                    SeekBar.TickFrequency = 0;
+                    SeekBar.Value = 0;
                     SocketClientOut.stopSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                 }
