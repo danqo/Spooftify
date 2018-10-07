@@ -9,7 +9,6 @@ using System.IO;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using System.Threading;
-using WpfApp1.UserJson;
 
 namespace WpfApp1
 {

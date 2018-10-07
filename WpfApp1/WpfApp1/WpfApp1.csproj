@@ -107,7 +107,7 @@
     <Compile Include="Song.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserCollection.cs" />
-    <Compile Include="UserJson\Account.cs" />
+    <Compile Include="Account.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
