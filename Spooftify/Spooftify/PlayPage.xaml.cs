@@ -148,7 +148,6 @@ namespace Spooftify
                         currTitle.Content = curSong.Title;
                         currArtist.Content = curSong.Artist;
                         currAlbum.Content = curSong.Album;
-                        System.Timers.Timer myTimer = new System.Timers.Timer();
                         myTimer.Start();
                         SeekBar.Minimum = 0;
                         SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
@@ -194,7 +193,7 @@ namespace Spooftify
                 if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
                 {
                     SocketClientOut.buffering = false;
-                    SeekBar.TickFrequency = 0;
+                    myTimer.Stop();
                     SocketClientOut.pauseSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                     
@@ -205,6 +204,7 @@ namespace Spooftify
                     ThreadStart receiveStart = new ThreadStart(SocketClientOut.resumeSong);
                     Thread receiveThread = new Thread(receiveStart);
                     SeekBar.TickFrequency = 1;
+                    myTimer.Start();
                     receiveThread.Start();
 
                     PlayerPlayPauseImage.Source = PauseButtonImg;
@@ -226,6 +226,7 @@ namespace Spooftify
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
                         SeekBar.TickFrequency = 1;
+                        myTimer.Start();
                         receiveThread.Start();
                     }
                     else
@@ -244,8 +245,11 @@ namespace Spooftify
                 if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
                 {
                     SocketClientOut.buffering = false;
-                    SeekBar.TickFrequency = 0;
                     SeekBar.Value = 0;
+                    myTimer.Stop();
+                    minutes = 0;
+                    seconds = 0;
+                    CurrentTimestampLabel.Content = minutes + ":" + seconds;
                     SocketClientOut.stopSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                 }
@@ -260,12 +264,51 @@ namespace Spooftify
 
         private void SeekBar_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
+            {
+                SocketClientOut.buffering = false;
+                myTimer.Stop();
+                SocketClientOut.pauseSong();
+                PlayerPlayPauseImage.Source = PlayButtonImg;
+            }
         }
 
         private void SeekBar_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
+            SocketClientOut.buffering = true;
+            SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+            SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist+" ("+curSong.Album+") - "+curSong.Title));
+            var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+            if (msg == "granted")
+            {
+                msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
 
+                TimeSpan total = new TimeSpan();
+                TimeSpan.TryParse(msg, out total);
+                TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                PlayerPlayPauseImage.Source = PauseButtonImg;
+                SocketClientOut.currentLocation = (int)SeekBar.Value;
+                ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                receiveThread = new Thread(receiveStart);
+                SocketClientOut.buffering = true;
+                currTitle.Content = curSong.Title;
+                currArtist.Content = curSong.Artist;
+                currAlbum.Content = curSong.Album;
+
+                myTimer.Start();
+                SeekBar.Minimum = 0;
+                SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                SeekBar.TickFrequency = 1;
+                receiveThread.Start();
+                int a = receiveThread.ManagedThreadId;
+            }
+        }
+
+        private void SeekBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            minutes = (int)(SeekBar.Value/60);
+            seconds = (int)(SeekBar.Value % 60);
+            CurrentTimestampLabel.Content = minutes + ":" + seconds;
         }
     }
 }

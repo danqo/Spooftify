@@ -25,6 +25,7 @@ namespace WpfApp1
         public static WaveOut waveOut = null;
         public static Thread current = null;
         public static IMp3FrameDecompressor decomp;
+        public static int currentLocation = 0;
         //got helps from erszcz on stackoverflow
         
 
@@ -132,7 +133,7 @@ namespace WpfApp1
                 Stream ms = new MemoryStream();
                 
                 ms.Write(receivedData, 0, receivedData.Length);
-                ms.Position = 0;
+                ms.Position = currentLocation;
                 frame = Mp3Frame.LoadFromStream(ms, true);
                 if (decomp == null)
                 {
@@ -178,6 +179,9 @@ namespace WpfApp1
 
             
         }
+
+        
+
         public static bool receiveData(ref byte[] data)
         {
             
