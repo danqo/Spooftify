@@ -126,6 +126,7 @@ namespace WpfApp1
             int count1 = 0;
             var buffer1 = new byte[16384 * 4];
             var nameOfTheSong = privatePort.Receive(ref privateEP);
+            var startPoint = privatePort.Receive(ref privateEP);
             Song sendingSong = null;
             try
             {
@@ -139,11 +140,11 @@ namespace WpfApp1
             privatePort.Send(Encoding.ASCII.GetBytes("granted"), 7, privateEP);
             if (sendingSong != null)
             {
-
+                int startTime = Int32.Parse(Encoding.ASCII.GetString(startPoint));
                 Mp3FileReader reader = new Mp3FileReader(mediaFolder + "\\" + sendingSong.Directory);
                 var b = Encoding.ASCII.GetBytes(reader.TotalTime.ToString());
                 privatePort.Send(b, b.Length, privateEP);
-                //reader.CurrentTime = TimeSpan.FromSeconds(20);
+                reader.CurrentTime = TimeSpan.FromSeconds(startTime);
                 Mp3Frame mp3Frame = reader.ReadNextFrame();
                 
                 IMp3FrameDecompressor decomp = null;

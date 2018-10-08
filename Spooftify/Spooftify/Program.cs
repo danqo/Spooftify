@@ -103,6 +103,11 @@ namespace WpfApp1
            
         }
 
+        public static void sendStartTime(byte[] startTime)
+        {
+            client.Send(startTime, startTime.Length);
+        }
+
         public static void receivingSong()
         {
             waveOut = new WaveOut();
@@ -133,7 +138,8 @@ namespace WpfApp1
                 Stream ms = new MemoryStream();
                 
                 ms.Write(receivedData, 0, receivedData.Length);
-                ms.Position = currentLocation;
+                ms.Position = 0;
+                
                 frame = Mp3Frame.LoadFromStream(ms, true);
                 if (decomp == null)
                 {
