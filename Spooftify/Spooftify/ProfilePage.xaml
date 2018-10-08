@@ -21,7 +21,7 @@
             </StackPanel>
         </Grid>
         <Viewbox Stretch="Uniform" Grid.Row="1" Margin="0,20,0,20">
-            <Image x:Name="AvatarImage" HorizontalAlignment="Center" Source="Images/omponce.png"></Image>
+            <Image x:Name="AvatarImage" HorizontalAlignment="Center"></Image>
         </Viewbox>
         <Grid Grid.Row="2" MaxWidth="600" Margin="50,0,50,0">
             <StackPanel>
