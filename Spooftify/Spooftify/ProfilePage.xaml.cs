@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Threading;
+using System.Net.Http;
 
 namespace Spooftify
 {
@@ -27,20 +28,18 @@ namespace Spooftify
         {
             InitializeComponent();
             UsernameLabel.Content = AccountManager.instance.Acct.Username;
-            FetchImage(new Uri(AccountManager.instance.Acct.AvatarURI));
             NameLabel.Content = AccountManager.instance.Acct.Name;
             EmailLabel.Content = AccountManager.instance.Acct.Email;
             BirthdayLabel.Content = AccountManager.instance.Acct.Birthday;
+            FetchImage(new Uri(AccountManager.instance.Acct.AvatarURI));
         }
 
         private void FetchImage(Uri uri)
         {
-            System.Diagnostics.Debug.WriteLine("Downloading avatar at " + AccountManager.instance.Acct.AvatarURI);
-            var context = SynchronizationContext.Current;
-            var image = new BitmapImage();
+            BitmapImage image = new BitmapImage();
             image.BeginInit();
-            image.CacheOption = BitmapCacheOption.OnDemand;
             image.UriSource = uri;
+<<<<<<< HEAD
             image.DownloadFailed += (s, args) =>
             {
                 System.Diagnostics.Debug.WriteLine("Avatar Image download failed: " + AccountManager.instance.Acct.AvatarURI);
@@ -52,7 +51,10 @@ namespace Spooftify
                 context.Post(_ => AvatarImage.Source = image, null);
             };
             
+=======
+>>>>>>> 95fab05f9696def0622745c562ba8487a95b9054
             image.EndInit();
+            AvatarImage.Source = image;
         }
     }
 }
