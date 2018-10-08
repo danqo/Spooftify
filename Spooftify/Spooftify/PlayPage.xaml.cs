@@ -36,6 +36,7 @@ namespace Spooftify
         private System.Timers.Timer myTimer;
         private int seconds = 0;
         private int minutes = 0;
+        private int currentIndex;
 
         public PlayPage()
         {
@@ -109,7 +110,33 @@ namespace Spooftify
                         currTitle.Content = curSong.Title;
                         currArtist.Content = curSong.Artist;
                         currAlbum.Content = curSong.Album;
+                        currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                        if(currentIndex - 1 >= 0)
+                        {
+                            prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
+                            prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
+                            prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
+                        }
+                        else
+                        {
+                            prevTitle.Content = "None";
+                            prevArtist.Content = "None";
+                            prevAlbum.Content = "None";
+                        }
                         
+                        if(currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                        {
+                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                        }
+                        else
+                        {
+                            nextTitle.Content = "None";
+                            nextArtist.Content = "None";
+                            nextAlbum.Content = "None";
+                        }
+
                         myTimer.Start();
                         SeekBar.Minimum = 0;
                         SeekBar.Maximum = (total.Minutes*60)+total.Seconds;
@@ -130,7 +157,7 @@ namespace Spooftify
                     if (SocketClientOut.buffering == true)
                         Thread.Sleep(150);
                     SocketClientOut.stopSong();
-                    SocketClientOut.waveOut.Dispose();
+                    //SocketClientOut.waveOut.Dispose();
                     b = sender as ListBox;
                     string songName = b.SelectedItem.ToString();
                     curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
@@ -140,6 +167,8 @@ namespace Spooftify
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                     if (msg == "granted")
                     {
+                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
                         PlayerPlayPauseImage.Source = PauseButtonImg;
                         TimeSpan total = new TimeSpan();
                         TimeSpan.TryParse(msg, out total);
@@ -150,6 +179,33 @@ namespace Spooftify
                         currTitle.Content = curSong.Title;
                         currArtist.Content = curSong.Artist;
                         currAlbum.Content = curSong.Album;
+                        currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                        if (currentIndex - 1 >= 0)
+                        {
+                            prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
+                            prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
+                            prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
+                        }
+                        else
+                        {
+                            prevTitle.Content = "None";
+                            prevArtist.Content = "None";
+                            prevAlbum.Content = "None";
+                        }
+
+                        if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                        {
+                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                        }
+                        else
+                        {
+                            nextTitle.Content = "None";
+                            nextArtist.Content = "None";
+                            nextAlbum.Content = "None";
+                        }
+
                         myTimer.Start();
                         SeekBar.Minimum = 0;
                         SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
@@ -196,18 +252,31 @@ namespace Spooftify
                 {
                     SocketClientOut.buffering = false;
                     myTimer.Stop();
-                    SocketClientOut.pauseSong();
+                    SocketClientOut.stopSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                     
                 }
-                else if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+                else if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Stopped)
                 {
                     SocketClientOut.buffering = true;
-                    ThreadStart receiveStart = new ThreadStart(SocketClientOut.resumeSong);
-                    Thread receiveThread = new Thread(receiveStart);
-                    SeekBar.TickFrequency = 1;
-                    myTimer.Start();
-                    receiveThread.Start();
+                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
+                    SocketClientOut.currentLocation = (int)SeekBar.Value;
+                    SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SocketClientOut.currentLocation.ToString()));
+                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                    if (msg == "granted")
+                    {
+
+                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
+                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                        receiveThread = new Thread(receiveStart);
+                        SocketClientOut.buffering = true;
+                        myTimer.Start();
+                        receiveThread.Start();
+                        int a = receiveThread.ManagedThreadId;
+                    }
 
                     PlayerPlayPauseImage.Source = PauseButtonImg;
                     //pauseResume.Content = "Pause";
@@ -300,7 +369,7 @@ namespace Spooftify
 
         private void SeekBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            minutes = (int)(SeekBar.Value/60);
+            minutes = (int)(SeekBar.Value / 60);
             seconds = (int)(SeekBar.Value % 60);
             CurrentTimestampLabel.Content = minutes + ":" + seconds;
         }

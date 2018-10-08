@@ -51,6 +51,7 @@ namespace Spooftify
                 image.Freeze();
                 context.Post(_ => AvatarImage.Source = image, null);
             };
+            
             image.EndInit();
         }
     }
