@@ -262,8 +262,20 @@ namespace Spooftify
                 {
                     SocketClientOut.buffering = false;
                     myTimer.Stop();
-                    SocketClientOut.stopSong();
-                    PlayerPlayPauseImage.Source = PlayButtonImg;
+                    try
+                    {
+                        SocketClientOut.stopSong();
+                    }
+                    catch
+                    {
+                        SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("no more"));
+                        if(SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+                            PlayerPlayPauseImage.Source = PlayButtonImg;
+                        else
+                            PlayerPlayPauseImage.Source = PauseButtonImg;
+                        MessageBox.Show("DON'T SPAM CLICK");
+                    }
+                    PlayerPlayPauseImage.Source = PlayButtonImg;      
 
                 }
                 else if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Stopped)
@@ -294,27 +306,9 @@ namespace Spooftify
             }
             else
             {
-                if (SongListbox.SelectedItem != null)
-                {
-                    string songName = SongListbox.SelectedItem.ToString();
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    if (msg == "granted")
-                    {
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
-                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                        receiveThread = new Thread(receiveStart);
-                        SocketClientOut.buffering = true;
-                        SeekBar.TickFrequency = 1;
-                        myTimer.Start();
-                        receiveThread.Start();
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show(msg);
-                    }
-                }
+                string songName = SongListbox.SelectedItem.ToString();
+                songPlay(songName);
+               
             }
 
         }
@@ -337,6 +331,19 @@ namespace Spooftify
                     CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                     SocketClientOut.stopSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
+                }
+                else
+                {
+                    if(SeekBar.Value!= 0 )
+                    {
+                        SocketClientOut.buffering = false;
+                        SeekBar.Value = 0;
+                        myTimer.Stop();
+                        timestamp = TimeSpan.Zero;
+                        CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+                        SocketClientOut.stopSong();
+                        PlayerPlayPauseImage.Source = PlayButtonImg;
+                    }
                 }
             }
         }
@@ -381,24 +388,32 @@ namespace Spooftify
 
         private void SeekBar_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            SocketClientOut.buffering = true;
-            SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-            SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
-            SocketClientOut.currentLocation = (int)SeekBar.Value;
-            SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SocketClientOut.currentLocation.ToString()));
-            var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-            if (msg == "granted")
+            if (curSong != null)
             {
-
-                msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-
-                PlayerPlayPauseImage.Source = PauseButtonImg;
-                ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                receiveThread = new Thread(receiveStart);
                 SocketClientOut.buffering = true;
-                myTimer.Start();
-                receiveThread.Start();
-                int a = receiveThread.ManagedThreadId;
+                SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
+                SocketClientOut.currentLocation = (int)SeekBar.Value;
+                SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SocketClientOut.currentLocation.ToString()));
+                var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                if (msg == "granted")
+                {
+
+                    msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                    PlayerPlayPauseImage.Source = PauseButtonImg;
+                    ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                    receiveThread = new Thread(receiveStart);
+                    SocketClientOut.buffering = true;
+                    myTimer.Start();
+                    receiveThread.Start();
+                    int a = receiveThread.ManagedThreadId;
+                }
+            }
+            else
+            {
+                SeekBar.Value = 0;
+                MessageBox.Show("no song is playing atm");
             }
         }
 
