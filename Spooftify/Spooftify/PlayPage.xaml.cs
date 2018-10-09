@@ -38,7 +38,6 @@ namespace Spooftify
         private System.Timers.Timer myTimer;
         private TimeSpan timestamp = TimeSpan.Zero;
         private int currentIndex;
-        private TimeSpan totalTime;
 
         private ContextMenu cm;
 
@@ -107,7 +106,7 @@ namespace Spooftify
                             timestamp = TimeSpan.Zero;
                             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                             SocketClientOut.stopSong();
-                            
+                            SeekBar.IsEnabled = false;
                         }
                     }
                 }
@@ -434,6 +433,7 @@ namespace Spooftify
                 {
                     if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
                     {
+                        SeekBar.IsEnabled = true;
                         myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
@@ -456,6 +456,10 @@ namespace Spooftify
                             ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                             receiveThread = new Thread(receiveStart);
                             SocketClientOut.buffering = true;
+                            CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
+                            SeekBar.Minimum = 0;
+                            SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                            SeekBar.TickFrequency = 1;
                             myTimer.Start();
                             receiveThread.Start();
                             int a = receiveThread.ManagedThreadId;
@@ -468,10 +472,12 @@ namespace Spooftify
                     }
                     else
                     {
+                        SeekBar.IsEnabled = false;
                         myTimer.Stop();
-                        
+                        CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
                         PlayerPlayPauseImage.Source = PlayButtonImg;
                         SocketClientOut.stopSong();
+                        displayControls();
                         SeekBar.Value = 0;
                     }
 
@@ -496,6 +502,7 @@ namespace Spooftify
                 var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                 if (msg == "granted")
                 {
+                    SeekBar.IsEnabled = true;
                     msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
 
                     TimeSpan total = new TimeSpan();
@@ -506,7 +513,7 @@ namespace Spooftify
                     receiveThread = new Thread(receiveStart);
                     SocketClientOut.buffering = true;
                     displayControls();
-
+                    CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
                     myTimer.Start();
                     SeekBar.Minimum = 0;
                     SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
@@ -543,6 +550,7 @@ namespace Spooftify
             {
                 msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
 
+                SeekBar.IsEnabled = true;
                 PlayerPlayPauseImage.Source = PauseButtonImg;
                 TimeSpan total = new TimeSpan();
                 TimeSpan.TryParse(msg, out total);
@@ -552,7 +560,7 @@ namespace Spooftify
                 receiveThread = new Thread(receiveStart);
                 SocketClientOut.buffering = true;
                 displayControls();
-
+                CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
                 myTimer.Start();
                 SeekBar.Minimum = 0;
                 SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
