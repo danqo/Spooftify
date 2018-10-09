@@ -306,6 +306,7 @@ namespace Spooftify
             myTimer.Stop();
             SongListbox.SelectedIndex = currentIndex + 1;
             SeekBar.Value = 0;
+
             string songName = SongListbox.SelectedValue.ToString();
             if (SongListbox.SelectedItem != null)
             {
@@ -378,10 +379,25 @@ namespace Spooftify
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content))
                 {
                     if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                    {
+                        myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
-                    myTimer.Stop();
-                    PlayerPlayPauseImage.Source = PlayButtonImg;
+                        
+                        
+                        PlayerPlayPauseImage.Source = PlayButtonImg;
+                        SeekBar.Value = 0;
+                    }
+                    else
+                    {
+                        myTimer.Stop();
+                        
+                        PlayerPlayPauseImage.Source = PlayButtonImg;
+                        SocketClientOut.stopSong();
+                        SeekBar.Value = 0;
+                    }
 
+                    
+                    
 
                 }
             });
