@@ -432,12 +432,15 @@ namespace Spooftify
             {
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content))
                 {
+                    myTimer.Stop();
+                    SeekBar.Value = 0;
+                    timestamp = TimeSpan.Zero;
+                    CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                     if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
                     {
-                        myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
-                        SeekBar.Value = 0;
+                        displayControls();
                         SocketClientOut.buffering = true;
                         SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                         SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
@@ -460,21 +463,17 @@ namespace Spooftify
                             receiveThread.Start();
                             int a = receiveThread.ManagedThreadId;
                         }
-
                         PlayerPlayPauseImage.Source = PauseButtonImg;
-                        displayControls();
-                        //pauseResume.Content = "Pause";
-                        
                     }
                     else
                     {
                         myTimer.Stop();
-                        
+
                         PlayerPlayPauseImage.Source = PlayButtonImg;
-                        SocketClientOut.stopSong();
+                        SocketClientOut.waveOut.Stop();
                         SeekBar.Value = 0;
                     }
-
+                    
                 }
             });
         }
