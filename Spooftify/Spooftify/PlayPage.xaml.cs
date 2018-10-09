@@ -241,27 +241,9 @@ namespace Spooftify
             }
             else
             {
-                if (SongListbox.SelectedItem != null)
-                {
-                    string songName = SongListbox.SelectedItem.ToString();
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    if (msg == "granted")
-                    {
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
-                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                        receiveThread = new Thread(receiveStart);
-                        SocketClientOut.buffering = true;
-                        SeekBar.TickFrequency = 1;
-                        myTimer.Start();
-                        receiveThread.Start();
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show(msg);
-                    }
-                }
+                string songName = SongListbox.SelectedItem.ToString();
+                songPlay(songName);
+               
             }
 
         }
