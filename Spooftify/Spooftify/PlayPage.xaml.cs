@@ -432,44 +432,49 @@ namespace Spooftify
             {
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content))
                 {
-                    myTimer.Stop();
-                    SeekBar.Value = 0;
-                    timestamp = TimeSpan.Zero;
-                    CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                     if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
                     {
+                        myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
+                        SeekBar.Value = 0;
+                        SocketClientOut.buffering = true;
+                        SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                        SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
+                        SocketClientOut.currentLocation = (int)SeekBar.Value;
+                        SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SocketClientOut.currentLocation.ToString()));
+                        var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                        if (msg == "granted")
+                        {
+
+                            msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                            TimeSpan total = new TimeSpan();
+                            TimeSpan.TryParse(msg, out total);
+                            TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
+                            PlayerPlayPauseImage.Source = PauseButtonImg;
+                            ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                            receiveThread = new Thread(receiveStart);
+                            SocketClientOut.buffering = true;
+                            myTimer.Start();
+                            receiveThread.Start();
+                            int a = receiveThread.ManagedThreadId;
+                        }
+
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
+                        displayControls();
+                        //pauseResume.Content = "Pause";
+                        
                     }
                     else
                     {
-                        SongListbox.SelectedIndex = 0;
-                        curSong = (Song)SongListbox.Items[0];
+                        myTimer.Stop();
+                        
+                        PlayerPlayPauseImage.Source = PlayButtonImg;
+                        SocketClientOut.stopSong();
+                        SeekBar.Value = 0;
                     }
-                    displayControls();
-                    SocketClientOut.buffering = true;
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
-                    SocketClientOut.currentLocation = (int)SeekBar.Value;
-                    SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SocketClientOut.currentLocation.ToString()));
-                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    if (msg == "granted")
-                    {
 
-                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-
-                        TimeSpan total = new TimeSpan();
-                        TimeSpan.TryParse(msg, out total);
-                        TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
-                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                        receiveThread = new Thread(receiveStart);
-                        SocketClientOut.buffering = true;
-                        myTimer.Start();
-                        receiveThread.Start();
-                        int a = receiveThread.ManagedThreadId;
-                    }
-                    PlayerPlayPauseImage.Source = PauseButtonImg;
                 }
             });
         }
