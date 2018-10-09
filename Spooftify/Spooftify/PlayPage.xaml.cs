@@ -25,6 +25,8 @@ namespace Spooftify
     {
         Thread receiveThread;
 
+        private const string TIMESTAMP_FORMAT = @"mm\:ss";
+
         private BitmapImage PlayButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPlayButton.png"));
         private BitmapImage PauseButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
         private BitmapImage StopButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyStopButton.png"));
@@ -34,8 +36,7 @@ namespace Spooftify
         private Song curSong;
 
         private System.Timers.Timer myTimer;
-        private int seconds = 0;
-        private int minutes = 0;
+        private TimeSpan timestamp = TimeSpan.Zero;
         private int currentIndex;
 
         public PlayPage()
@@ -227,13 +228,8 @@ namespace Spooftify
             this.Dispatcher.Invoke(() =>
             {
                 SeekBar.Value += 1;
-                seconds += 1;
-                if (seconds == 60)
-                {
-                    seconds = 0;
-                    minutes += 1;
-                }
-                CurrentTimestampLabel.Content = minutes + ":" + seconds;
+                timestamp = timestamp.Add(TimeSpan.FromSeconds(1));
+                CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
             });
 
 
@@ -320,9 +316,8 @@ namespace Spooftify
                     SocketClientOut.buffering = false;
                     SeekBar.Value = 0;
                     myTimer.Stop();
-                    minutes = 0;
-                    seconds = 0;
-                    CurrentTimestampLabel.Content = minutes + ":" + seconds;
+                    timestamp = TimeSpan.Zero;
+                    CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                     SocketClientOut.stopSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                 }
@@ -373,9 +368,8 @@ namespace Spooftify
 
         private void SeekBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            minutes = (int)(SeekBar.Value / 60);
-            seconds = (int)(SeekBar.Value % 60);
-            CurrentTimestampLabel.Content = minutes + ":" + seconds;
+            timestamp = new TimeSpan(0, (int)(SeekBar.Value / 60), (int)(SeekBar.Value % 60));
+            CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
             this.Dispatcher.Invoke(() =>
             {
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content))
@@ -411,7 +405,7 @@ namespace Spooftify
 
                         TimeSpan total = new TimeSpan();
                         TimeSpan.TryParse(msg, out total);
-                        TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                        TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
                         PlayerPlayPauseImage.Source = PauseButtonImg;
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
@@ -497,7 +491,7 @@ namespace Spooftify
                         PlayerPlayPauseImage.Source = PauseButtonImg;
                         TimeSpan total = new TimeSpan();
                         TimeSpan.TryParse(msg, out total);
-                        TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                        TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
                         SocketClientOut.buffering = true;
