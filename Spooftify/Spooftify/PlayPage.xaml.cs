@@ -41,6 +41,8 @@ namespace Spooftify
 
         private ContextMenu cm;
 
+        public static Boolean isChanged = false;
+
         /// <summary>
         /// constructor
         /// </summary>
@@ -50,15 +52,7 @@ namespace Spooftify
             myTimer = new System.Timers.Timer();
             myTimer.Elapsed += new ElapsedEventHandler(DisplayTimeEvent);
             myTimer.Interval = 1000; // 1000 ms is one second
-            prevAlbum.Content = "None";
-            prevTitle.Content = "None";
-            prevArtist.Content = "None";
-            currAlbum.Content = "None";
-            currArtist.Content = "None";
-            currTitle.Content = "None";
-            nextTitle.Content = "None";
-            nextAlbum.Content = "None";
-            nextArtist.Content = "None";
+            displayControls();
         }
 
         public void Reset()
@@ -112,13 +106,71 @@ namespace Spooftify
                             timestamp = TimeSpan.Zero;
                             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                             SocketClientOut.stopSong();
-                            PlayerPlayPauseImage.Source = PlayButtonImg;
+                            
                         }
                     }
                 }
+                
                 AccountManager.instance.CurrentPlaylist.deleteSong(SongListbox.SelectedItem as Song);
                 SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
                 SongListbox.Items.Refresh();
+                displayControls();
+            }
+        }
+
+        private void displayControls()
+        {
+            if(curSong != null)
+            {
+                currTitle.Content = curSong.Title;
+                currArtist.Content = curSong.Artist;
+                currAlbum.Content = curSong.Album;
+                currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                if (currentIndex - 1 >= 0)
+                {
+                    PlayerPrevImage.IsEnabled = true;
+                    PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
+                    PlayerControlPrev.IsEnabled = true;
+                    PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
+                    prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
+                    prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
+                    prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
+                }
+                else
+                {
+                    PlayerPrevImage.IsEnabled = false;
+                    PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
+                    PlayerControlPrev.IsEnabled = false;
+                    PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
+                    prevTitle.Content = "None";
+                    prevArtist.Content = "None";
+                    prevAlbum.Content = "None";
+                }
+
+                if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                {
+                    PlayerNextImage.IsEnabled = true;
+                    PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
+                    PlayerControlNext.IsEnabled = true;
+                    PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
+                    nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                    nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                    nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                }
+                else
+                {
+                    PlayerNextImage.IsEnabled = false;
+                    PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
+                    PlayerControlNext.IsEnabled = false;
+                    PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
+                    nextTitle.Content = "None";
+                    nextArtist.Content = "None";
+                    nextAlbum.Content = "None";
+                }
+            }
+            else
+            {
+                PlayerPlayPauseImage.Source = PlayButtonImg;
                 prevAlbum.Content = "None";
                 prevTitle.Content = "None";
                 prevArtist.Content = "None";
@@ -129,6 +181,7 @@ namespace Spooftify
                 nextAlbum.Content = "None";
                 nextArtist.Content = "None";
             }
+            
         }
 
         /// <summary>
@@ -396,9 +449,6 @@ namespace Spooftify
                         SeekBar.Value = 0;
                     }
 
-                    
-                    
-
                 }
             });
         }
@@ -429,72 +479,7 @@ namespace Spooftify
                     ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                     receiveThread = new Thread(receiveStart);
                     SocketClientOut.buffering = true;
-                    currTitle.Content = curSong.Title;
-                    currArtist.Content = curSong.Artist;
-                    currAlbum.Content = curSong.Album;
-                    currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
-                    if (currentIndex - 1 >= 0)
-                    {
-                        PlayerPrevImage.IsEnabled = true;
-                        PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
-                        PlayerControlPrev.IsEnabled = true;
-                        PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
-                        prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
-                        prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
-                        prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
-                    }
-                    else
-                    {
-                        PlayerPrevImage.IsEnabled = false;
-                        PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
-                        PlayerControlPrev.IsEnabled = false;
-                        PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
-                        prevTitle.Content = "None";
-                        prevArtist.Content = "None";
-                        prevAlbum.Content = "None";
-                    }
-
-                    if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
-                        {
-                            PlayerNextImage.IsEnabled = true;
-                            PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
-                            PlayerControlNext.IsEnabled = true;
-                            PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
-                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
-                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
-                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
-                        }
-                        else
-                        {
-                            PlayerNextImage.IsEnabled = false;
-                            PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
-                            PlayerControlNext.IsEnabled = false;
-                            PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
-                            nextTitle.Content = "None";
-                            nextArtist.Content = "None";
-                            nextAlbum.Content = "None";
-                        }
-
-                    if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
-                    {
-                        PlayerNextImage.IsEnabled = true;
-                        PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
-                        PlayerControlNext.IsEnabled = true;
-                        PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
-                        nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
-                        nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
-                        nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
-                    }
-                    else
-                    {
-                        PlayerNextImage.IsEnabled = false;
-                        PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
-                        PlayerControlNext.IsEnabled = false;
-                        PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
-                        nextTitle.Content = "None";
-                        nextArtist.Content = "None";
-                        nextAlbum.Content = "None";
-                    }
+                    displayControls();
 
                     myTimer.Start();
                     SeekBar.Minimum = 0;
@@ -540,51 +525,7 @@ namespace Spooftify
                 ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                 receiveThread = new Thread(receiveStart);
                 SocketClientOut.buffering = true;
-                currTitle.Content = curSong.Title;
-                currArtist.Content = curSong.Artist;
-                currAlbum.Content = curSong.Album;
-                currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
-                if (currentIndex - 1 >= 0)
-                {
-                    PlayerPrevImage.IsEnabled = true;
-                    PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
-                    PlayerControlPrev.IsEnabled = true;
-                    PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
-                    prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
-                    prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
-                    prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
-                }
-                else
-                {
-                    PlayerPrevImage.IsEnabled = false;
-                    PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
-                    PlayerControlPrev.IsEnabled = false;
-                    PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
-                    prevTitle.Content = "None";
-                    prevArtist.Content = "None";
-                    prevAlbum.Content = "None";
-                }
-
-                if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
-                {
-                    PlayerNextImage.IsEnabled = true;
-                    PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
-                    PlayerControlNext.IsEnabled = true;
-                    PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
-                    nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
-                    nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
-                    nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
-                }
-                else
-                {
-                    PlayerNextImage.IsEnabled = false;
-                    PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
-                    PlayerControlNext.IsEnabled = false;
-                    PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
-                    nextTitle.Content = "None";
-                    nextArtist.Content = "None";
-                    nextAlbum.Content = "None";
-                }
+                displayControls();
 
                 myTimer.Start();
                 SeekBar.Minimum = 0;
