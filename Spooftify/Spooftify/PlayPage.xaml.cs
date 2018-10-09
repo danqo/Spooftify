@@ -222,7 +222,7 @@ namespace Spooftify
                             PlayerPlayPauseImage.Source = PauseButtonImg;
                         MessageBox.Show("DON'T SPAM CLICK");
                     }
-                    PlayerPlayPauseImage.Source = PlayButtonImg;
+                    PlayerPlayPauseImage.Source = PlayButtonImg;      
 
                 }
                 else if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Stopped)
@@ -278,6 +278,19 @@ namespace Spooftify
                     CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                     SocketClientOut.stopSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
+                }
+                else
+                {
+                    if(SeekBar.Value!= 0 )
+                    {
+                        SocketClientOut.buffering = false;
+                        SeekBar.Value = 0;
+                        myTimer.Stop();
+                        timestamp = TimeSpan.Zero;
+                        CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+                        SocketClientOut.stopSong();
+                        PlayerPlayPauseImage.Source = PlayButtonImg;
+                    }
                 }
             }
         }
