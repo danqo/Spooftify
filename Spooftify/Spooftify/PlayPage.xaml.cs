@@ -191,19 +191,23 @@ namespace Spooftify
         /// <param name="e"></param>
         private void SongListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            SeekBar.Value = 0;
             var b = sender as ListBox;
-            string songName = b.SelectedValue.ToString();
-            if (b.SelectedItem != null)
+            if (b.SelectedValue != null)
             {
-                if (SocketClientOut.waveOut == null)
+                SeekBar.Value = 0;
+                
+                string songName = b.SelectedValue.ToString();
+                if (b.SelectedItem != null)
                 {
-                    songPlay(songName);
-                }
+                    if (SocketClientOut.waveOut == null)
+                    {
+                        songPlay(songName);
+                    }
 
-                else
-                {
-                    otherSongPlay(songName);
+                    else
+                    {
+                        otherSongPlay(songName);
+                    }
                 }
             }
         }
@@ -403,6 +407,7 @@ namespace Spooftify
                     msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
 
                     PlayerPlayPauseImage.Source = PauseButtonImg;
+                    receiveThread.Abort();
                     ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                     receiveThread = new Thread(receiveStart);
                     SocketClientOut.buffering = true;
@@ -427,6 +432,10 @@ namespace Spooftify
         {
             timestamp = new TimeSpan(0, (int)(SeekBar.Value / 60), (int)(SeekBar.Value % 60));
             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+            if(isChanged)
+            {
+                displayControls();
+            }
             this.Dispatcher.Invoke(() =>
             {
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content))
@@ -460,18 +469,20 @@ namespace Spooftify
                             PlayerPlayPauseImage.Source = PauseButtonImg;
                             ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                             receiveThread = new Thread(receiveStart);
-                            SocketClientOut.buffering = true;                            CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
+                            SocketClientOut.buffering = true;
+                            
                             SeekBar.Minimum = 0;
                             SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
                             SeekBar.TickFrequency = 1;
-                            myTimer.Start();
+                            
                             receiveThread.Start();
+                            CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
+                            myTimer.Start();
                             int a = receiveThread.ManagedThreadId;
                         }
 
                         PlayerPlayPauseImage.Source = PauseButtonImg;
-                        displayControls();
-                        //pauseResume.Content = "Pause";
+                        
                         
                     }
                     else
