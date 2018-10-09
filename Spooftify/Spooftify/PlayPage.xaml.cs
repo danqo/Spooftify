@@ -460,6 +460,8 @@ namespace Spooftify
                             receiveThread = new Thread(receiveStart);
                             SocketClientOut.buffering = true;
                             myTimer.Start();
+                            SeekBar.Minimum = 0;
+                            SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
                             receiveThread.Start();
                             int a = receiveThread.ManagedThreadId;
                         }
