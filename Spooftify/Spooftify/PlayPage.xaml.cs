@@ -441,7 +441,11 @@ namespace Spooftify
                         myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
+<<<<<<< HEAD
                         SeekBar.Value = 0;
+=======
+                        displayControls();
+>>>>>>> d0eab76defd2e1f30adbf215787bc49cf9182f00
                         SocketClientOut.buffering = true;
                         SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                         SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
@@ -460,6 +464,7 @@ namespace Spooftify
                             ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                             receiveThread = new Thread(receiveStart);
                             SocketClientOut.buffering = true;
+<<<<<<< HEAD
                             CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
                             SeekBar.Minimum = 0;
                             SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
@@ -485,7 +490,25 @@ namespace Spooftify
                         SeekBar.Value = 0;
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
+=======
+                            myTimer.Start();
+                            SeekBar.Minimum = 0;
+                            SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                            receiveThread.Start();
+                            int a = receiveThread.ManagedThreadId;
+                        }
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
                     }
+                    else
+                    {
+                        myTimer.Stop();
+
+                        PlayerPlayPauseImage.Source = PlayButtonImg;
+                        SocketClientOut.waveOut.Stop();
+                        SeekBar.Value = 0;
+>>>>>>> d0eab76defd2e1f30adbf215787bc49cf9182f00
+                    }
+                    
                 }
             });
         }

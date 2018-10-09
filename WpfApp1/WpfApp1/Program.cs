@@ -75,6 +75,7 @@ namespace WpfApp1
                     Console.WriteLine("Disconnecting user");
                     break;
                 }
+                
 
             }
         }
@@ -184,6 +185,11 @@ namespace WpfApp1
             File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", acct.Username)), JsonConvert.SerializeObject(acct));
             Console.WriteLine("Saving account changes to json");
             privatePort.Close();
+        }
+        public static void nomore(UdpClient privatePort, IPEndPoint privateEP)
+        {
+
+            privatePort.Send(Encoding.ASCII.GetBytes("done"), 4, privateEP);
         }
     }
 }
