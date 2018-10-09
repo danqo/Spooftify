@@ -75,6 +75,12 @@ namespace WpfApp1
                     Console.WriteLine("Disconnecting user");
                     break;
                 }
+                if (Encoding.ASCII.GetString(request) == "no more")
+                {
+                    privatePort.Send(Encoding.ASCII.GetBytes("done"), 4 , privateEP);
+                    Console.WriteLine("send done");
+                    break;
+                }
 
             }
         }
