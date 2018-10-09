@@ -38,6 +38,7 @@ namespace Spooftify
         private System.Timers.Timer myTimer;
         private TimeSpan timestamp = TimeSpan.Zero;
         private int currentIndex;
+        private TimeSpan totalTime;
 
         private ContextMenu cm;
 
@@ -448,6 +449,9 @@ namespace Spooftify
 
                             msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
 
+                            TimeSpan total = new TimeSpan();
+                            TimeSpan.TryParse(msg, out total);
+                            TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
                             PlayerPlayPauseImage.Source = PauseButtonImg;
                             ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                             receiveThread = new Thread(receiveStart);
@@ -458,6 +462,7 @@ namespace Spooftify
                         }
 
                         PlayerPlayPauseImage.Source = PauseButtonImg;
+                        displayControls();
                         //pauseResume.Content = "Pause";
                         
                     }
