@@ -431,6 +431,10 @@ namespace Spooftify
             {
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content))
                 {
+                    myTimer.Stop();
+                    SeekBar.Value = 0;
+                    timestamp = TimeSpan.Zero;
+                    CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                     if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
                     {
                         SeekBar.IsEnabled = true;
@@ -479,8 +483,9 @@ namespace Spooftify
                         SocketClientOut.stopSong();
                         displayControls();
                         SeekBar.Value = 0;
+                        SongListbox.SelectedIndex = currentIndex + 1;
+                        curSong = (Song) SongListbox.Items[currentIndex + 1];
                     }
-
                 }
             });
         }
