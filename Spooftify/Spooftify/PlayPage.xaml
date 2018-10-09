@@ -97,7 +97,7 @@
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="1">
-                <Slider x:Name="SeekBar" ValueChanged="SeekBar_ValueChanged" Width="500" Minimum="0" VerticalAlignment="Center" PreviewMouseDown="SeekBar_PreviewMouseDown" PreviewMouseUp="SeekBar_PreviewMouseUp"/>
+                <Slider x:Name="SeekBar" ValueChanged="SeekBar_ValueChanged" Width="500" Minimum="0" VerticalAlignment="Center" PreviewMouseDown="SeekBar_PreviewMouseDown" PreviewMouseUp="SeekBar_PreviewMouseUp" IsMoveToPointEnabled="True"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Label x:Name="CurrentTimestampLabel" Content="00:00" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
                     <Label x:Name="Separator" Content="/" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
@@ -127,7 +127,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" SelectionChanged="SongListbox_SelectionChanged">
+        <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" MouseDoubleClick="SongListbox_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

@@ -38,12 +38,23 @@ namespace Spooftify
         private int minutes = 0;
         private int currentIndex;
 
+        private ContextMenu cm;
+
         public PlayPage()
         {
             InitializeComponent();
             myTimer = new System.Timers.Timer();
             myTimer.Elapsed += new ElapsedEventHandler(DisplayTimeEvent);
             myTimer.Interval = 1000; // 1000 ms is one second
+            prevAlbum.Content = "None";
+            prevTitle.Content = "None";
+            prevArtist.Content = "None";
+            currAlbum.Content = "None";
+            currArtist.Content = "None";
+            currTitle.Content = "None";
+            nextTitle.Content = "None";
+            nextAlbum.Content = "None";
+            nextArtist.Content = "None";
         }
 
         public void Reset()
@@ -65,7 +76,7 @@ namespace Spooftify
             }
             else
             {
-                ContextMenu cm = this.FindResource("playlistContextMenu") as ContextMenu;
+                cm = this.FindResource("playlistContextMenu") as ContextMenu;
                 cm.PlacementTarget = sender as ListBox;
                 cm.IsOpen = true;
             }
@@ -78,149 +89,36 @@ namespace Spooftify
                 AccountManager.instance.CurrentPlaylist.deleteSong(SongListbox.SelectedItem as Song);
                 SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
                 SongListbox.Items.Refresh();
+                prevAlbum.Content = "None";
+                prevTitle.Content = "None";
+                prevArtist.Content = "None";
+                currAlbum.Content = "None";
+                currArtist.Content = "None";
+                currTitle.Content = "None";
+                nextTitle.Content = "None";
+                nextAlbum.Content = "None";
+                nextArtist.Content = "None";
             }
         }
 
-        /*private void SongListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void SongListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             SeekBar.Value = 0;
             var b = sender as ListBox;
+            string songName = b.SelectedValue.ToString();
             if (b.SelectedItem != null)
             {
                 if (SocketClientOut.waveOut == null)
                 {
-                    SocketClientOut.buffering = true;
-                    string songName = b.SelectedItem.ToString();
-                    curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                    SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
-                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    if (msg == "granted")
-                    {
-                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-
-                        TimeSpan total = new TimeSpan();
-                        TimeSpan.TryParse(msg, out total);
-                        TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
-                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                        receiveThread = new Thread(receiveStart);
-                        SocketClientOut.buffering = true;
-                        currTitle.Content = curSong.Title;
-                        currArtist.Content = curSong.Artist;
-                        currAlbum.Content = curSong.Album;
-                        currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
-                        if (currentIndex - 1 >= 0)
-                        {
-                            prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
-                            prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
-                            prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
-                        }
-                        else
-                        {
-                            prevTitle.Content = "None";
-                            prevArtist.Content = "None";
-                            prevAlbum.Content = "None";
-                        }
-
-                        if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
-                        {
-                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
-                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
-                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
-                        }
-                        else
-                        {
-                            nextTitle.Content = "None";
-                            nextArtist.Content = "None";
-                            nextAlbum.Content = "None";
-                        }
-
-                        myTimer.Start();
-                        SeekBar.Minimum = 0;
-                        SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
-                        SeekBar.TickFrequency = 1;
-                        receiveThread.Start();
-                        int a = receiveThread.ManagedThreadId;
-
-                        //SocketClientOut.playSong();
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show(msg);
-                    }
+                    songPlay(songName);
                 }
 
                 else
                 {
-                    if (SocketClientOut.buffering == true)
-                        Thread.Sleep(150);
-                    SocketClientOut.stopSong();
-                    //SocketClientOut.waveOut.Dispose();
-                    b = sender as ListBox;
-                    string songName = b.SelectedItem.ToString();
-                    curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                    SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
-                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    if (msg == "granted")
-                    {
-                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
-                        TimeSpan total = new TimeSpan();
-                        TimeSpan.TryParse(msg, out total);
-                        TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
-                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                        receiveThread = new Thread(receiveStart);
-                        SocketClientOut.buffering = true;
-                        currTitle.Content = curSong.Title;
-                        currArtist.Content = curSong.Artist;
-                        currAlbum.Content = curSong.Album;
-                        currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
-                        if (currentIndex - 1 >= 0)
-                        {
-                            prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
-                            prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
-                            prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
-                        }
-                        else
-                        {
-                            prevTitle.Content = "None";
-                            prevArtist.Content = "None";
-                            prevAlbum.Content = "None";
-                        }
-
-                        if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
-                        {
-                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
-                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
-                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
-                        }
-                        else
-                        {
-                            nextTitle.Content = "None";
-                            nextArtist.Content = "None";
-                            nextAlbum.Content = "None";
-                        }
-
-                        myTimer.Start();
-                        SeekBar.Minimum = 0;
-                        SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
-                        SeekBar.TickFrequency = 1;
-
-                        receiveThread.Start();
-                        //SocketClientOut.playSong();
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show(msg);
-                    }
+                    otherSongPlay(songName);
                 }
             }
-        }*/
+        }
 
         public void DisplayTimeEvent(object source, ElapsedEventArgs e)
         {
@@ -244,6 +142,20 @@ namespace Spooftify
             System.Diagnostics.Debug.WriteLine("Prev Clicked");
             myTimer.Stop();
             SongListbox.SelectedIndex = currentIndex - 1;
+            SeekBar.Value = 0;
+            string songName = SongListbox.SelectedValue.ToString();
+            if (SongListbox.SelectedItem != null)
+            {
+                if (SocketClientOut.waveOut == null)
+                {
+                    songPlay(songName);
+                }
+
+                else
+                {
+                    otherSongPlay(songName);
+                }
+            }
         }
 
         private void PlayerControlPlayPause_Click(object sender, RoutedEventArgs e)
@@ -335,6 +247,21 @@ namespace Spooftify
             System.Diagnostics.Debug.WriteLine("Next Clicked");
             myTimer.Stop();
             SongListbox.SelectedIndex = currentIndex + 1;
+            SeekBar.Value = 0;
+            string songName = SongListbox.SelectedValue.ToString();
+            if (SongListbox.SelectedItem != null)
+            {
+                if (SocketClientOut.waveOut == null)
+                {
+                    songPlay(songName);
+                }
+
+                else
+                {
+                    otherSongPlay(songName);
+                }
+            }
+
         }
 
         private void SeekBar_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -390,177 +317,348 @@ namespace Spooftify
             });
         }
 
-        private void SongListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void songPlay(string selectSong)
         {
-            SeekBar.Value = 0;
-            var b = sender as ListBox;
-            if (b.SelectedItem != null)
+            if (SocketClientOut.waveOut == null)
             {
-                if (SocketClientOut.waveOut == null)
+                SocketClientOut.buffering = true;
+                string songName = selectSong;
+                curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
+                SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
+                SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
+                var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                if (msg == "granted")
                 {
+                    msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                    TimeSpan total = new TimeSpan();
+                    TimeSpan.TryParse(msg, out total);
+                    TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                    PlayerPlayPauseImage.Source = PauseButtonImg;
+                    ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                    receiveThread = new Thread(receiveStart);
                     SocketClientOut.buffering = true;
-                    string songName = b.SelectedItem.ToString();
-                    curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                    SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
-                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    if (msg == "granted")
+                    currTitle.Content = curSong.Title;
+                    currArtist.Content = curSong.Artist;
+                    currAlbum.Content = curSong.Album;
+                    currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                    if (currentIndex - 1 >= 0)
                     {
-                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-
-                        TimeSpan total = new TimeSpan();
-                        TimeSpan.TryParse(msg, out total);
-                        TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
-                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                        receiveThread = new Thread(receiveStart);
-                        SocketClientOut.buffering = true;
-                        currTitle.Content = curSong.Title;
-                        currArtist.Content = curSong.Artist;
-                        currAlbum.Content = curSong.Album;
-                        currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
-                        if (currentIndex - 1 >= 0)
-                        {
-                            PlayerPrevImage.IsEnabled = true;
-                            PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
-                            PlayerControlPrev.IsEnabled = true;
-                            PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
-                            prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
-                            prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
-                            prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
-                        }
-                        else
-                        {
-                            PlayerPrevImage.IsEnabled = false;
-                            PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
-                            PlayerControlPrev.IsEnabled = false;
-                            PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
-                            prevTitle.Content = "None";
-                            prevArtist.Content = "None";
-                            prevAlbum.Content = "None";
-                        }
-
-                        if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
-                        {
-                            PlayerNextImage.IsEnabled = true;
-                            PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
-                            PlayerControlNext.IsEnabled = true;
-                            PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
-                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
-                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
-                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
-                        }
-                        else
-                        {
-                            PlayerNextImage.IsEnabled = false;
-                            PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
-                            PlayerControlNext.IsEnabled = false;
-                            PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
-                            nextTitle.Content = "None";
-                            nextArtist.Content = "None";
-                            nextAlbum.Content = "None";
-                        }
-
-                        myTimer.Start();
-                        SeekBar.Minimum = 0;
-                        SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
-                        SeekBar.TickFrequency = 1;
-                        receiveThread.Start();
-                        int a = receiveThread.ManagedThreadId;
-
-                        //SocketClientOut.playSong();
+                        PlayerPrevImage.IsEnabled = true;
+                        PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
+                        PlayerControlPrev.IsEnabled = true;
+                        PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
+                        prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
+                        prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
+                        prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
                     }
                     else
                     {
-                        System.Windows.MessageBox.Show(msg);
+                        PlayerPrevImage.IsEnabled = false;
+                        PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
+                        PlayerControlPrev.IsEnabled = false;
+                        PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
+                        prevTitle.Content = "None";
+                        prevArtist.Content = "None";
+                        prevAlbum.Content = "None";
                     }
-                }
 
+                    if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                    {
+                        PlayerNextImage.IsEnabled = true;
+                        PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
+                        PlayerControlNext.IsEnabled = true;
+                        PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
+                        nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                        nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                        nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                    }
+                    else
+                    {
+                        PlayerNextImage.IsEnabled = false;
+                        PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
+                        PlayerControlNext.IsEnabled = false;
+                        PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
+                        nextTitle.Content = "None";
+                        nextArtist.Content = "None";
+                        nextAlbum.Content = "None";
+                    }
+
+                    myTimer.Start();
+                    SeekBar.Minimum = 0;
+                    SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                    SeekBar.TickFrequency = 1;
+                    receiveThread.Start();
+                    int a = receiveThread.ManagedThreadId;
+
+                    //SocketClientOut.playSong();
+                }
                 else
                 {
-                    if (SocketClientOut.buffering == true)
-                        Thread.Sleep(150);
-                    SocketClientOut.stopSong();
-                    //SocketClientOut.waveOut.Dispose();
-                    b = sender as ListBox;
-                    string songName = b.SelectedItem.ToString();
-                    curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
-                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
-                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
-                    SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
-                    var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-                    if (msg == "granted")
-                    {
-                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
-
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
-                        TimeSpan total = new TimeSpan();
-                        TimeSpan.TryParse(msg, out total);
-                        TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
-                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
-                        receiveThread = new Thread(receiveStart);
-                        SocketClientOut.buffering = true;
-                        currTitle.Content = curSong.Title;
-                        currArtist.Content = curSong.Artist;
-                        currAlbum.Content = curSong.Album;
-                        currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
-                        if (currentIndex - 1 >= 0)
-                        {
-                            PlayerPrevImage.IsEnabled = true;
-                            PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
-                            PlayerControlPrev.IsEnabled = true;
-                            PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
-                            prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
-                            prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
-                            prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
-                        }
-                        else
-                        {
-                            PlayerPrevImage.IsEnabled = false;
-                            PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
-                            PlayerControlPrev.IsEnabled = false;
-                            PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
-                            prevTitle.Content = "None";
-                            prevArtist.Content = "None";
-                            prevAlbum.Content = "None";
-                        }
-
-                        if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
-                        {
-                            PlayerNextImage.IsEnabled = true;
-                            PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
-                            PlayerControlNext.IsEnabled = true;
-                            PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
-                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
-                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
-                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
-                        }
-                        else
-                        {
-                            PlayerNextImage.IsEnabled = false;
-                            PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
-                            PlayerControlNext.IsEnabled = false;
-                            PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
-                            nextTitle.Content = "None";
-                            nextArtist.Content = "None";
-                            nextAlbum.Content = "None";
-                        }
-
-                        myTimer.Start();
-                        SeekBar.Minimum = 0;
-                        SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
-                        SeekBar.TickFrequency = 1;
-
-                        receiveThread.Start();
-                        //SocketClientOut.playSong();
-                    }
-                    else
-                    {
-                        System.Windows.MessageBox.Show(msg);
-                    }
+                    System.Windows.MessageBox.Show(msg);
                 }
             }
         }
+
+        private void otherSongPlay(string songSelected)
+        {
+            if (SocketClientOut.buffering == true)
+                Thread.Sleep(150);
+            SocketClientOut.stopSong();
+            //SocketClientOut.waveOut.Dispose();
+            string songName = songSelected;
+            curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
+            SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+            SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
+            SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
+            var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+            if (msg == "granted")
+            {
+                msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                PlayerPlayPauseImage.Source = PauseButtonImg;
+                TimeSpan total = new TimeSpan();
+                TimeSpan.TryParse(msg, out total);
+                TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                receiveThread = new Thread(receiveStart);
+                SocketClientOut.buffering = true;
+                currTitle.Content = curSong.Title;
+                currArtist.Content = curSong.Artist;
+                currAlbum.Content = curSong.Album;
+                currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                if (currentIndex - 1 >= 0)
+                {
+                    PlayerPrevImage.IsEnabled = true;
+                    PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
+                    PlayerControlPrev.IsEnabled = true;
+                    PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
+                    prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
+                    prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
+                    prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
+                }
+                else
+                {
+                    PlayerPrevImage.IsEnabled = false;
+                    PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
+                    PlayerControlPrev.IsEnabled = false;
+                    PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
+                    prevTitle.Content = "None";
+                    prevArtist.Content = "None";
+                    prevAlbum.Content = "None";
+                }
+
+                if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                {
+                    PlayerNextImage.IsEnabled = true;
+                    PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
+                    PlayerControlNext.IsEnabled = true;
+                    PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
+                    nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                    nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                    nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                }
+                else
+                {
+                    PlayerNextImage.IsEnabled = false;
+                    PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
+                    PlayerControlNext.IsEnabled = false;
+                    PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
+                    nextTitle.Content = "None";
+                    nextArtist.Content = "None";
+                    nextAlbum.Content = "None";
+                }
+
+                myTimer.Start();
+                SeekBar.Minimum = 0;
+                SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                SeekBar.TickFrequency = 1;
+
+                receiveThread.Start();
+                //SocketClientOut.playSong();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show(msg);
+            }
+        }
+
+        /*private void SongListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cm = this.FindResource("playlistContextMenu") as ContextMenu;
+            if (!cm.IsOpen)
+            {
+                SeekBar.Value = 0;
+                var b = sender as ListBox;
+                if (b.SelectedItem != null)
+                {
+                    if (SocketClientOut.waveOut == null)
+                    {
+                        SocketClientOut.buffering = true;
+                        string songName = b.SelectedItem.ToString();
+                        curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
+                        SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                        SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
+                        SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
+                        var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                        if (msg == "granted")
+                        {
+                            msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                            TimeSpan total = new TimeSpan();
+                            TimeSpan.TryParse(msg, out total);
+                            TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                            PlayerPlayPauseImage.Source = PauseButtonImg;
+                            ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                            receiveThread = new Thread(receiveStart);
+                            SocketClientOut.buffering = true;
+                            currTitle.Content = curSong.Title;
+                            currArtist.Content = curSong.Artist;
+                            currAlbum.Content = curSong.Album;
+                            currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                            if (currentIndex - 1 >= 0)
+                            {
+                                PlayerPrevImage.IsEnabled = true;
+                                PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
+                                PlayerControlPrev.IsEnabled = true;
+                                PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
+                                prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
+                                prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
+                                prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
+                            }
+                            else
+                            {
+                                PlayerPrevImage.IsEnabled = false;
+                                PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
+                                PlayerControlPrev.IsEnabled = false;
+                                PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
+                                prevTitle.Content = "None";
+                                prevArtist.Content = "None";
+                                prevAlbum.Content = "None";
+                            }
+
+                            if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                            {
+                                PlayerNextImage.IsEnabled = true;
+                                PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
+                                PlayerControlNext.IsEnabled = true;
+                                PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
+                                nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                                nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                                nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                            }
+                            else
+                            {
+                                PlayerNextImage.IsEnabled = false;
+                                PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
+                                PlayerControlNext.IsEnabled = false;
+                                PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
+                                nextTitle.Content = "None";
+                                nextArtist.Content = "None";
+                                nextAlbum.Content = "None";
+                            }
+
+                            myTimer.Start();
+                            SeekBar.Minimum = 0;
+                            SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                            SeekBar.TickFrequency = 1;
+                            receiveThread.Start();
+                            int a = receiveThread.ManagedThreadId;
+
+                            //SocketClientOut.playSong();
+                        }
+                        else
+                        {
+                            System.Windows.MessageBox.Show(msg);
+                        }
+                    }
+
+                    else
+                    {
+                        if (SocketClientOut.buffering == true)
+                            Thread.Sleep(150);
+                        SocketClientOut.stopSong();
+                        //SocketClientOut.waveOut.Dispose();
+                        b = sender as ListBox;
+                        string songName = b.SelectedItem.ToString();
+                        curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
+                        SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                        SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
+                        SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
+                        var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                        if (msg == "granted")
+                        {
+                            msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                            PlayerPlayPauseImage.Source = PauseButtonImg;
+                            TimeSpan total = new TimeSpan();
+                            TimeSpan.TryParse(msg, out total);
+                            TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                            ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                            receiveThread = new Thread(receiveStart);
+                            SocketClientOut.buffering = true;
+                            currTitle.Content = curSong.Title;
+                            currArtist.Content = curSong.Artist;
+                            currAlbum.Content = curSong.Album;
+                            currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                            if (currentIndex - 1 >= 0)
+                            {
+                                PlayerPrevImage.IsEnabled = true;
+                                PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
+                                PlayerControlPrev.IsEnabled = true;
+                                PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
+                                prevTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Title;
+                                prevArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Artist;
+                                prevAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1].Album;
+                            }
+                            else
+                            {
+                                PlayerPrevImage.IsEnabled = false;
+                                PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
+                                PlayerControlPrev.IsEnabled = false;
+                                PlayerControlPrev.Visibility = System.Windows.Visibility.Hidden;
+                                prevTitle.Content = "None";
+                                prevArtist.Content = "None";
+                                prevAlbum.Content = "None";
+                            }
+
+                            if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                            {
+                                PlayerNextImage.IsEnabled = true;
+                                PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
+                                PlayerControlNext.IsEnabled = true;
+                                PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
+                                nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                                nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                                nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                            }
+                            else
+                            {
+                                PlayerNextImage.IsEnabled = false;
+                                PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
+                                PlayerControlNext.IsEnabled = false;
+                                PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
+                                nextTitle.Content = "None";
+                                nextArtist.Content = "None";
+                                nextAlbum.Content = "None";
+                            }
+
+                            myTimer.Start();
+                            SeekBar.Minimum = 0;
+                            SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                            SeekBar.TickFrequency = 1;
+
+                            receiveThread.Start();
+                            //SocketClientOut.playSong();
+                        }
+                        else
+                        {
+                            System.Windows.MessageBox.Show(msg);
+                        }
+                    }
+                }
+            }   
+        }*/
     }
 }
