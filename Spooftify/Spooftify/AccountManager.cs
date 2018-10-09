@@ -10,6 +10,9 @@ namespace Spooftify
 {
     public class AccountManager
     {
+        /// <summary>
+        /// AccountManager holds the session information for the currently logged user
+        /// </summary>
         public static AccountManager instance;
 
         public Account Acct { get => acct; set => acct = value; }
@@ -20,24 +23,26 @@ namespace Spooftify
         private Playlist allSongs;
         private Playlist currentPlaylist;
 
+        /// <summary>
+        /// Constructor for the AccountManager
+        /// </summary>
         public AccountManager()
         {
             instance = this;
         }
 
+        /// <summary>
+        /// Saves the account object sent from the server
+        /// </summary>
+        /// <param name="x">Account information sent back from the server</param>
         public void LoadAccount(Account x)
         {
             acct = x;
         }
 
-        public void SaveAccount()
-        {
-            if(acct != null)
-            {
-                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("UserJson\\{0}.json", acct.Username)), JsonConvert.SerializeObject(acct));
-            }
-        }
-
+        /// <summary>
+        /// Used when the user has chosen to log out to remove all session information
+        /// </summary>
         public void Clear()
         {
             acct = null;

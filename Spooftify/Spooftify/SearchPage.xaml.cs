@@ -24,6 +24,9 @@ namespace Spooftify
     {
         private Playlist searchQuery;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public SearchPage()
         {
             InitializeComponent();
@@ -31,6 +34,11 @@ namespace Spooftify
             SearchListBox.ItemsSource = searchQuery.Songs;
         }
 
+        /// <summary>
+        /// Event triggered to perform a search by keyword
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -41,11 +49,19 @@ namespace Spooftify
             FilterSearch();
         }
 
+        /// <summary>
+        /// Event triggered to filter by the specified search criteria
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SearchByComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FilterSearch();
         }
 
+        /// <summary>
+        /// Filters based on keyword and search criteria and updates the listbox contents with the results
+        /// </summary>
         private void FilterSearch()
         {
             if(String.IsNullOrWhiteSpace(SearchTextBox.Text))
@@ -87,6 +103,14 @@ namespace Spooftify
             SearchListBox.Items.Refresh();
         }
 
+        /// <summary>
+        /// Brings up the context menu when right clicking on a listbox item
+        /// Allows the user to add/remove a song to any of the playlists shown on the context menu
+        /// A checkmark means the song exists on that playlist. Clicking on that playlist will remove it.
+        /// No checkmark means the song does not exist on the playlist. Clicking on that playlist will add it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SearchListBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
@@ -117,6 +141,11 @@ namespace Spooftify
             }
         }
 
+        /// <summary>
+        /// Called by the context menu playlist without a checkmark to add the song to the playlist
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Add_Click(object sender, RoutedEventArgs e)
         {
             if (SearchListBox.SelectedItem != null)
@@ -128,6 +157,11 @@ namespace Spooftify
             }
         }
 
+        /// <summary>
+        /// called by teh context menu playlist with a checkmark to remove the song from the playlist
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Remove_Click(object sender, RoutedEventArgs e)
         {
             if (SearchListBox.SelectedItem != null)

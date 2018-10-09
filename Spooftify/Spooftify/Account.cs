@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Spooftify
 {
+    /// <summary>
+    /// Account class keeps track of the user's profile
+    /// includes their list of playlists and their personal information
+    /// </summary>
     public class Account
     {
         public IList<Playlist> Playlists { get => playlists; set => playlists = value; }

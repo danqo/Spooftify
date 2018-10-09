@@ -16,6 +16,7 @@ namespace Spooftify
 {
     /// <summary>
     /// Interaction logic for Spooftify.xaml
+    /// Container for the application with navigation buttons
     /// </summary>
     public partial class SpooftifyMain : Window
     {
@@ -34,6 +35,9 @@ namespace Spooftify
         private ProfilePage profilePage;
         private SearchPage searchPage;
 
+        /// <summary>
+        /// constructor that initializes all the pages for the application
+        /// </summary>
         public SpooftifyMain()
         {
             InitializeComponent();
@@ -49,6 +53,10 @@ namespace Spooftify
             LoadPlaylistsPage();
         }
 
+        /// <summary>
+        /// navigation procedure to the playlist or home page
+        /// correctly highlights the current page
+        /// </summary>
         public void LoadPlaylistsPage()
         {
             PageFrame.Content = playlistsPage;
@@ -62,6 +70,10 @@ namespace Spooftify
             LoadPlayPage();
         }
 
+        /// <summary>
+        /// navigation procedure to the playpage
+        /// correctly highlights the current page
+        /// </summary>
         public void LoadPlayPage()
         {
             PageFrame.Content = playPage;
@@ -75,6 +87,10 @@ namespace Spooftify
             LoadSearchPage();
         }
 
+        /// <summary>
+        /// navigation procedure to the search page
+        /// correctly highlights the current page
+        /// </summary>
         public void LoadSearchPage()
         {
             PageFrame.Content = searchPage;
@@ -83,6 +99,12 @@ namespace Spooftify
             ResetPages();
         }
 
+        /// <summary>
+        /// navigation procedure to the profile page
+        /// correctly highlights the current page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
             PageFrame.Content = profilePage;
@@ -91,14 +113,21 @@ namespace Spooftify
             ResetPages();
         }
 
+        /// <summary>
+        /// send account information to the server to be overwritten
+        /// return the user to the login page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            //AccountManager.instance.SaveAccount();
-            
             SocketClientOut.logout();
             ApplicationManager.instance.Logout();
         }
 
+        /// <summary>
+        /// resets the navigation buttons to their default state
+        /// </summary>
         private void SetNavImagesDefault()
         {
             TogglePlayPageButton();
@@ -107,11 +136,14 @@ namespace Spooftify
             ProfileButtonImage.Source = ProfileDefault;
         }
 
+        /// <summary>
+        /// Disables the play page button if current playlist is not selected
+        /// May be triggered if the current playlist selected is removed by the user
+        /// </summary>
         public void TogglePlayPageButton()
         {
             PlayPageButton.IsEnabled = AccountManager.instance.CurrentPlaylist != null;
             PlayPageButtonImage.Source = PlayPageButton.IsEnabled ? PlayPageDefault : PlayPageDisabled;
-            // stop playing the music if the playlist deleted is the active one
         }
 
         public void ResetPages()

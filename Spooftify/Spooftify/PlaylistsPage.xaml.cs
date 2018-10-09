@@ -26,12 +26,21 @@ namespace Spooftify
         private const string EMPTY_NAME_MSG = "Playlist name cannot be empty!";
         private const string REMOVED_PLAYLIST_MSG = "Playlist removed!";
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public PlaylistsPage()
         {
             InitializeComponent();
             PlaylistListBox.ItemsSource = AccountManager.instance.Acct.Playlists;
         }
 
+        /// <summary>
+        /// Creates another playlist for the user and displays it on the listbox
+        /// IF: the inputted playlistname is not empty and not a duplicate playlist name
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrWhiteSpace(AddPlaylistTextBox.Text))
@@ -57,6 +66,12 @@ namespace Spooftify
             }
         }
 
+        /// <summary>
+        /// Creates another playlist for the user and displays it on the listbox
+        /// IF: the inputted playlistname is not empty and not a duplicate playlist name
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddPlaylistTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
@@ -85,6 +100,11 @@ namespace Spooftify
             }
         }
 
+        /// <summary>
+        /// Loads the selected playlist onto the playpage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PlaylistListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
@@ -99,6 +119,11 @@ namespace Spooftify
             }
         }
 
+        /// <summary>
+        /// brings up the context menu that allows the user to remove a playlist from their account
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PlaylistListBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
@@ -114,6 +139,11 @@ namespace Spooftify
             }
         }
 
+        /// <summary>
+        /// called when the user clicks "remove" on the context menu to remove a playlist from their account
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Remove_Click(object sender, RoutedEventArgs e)
         {
             if (PlaylistListBox.SelectedItem != null)

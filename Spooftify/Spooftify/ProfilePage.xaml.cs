@@ -24,6 +24,9 @@ namespace Spooftify
     /// </summary>
     public partial class ProfilePage : Page
     {
+        /// <summary>
+        /// constructor
+        /// </summary>
         public ProfilePage()
         {
             InitializeComponent();
@@ -34,6 +37,11 @@ namespace Spooftify
             FetchImage(new Uri(AccountManager.instance.Acct.AvatarURI));
         }
 
+        /// <summary>
+        /// Downloads the avatar image loaded from the account information from the server
+        /// Updates the image with the downloaded image
+        /// </summary>
+        /// <param name="uri">uri used to download the image</param>
         private void FetchImage(Uri uri)
         {
             BitmapImage image = new BitmapImage();

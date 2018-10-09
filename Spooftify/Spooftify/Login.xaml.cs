@@ -17,7 +17,7 @@ using WpfApp1;
 namespace Spooftify
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    // Interaction logic for Login.xaml
     /// </summary>
     public partial class Login : Window
     {
@@ -28,6 +28,9 @@ namespace Spooftify
         private const string EMPTY_USER_PASS = "Username or password cannot be empty!";
         private const string INVALID_LOGIN = "Incorrect username or password!";
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public Login()
         {
             InitializeComponent();
@@ -36,6 +39,13 @@ namespace Spooftify
             accountManager = new AccountManager();
         }
 
+        /// <summary>
+        /// Verifies that the inputted login information is valid
+        /// Loads the application if login information is valid
+        /// Displays an error message otherwise
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SignIn_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrWhiteSpace(user.Text) || String.IsNullOrWhiteSpace(pass.Password))
@@ -50,6 +60,13 @@ namespace Spooftify
             }
         }
 
+        /// <summary>
+        /// Verifies that the inputted login information is valid
+        /// Loads the application if login information is valid
+        /// Displays an error message otherwise 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SignIn_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)

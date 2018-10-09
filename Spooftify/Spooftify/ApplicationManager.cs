@@ -8,6 +8,10 @@ using WpfApp1;
 
 namespace Spooftify
 {
+    /// <summary>
+    /// Handles signing into the application and connecting to the server
+    /// Saves any changes made to the account on logging out or exiting
+    /// </summary>
     public class ApplicationManager
     {
         public static ApplicationManager instance;
@@ -20,25 +24,20 @@ namespace Spooftify
         private Login loginPage;
         private SpooftifyMain mainPage;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ApplicationManager()
         {
             instance = this;
         }
 
-        public bool IsValidSignIn(String username, String password)
-        {
-            string accountsJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UserJson\\UsernamesPasswords.json"));
-            LoginCollection userpass = JsonConvert.DeserializeObject<LoginCollection>(accountsJson);
-            foreach(LoginCollection.LoginInfo entry in userpass.LoginList)
-            {
-                if(entry.Username == username && entry.Password == password)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
+        /// <summary>
+        /// Sends the inputted usernames and passwords to the server for verification.
+        /// </summary>
+        /// <param name="username">inputted username</param>
+        /// <param name="password">inputted password</param>
+        /// <returns>true if the login information has a match, false if the login information was incorrect or if the connection timed out</returns>
         public bool SignIn(string username, string password)
         {
             connectionError = false;
@@ -74,9 +73,11 @@ namespace Spooftify
             return false;
         }
 
+        /// <summary>
+        /// sends any changes made to the account to the server and returns the user to the login page
+        /// </summary>
         public void Logout()
         {
-            AccountManager.instance.SaveAccount();
             AccountManager.instance.Clear();
             explicitShutdown = true;
             mainPage.Close();
@@ -85,6 +86,10 @@ namespace Spooftify
             loginPage.Show();
         }
 
+        /// <summary>
+        /// Asks the user to confirm shutdown and sends the account information to the server on shutdown
+        /// </summary>
+        /// <returns>true if shutdown has been confirmed, false if cancelled</returns>
         public bool ConfirmExit()
         {
             explicitShutdown = MessageBox.Show("Are you sure you want to exit?", "Exit", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes;

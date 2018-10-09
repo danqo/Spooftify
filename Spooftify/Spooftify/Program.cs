@@ -15,6 +15,9 @@ using System.Windows.Threading;
 
 namespace WpfApp1
 {
+    /// <summary>
+    /// Handles any udp requests made to the server
+    /// </summary>
     class SocketClientOut
     {
         public static bool buffering; 
@@ -25,9 +28,7 @@ namespace WpfApp1
         public static WaveOut waveOut = null;
         public static Thread current = null;
         public static IMp3FrameDecompressor decomp;
-        public static int currentLocation = 0;
-        //got helps from erszcz on stackoverflow
-        
+        public static int currentLocation = 0;        
 
         public static void connectionEstablish()
         {

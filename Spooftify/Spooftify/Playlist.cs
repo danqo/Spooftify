@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Spooftify
 {
+    /// <summary>
+    /// Holds a list of songs and a name for identifying the playlist
+    /// </summary>
     public class Playlist
     {
         public IList<Song> Songs { get => mSongs; set => mSongs = value; }

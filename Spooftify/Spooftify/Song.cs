@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Spooftify
 {
+    /// <summary>
+    /// Song class with details about the song, including title, artist, and album
+    /// Includes string format for how the song information is displayed
+    /// </summary>
     public class Song
     {
         public string Title { get => mTitle; set => mTitle = value; }
