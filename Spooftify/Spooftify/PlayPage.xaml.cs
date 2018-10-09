@@ -25,6 +25,8 @@ namespace Spooftify
     {
         Thread receiveThread;
 
+        private const string TIMESTAMP_FORMAT = @"mm\:ss";
+
         private BitmapImage PlayButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPlayButton.png"));
         private BitmapImage PauseButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPauseButton.png"));
         private BitmapImage StopButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyStopButton.png"));
@@ -34,8 +36,7 @@ namespace Spooftify
         private Song curSong;
 
         private System.Timers.Timer myTimer;
-        private int seconds = 0;
-        private int minutes = 0;
+        private TimeSpan timestamp = TimeSpan.Zero;
         private int currentIndex;
 
         private ContextMenu cm;
@@ -125,13 +126,8 @@ namespace Spooftify
             this.Dispatcher.Invoke(() =>
             {
                 SeekBar.Value += 1;
-                seconds += 1;
-                if (seconds == 60)
-                {
-                    seconds = 0;
-                    minutes += 1;
-                }
-                CurrentTimestampLabel.Content = minutes + ":" + seconds;
+                timestamp = timestamp.Add(TimeSpan.FromSeconds(1));
+                CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
             });
 
 
@@ -232,9 +228,8 @@ namespace Spooftify
                     SocketClientOut.buffering = false;
                     SeekBar.Value = 0;
                     myTimer.Stop();
-                    minutes = 0;
-                    seconds = 0;
-                    CurrentTimestampLabel.Content = minutes + ":" + seconds;
+                    timestamp = TimeSpan.Zero;
+                    CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                     SocketClientOut.stopSong();
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                 }
@@ -300,9 +295,8 @@ namespace Spooftify
 
         private void SeekBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            minutes = (int)(SeekBar.Value / 60);
-            seconds = (int)(SeekBar.Value % 60);
-            CurrentTimestampLabel.Content = minutes + ":" + seconds;
+            timestamp = new TimeSpan(0, (int)(SeekBar.Value / 60), (int)(SeekBar.Value % 60));
+            CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
             this.Dispatcher.Invoke(() =>
             {
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content))
@@ -334,7 +328,7 @@ namespace Spooftify
 
                     TimeSpan total = new TimeSpan();
                     TimeSpan.TryParse(msg, out total);
-                    TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                    TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
                     PlayerPlayPauseImage.Source = PauseButtonImg;
                     ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                     receiveThread = new Thread(receiveStart);
@@ -363,6 +357,27 @@ namespace Spooftify
                         prevArtist.Content = "None";
                         prevAlbum.Content = "None";
                     }
+
+                    if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                        {
+                            PlayerNextImage.IsEnabled = true;
+                            PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
+                            PlayerControlNext.IsEnabled = true;
+                            PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
+                            nextTitle.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Title;
+                            nextArtist.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Artist;
+                            nextAlbum.Content = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1].Album;
+                        }
+                        else
+                        {
+                            PlayerNextImage.IsEnabled = false;
+                            PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
+                            PlayerControlNext.IsEnabled = false;
+                            PlayerControlNext.Visibility = System.Windows.Visibility.Hidden;
+                            nextTitle.Content = "None";
+                            nextArtist.Content = "None";
+                            nextAlbum.Content = "None";
+                        }
 
                     if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
                     {
@@ -420,7 +435,8 @@ namespace Spooftify
                 PlayerPlayPauseImage.Source = PauseButtonImg;
                 TimeSpan total = new TimeSpan();
                 TimeSpan.TryParse(msg, out total);
-                TotalTimestampLabel.Content = total.Minutes + ":" + total.Seconds;
+                TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
+                PlayerPlayPauseImage.Source = PauseButtonImg;
                 ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                 receiveThread = new Thread(receiveStart);
                 SocketClientOut.buffering = true;
@@ -495,6 +511,14 @@ namespace Spooftify
                 {
                     if (SocketClientOut.waveOut == null)
                     {
+=======
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
+                        TimeSpan total = new TimeSpan();
+                        TimeSpan.TryParse(msg, out total);
+                        TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
+                        ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                        receiveThread = new Thread(receiveStart);
+>>>>>>> fe9482fc6c6f0dc57a7371a4a2d1585c72579824
                         SocketClientOut.buffering = true;
                         string songName = b.SelectedItem.ToString();
                         curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
