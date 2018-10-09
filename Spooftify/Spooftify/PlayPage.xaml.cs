@@ -455,12 +455,12 @@ namespace Spooftify
                     var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                     if (msg == "granted")
                     {
+
                         msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
 
                         TimeSpan total = new TimeSpan();
                         TimeSpan.TryParse(msg, out total);
                         TotalTimestampLabel.Content = total.ToString(TIMESTAMP_FORMAT);
-                        msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
                         PlayerPlayPauseImage.Source = PauseButtonImg;
                         ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                         receiveThread = new Thread(receiveStart);
@@ -468,8 +468,8 @@ namespace Spooftify
                         myTimer.Start();
                         receiveThread.Start();
                         int a = receiveThread.ManagedThreadId;
-                        PlayerPlayPauseImage.Source = PauseButtonImg;
                     }
+                    PlayerPlayPauseImage.Source = PauseButtonImg;
                 }
             });
         }
