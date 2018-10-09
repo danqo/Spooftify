@@ -166,7 +166,6 @@ namespace WpfApp1
                         Console.WriteLine("Total packet sent: " + total);
                     }
 
-
                     count1 = count1 + 1;
                     mp3Frame = reader.ReadNextFrame();
 

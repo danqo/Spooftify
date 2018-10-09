@@ -127,7 +127,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" MouseDoubleClick="SongListbox_MouseDoubleClick">
+        <ListBox Grid.Row="2" x:Name="SongListbox" Background="Black" MaxWidth="600" Padding="12" Margin="0,0,0,4" BorderBrush="Black" MouseRightButtonUp="SongListbox_MouseRightButtonUp" SelectionChanged="SongListbox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
