@@ -435,8 +435,9 @@ namespace Spooftify
                     {
                         myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
-                        
-                        
+                        curSong = (Song) SongListbox.Items[currentIndex + 1];
+
+
                         PlayerPlayPauseImage.Source = PlayButtonImg;
                         SeekBar.Value = 0;
                     }
