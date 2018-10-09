@@ -54,5 +54,10 @@ namespace Spooftify
         {
             return mSongs.FirstOrDefault(x => x.IsSame(s)) != null;
         }
+
+        public int FindSongIndex(Song s)
+        {
+            return ContainsSong(s) ? mSongs.IndexOf(mSongs.FirstOrDefault(x => x.IsSame(s))) : -1;
+        }
     }
 }

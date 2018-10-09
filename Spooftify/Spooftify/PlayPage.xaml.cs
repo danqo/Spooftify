@@ -100,6 +100,22 @@ namespace Spooftify
         {
             if (SongListbox.SelectedItem != null)
             {
+                if(AccountManager.instance.CurrentPlaylist.FindSongIndex(SongListbox.SelectedItem as Song) == currentIndex)
+                {
+                    if (SocketClientOut.waveOut != null)
+                    {
+                        if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+                        {
+                            SocketClientOut.buffering = false;
+                            SeekBar.Value = 0;
+                            myTimer.Stop();
+                            timestamp = TimeSpan.Zero;
+                            CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+                            SocketClientOut.stopSong();
+                            PlayerPlayPauseImage.Source = PlayButtonImg;
+                        }
+                    }
+                }
                 AccountManager.instance.CurrentPlaylist.deleteSong(SongListbox.SelectedItem as Song);
                 SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
                 SongListbox.Items.Refresh();
