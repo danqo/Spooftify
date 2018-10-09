@@ -436,10 +436,30 @@ namespace Spooftify
                         myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
-
-
-                        PlayerPlayPauseImage.Source = PlayButtonImg;
                         SeekBar.Value = 0;
+                        SocketClientOut.buffering = true;
+                        SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+                        SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
+                        SocketClientOut.currentLocation = (int)SeekBar.Value;
+                        SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SocketClientOut.currentLocation.ToString()));
+                        var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+                        if (msg == "granted")
+                        {
+
+                            msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());
+
+                            PlayerPlayPauseImage.Source = PauseButtonImg;
+                            ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
+                            receiveThread = new Thread(receiveStart);
+                            SocketClientOut.buffering = true;
+                            myTimer.Start();
+                            receiveThread.Start();
+                            int a = receiveThread.ManagedThreadId;
+                        }
+
+                        PlayerPlayPauseImage.Source = PauseButtonImg;
+                        //pauseResume.Content = "Pause";
+                        
                     }
                     else
                     {
