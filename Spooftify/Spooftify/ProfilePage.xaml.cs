@@ -39,20 +39,6 @@ namespace Spooftify
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             image.UriSource = uri;
-<<<<<<< HEAD
-            image.DownloadFailed += (s, args) =>
-            {
-                System.Diagnostics.Debug.WriteLine("Avatar Image download failed: " + AccountManager.instance.Acct.AvatarURI);
-            };
-            image.DownloadCompleted += (s, args) =>
-            {
-                System.Diagnostics.Debug.WriteLine("Downloading Complete!");
-                image.Freeze();
-                context.Post(_ => AvatarImage.Source = image, null);
-            };
-            
-=======
->>>>>>> 95fab05f9696def0622745c562ba8487a95b9054
             image.EndInit();
             AvatarImage.Source = image;
         }
