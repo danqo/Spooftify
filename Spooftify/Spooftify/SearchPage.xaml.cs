@@ -154,6 +154,7 @@ namespace Spooftify
                 AccountManager.instance.Acct.FindPlaylist(cmItem.Header.ToString()).addSong(SearchListBox.SelectedItem as Song);
                 AddRemoveSongMsg.Content = String.Format("{0} added to {1}!", (SearchListBox.SelectedItem as Song).Title, cmItem.Header);
                 AddRemoveSongMsg.Visibility = Visibility.Visible;
+                PlayPage.isChanged = true;
             }
         }
 
