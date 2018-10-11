@@ -1,0 +1,25 @@
+﻿<Window x:Class="Spooftify.VLCPlayer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:windowForms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:vlcXcontrol="clr-namespace:AxAXVLC;assembly=AxInterop.AXVLC"
+       
+        xmlns:local="clr-namespace:Spooftify"
+        mc:Ignorable="d"
+        Title="VLCPlayer" Height="450" Width="800">
+    <Grid Background="Black">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="134*"/>
+            <ColumnDefinition Width="388*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox Background="Black" Foreground="White" FontSize="18" MouseDoubleClick="ListBox_MouseDoubleClick">
+            <ListBoxItem>eminem-venom.mp4</ListBoxItem>
+        </ListBox>
+        <WindowsFormsHost x:Name="winFormHost" Grid.Column="1">
+            <vlcXcontrol:AxVLCPlugin2 x:Name="acitveXVLCPlayer"/>
+
+        </WindowsFormsHost>
+    </Grid>
+</Window>

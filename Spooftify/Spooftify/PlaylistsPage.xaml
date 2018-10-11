@@ -35,6 +35,7 @@
                 <RowDefinition Height="1.8*"/>
                 <RowDefinition Height="1.2*"/>
             </Grid.RowDefinitions>
+            <Button Margin="0,75,488,-0.4" Grid.RowSpan="2" Click="Button_Click"> OPEN VLC</Button>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Grid>
                     <Label Grid.Row="0" Content="Enter new playlist name" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="450" Height="50" FontSize="24" Foreground="Gray" Background ="LightGray" Padding="16,0,0,0">

@@ -182,5 +182,11 @@ namespace Spooftify
             AddPlaylistTextBox.Text = "";
             RefreshPlaylists();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            VLCPlayer vlc = new VLCPlayer();
+            vlc.Show();
+        }
     }
 }

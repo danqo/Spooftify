@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spooftify", "Spooftify\Spooftify.csproj", "{64BC7E6E-5CF9-4DA1-A0C3-32DDE6D298E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsControlLibrary1", "WindowsFormsControlLibrary1\WindowsFormsControlLibrary1.csproj", "{AD79031A-33C1-4A40-996C-7CB0B58A90C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{64BC7E6E-5CF9-4DA1-A0C3-32DDE6D298E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64BC7E6E-5CF9-4DA1-A0C3-32DDE6D298E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64BC7E6E-5CF9-4DA1-A0C3-32DDE6D298E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD79031A-33C1-4A40-996C-7CB0B58A90C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD79031A-33C1-4A40-996C-7CB0B58A90C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD79031A-33C1-4A40-996C-7CB0B58A90C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD79031A-33C1-4A40-996C-7CB0B58A90C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -34,6 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.AXVLC">
+      <HintPath>..\WindowsFormsControlLibrary1\bin\Debug\AxInterop.AXVLC.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.AXVLC">
+      <HintPath>..\WindowsFormsControlLibrary1\bin\Debug\Interop.AXVLC.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
     </Reference>
@@ -56,6 +63,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -77,6 +85,9 @@
     <Compile Include="Song.cs" />
     <Compile Include="SpooftifyMain.xaml.cs">
       <DependentUpon>SpooftifyMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VLCPlayer.xaml.cs">
+      <DependentUpon>VLCPlayer.xaml</DependentUpon>
     </Compile>
     <Page Include="Login.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -113,6 +124,10 @@
     <Page Include="SpooftifyMain.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="VLCPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +207,12 @@
     <Resource Include="Images\SpooftifyPlayButton.png" />
     <Resource Include="Images\SpooftifyPrevButton.png" />
     <Resource Include="Images\SpooftifyStopButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WindowsFormsControlLibrary1\WindowsFormsControlLibrary1.csproj">
+      <Project>{ad79031a-33c1-4a40-996c-7cb0b58a90c2}</Project>
+      <Name>WindowsFormsControlLibrary1</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
