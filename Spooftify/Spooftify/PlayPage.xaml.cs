@@ -479,9 +479,7 @@ namespace Spooftify
         {
             timestamp = new TimeSpan(0, (int)(SeekBar.Value / 60), (int)(SeekBar.Value % 60));
             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
-<<<<<<< HEAD
-            if (isChanged)
-=======
+
             if(isChanged)
             {
                 if (currentIndex + 1 == AccountManager.instance.CurrentPlaylist.Songs.Count - 1)
@@ -503,14 +501,9 @@ namespace Spooftify
                         myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
-<<<<<<< HEAD
 
-                        displayControls();
-
-=======
                         SeekBar.Value = 0;
                         displayControls();
->>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                         SocketClientOut.buffering = true;
                         SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                         SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
@@ -529,17 +522,9 @@ namespace Spooftify
                             ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                             receiveThread = new Thread(receiveStart);
                             SocketClientOut.buffering = true;
-<<<<<<< HEAD
                             SeekBar.Minimum = 0;
                             SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
                             SeekBar.TickFrequency = 1;
-=======
-                            
-                            SeekBar.Minimum = 0;
-                            SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
-                            SeekBar.TickFrequency = 1;
-                            
->>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                             receiveThread.Start();
                             CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
                             myTimer.Start();
@@ -547,11 +532,6 @@ namespace Spooftify
                         }
 
                         PlayerPlayPauseImage.Source = PauseButtonImg;
-<<<<<<< HEAD
-                        //pauseResume.Content = "Pause";
-=======
-                        
->>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                         
                     }
                     else
@@ -563,11 +543,6 @@ namespace Spooftify
                         SocketClientOut.waveOut.Stop();
                         displayControls();
                         SeekBar.Value = 0;
-<<<<<<< HEAD
-                        SongListbox.SelectedIndex = currentIndex + 1;
-                        curSong = (Song) SongListbox.Items[currentIndex + 1];
-=======
->>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                     }
                     
                 }
