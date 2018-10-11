@@ -18,20 +18,23 @@ namespace Spooftify
         public string Album { get => mAlbum; set => mAlbum = value; }
         public string Directory { get => mArtist + "-" + mTitle + mExtension; }
         public string Display { get => ToString(); }
+        public string AlbumArt { get => mAlbumArt; set => mAlbumArt = value; }
 
         private string mTitle;
         private string mArtist;
         private string mExtension;
         private string mAlbum;
+        private string mAlbumArt;
 
         public Song()
         {
-
+            mAlbumArt = "";
         }
         public Song(string title,  string artist)
         {
             mTitle = title;
             mArtist = artist;
+            mAlbumArt = "";
         }
 
         public Song(string title, string artist, string extension)
@@ -39,6 +42,7 @@ namespace Spooftify
             mTitle = title;
             mArtist = artist;
             mExtension = extension;
+            mAlbumArt = "";
         }
 
         public Song(Song s)
@@ -47,6 +51,7 @@ namespace Spooftify
             mArtist = s.Artist;
             mExtension = s.Extension;
             mAlbum = s.Album;
+            mAlbumArt = s.mAlbumArt;
         }
 
         public override string ToString()

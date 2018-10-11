@@ -2,142 +2,187 @@
   "Name": "All Songs",
   "Songs": [
     {
+      "Title": "Hope You Like It",
+      "Artist": "Gift for Nhan",
+      "Extension": ".mp3",
+      "Album": "Memes",
+      "AlbumArt": "http://www.jmkxyy.com/middle-finger-icon-for-iphone/middle-finger-icon-for-iphone-29.jpg"
+    },
+    {
+      "Title": "Electric Feel",
+      "Artist": "MGMT",
+      "Extension": ".mp3",
+      "Album": "Oracular Spectacular",
+      "AlbumArt": "https://consequenceofsound.files.wordpress.com/2018/01/71xturugcvl-_sl1500_.jpg?quality=80"
+    },
+    {
       "Title": "BangBangBang",
       "Artist": "BigBang",
       "Extension": ".mp3",
-      "Album": "Made Series"
+      "Album": "Made Series",
+      "AlbumArt": "http://cjklyrics.net/file/album/big-bang1-made.jpg"
+    },
+    {
+      "Title": "Slow Dancing in the Dark",
+      "Artist": "Joji",
+      "Extension": ".mp3",
+      "Album": "Ballads",
+      "AlbumArt": "https://ssle.ulximg.com/image/750x750/cover/1536764694_29b4ca606a616cf753bdf94d27c98a84.jpg/2b764f480639834555b4e1176cae3b2e/1536764694_c7d8b93295f788215b0b38bd25a38730.jpg"
     },
     {
       "Title": "Baam",
       "Artist": "MoMoLand",
       "Extension": ".mp3",
-      "Album": "Fun to the World"
+      "Album": "Fun to the World",
+      "AlbumArt": "https://pre00.deviantart.net/2ea1/th/pre/f/2018/184/4/4/momoland_baam___fun_to_the_world_album_cover_by_lealbum-dcfe3x1.jpg"
     },
     {
       "Title": "LaTaTa",
       "Artist": "(G)I-DLE",
       "Extension": ".mp3",
-      "Album": "I Am"
+      "Album": "I Am",
+      "AlbumArt": "https://kpopreviewed.files.wordpress.com/2018/05/gidle-iam-2.jpg?w=515&h=515"
     },
     {
       "Title": "Pumped Up Kicks",
       "Artist": "Foster the People",
       "Extension": ".mp3",
-      "Album": "Torches"
+      "Album": "Torches",
+      "AlbumArt": "https://lutheruk1.files.wordpress.com/2016/02/torches_foster_the_people.jpg"
     },
     {
       "Title": "Selfish High Heels",
       "Artist": "Yung Bae",
       "Extension": ".mp3",
-      "Album": "N/A"
+      "Album": "Japanese Disco Edits",
+      "AlbumArt": "https://images-na.ssl-images-amazon.com/images/I/51o1XNqW-RL._SS500.jpg"
+
     },
     {
       "Title": "Kaancepts",
       "Artist": "KAAN",
       "Extension": ".mp3",
-      "Album": "N/A"
+      "Album": "11/2/199?",
+      "AlbumArt": "https://f4.bcbits.com/img/a1420947127_10.jpg"
     },
     {
       "Title": "STARGAZING",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "CAROUSEL",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "SICKO MODE",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "R.I.P. SCREW",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "STOP TRYING TO BE GOD",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "NO BYSTANDERS",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "SKELETONS",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "WAKE UP",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "5% TNT",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "NC-17",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "ASTROTHUNDER",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "YOSEMITE",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "CAN'T SAY",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "WHO_ WHAT_",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "BUTTERFLY EFFECT",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "HOUSTONFORNICATION",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "COFFEE BEAN",
       "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "ASTROWORLD"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     }
   ]
 }
