@@ -351,9 +351,15 @@ namespace Spooftify
             }
             else
             {
-                string songName = SongListbox.SelectedItem.ToString();
-                songPlay(songName);
-               
+                try
+                {
+                    string songName = SongListbox.SelectedItem.ToString();
+                    songPlay(songName);
+                }
+                catch
+                {
+                    MessageBox.Show("PICK A DAMM SONG");
+                }
             }
 
         }
