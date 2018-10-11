@@ -88,14 +88,14 @@
 
     <Grid Background="Black">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="4.5*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" x:Name="PlaylistName" Content="Playlist #1" HorizontalContentAlignment="Center" Background="#1B1B1B" Foreground="LightGray" FontSize="36" FontWeight="DemiBold"/>
+        <Label Grid.Row="0" x:Name="PlaylistName" Content="Playlist #1" HorizontalContentAlignment="Center" Background="#1B1B1B" Foreground="LightGray" FontSize="32" FontWeight="DemiBold"/>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="5.5*"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
@@ -105,66 +105,66 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <Image/>
-                    <Label Content="Previous Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="16" />
-                    <Grid>
+                    <Image x:Name="prevImg" Width="110" Height="110" Margin="0,35,0,0"/>
+                    <Label Content="Previous Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="13" Height="27"/>
+                    <Grid Margin="12,0,0,0">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="22"/>
+                            <RowDefinition Height="22"/>
+                            <RowDefinition Height="22"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="Title: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="0" Grid.Column="0"/>
-                        <Label Content="Artist: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="1" Grid.Column="0"/>
-                        <Label Content="Album: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="2" Grid.Column="0"/>
-                        <Label x:Name="prevTitle" Foreground="LightGray" FontSize="16" Grid.Row="0" Grid.Column="1"/>
-                        <Label x:Name="prevArtist" Foreground="LightGray" FontSize="16" Grid.Row="1" Grid.Column="1"/>
-                        <Label x:Name="prevAlbum" Foreground="LightGray" FontSize="16" Grid.Row="2" Grid.Column="1"/>
+                        <Label Content="Title: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="9" Grid.Row="0" Grid.Column="0"/>
+                        <Label Content="Artist: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="9" Grid.Row="1" Grid.Column="0"/>
+                        <Label Content="Album: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="9" Grid.Row="2" Grid.Column="0"/>
+                        <Label x:Name="prevTitle" Foreground="LightGray" FontSize="9" Grid.Row="0" Grid.Column="1"/>
+                        <Label x:Name="prevArtist" Foreground="LightGray" FontSize="9" Grid.Row="1" Grid.Column="1"/>
+                        <Label x:Name="prevAlbum" Foreground="LightGray" FontSize="9" Grid.Row="2" Grid.Column="1"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <Image/>
-                    <Label Content="Current Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="16" />
+                    <Image x:Name="curImg" Width="133" Height="133" Margin="0,12,0,0"/>
+                    <Label Content="Current Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="16" Height="31"/>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="24"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="Title: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="0" Grid.Column="0"/>
-                        <Label Content="Artist: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="1" Grid.Column="0"/>
-                        <Label Content="Album: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="2" Grid.Column="0"/>
-                        <Label x:Name="currTitle" Foreground="LightGray" FontSize="16" Grid.Row="0" Grid.Column="1"/>
-                        <Label x:Name="currArtist" Foreground="LightGray" FontSize="16" Grid.Row="1" Grid.Column="1"/>
-                        <Label x:Name="currAlbum" Foreground="LightGray" FontSize="16" Grid.Row="2" Grid.Column="1"/>
+                        <Label Content="Title: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="11" Grid.Row="0" Grid.Column="0"/>
+                        <Label Content="Artist: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="11" Grid.Row="1" Grid.Column="0"/>
+                        <Label Content="Album: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="11" Grid.Row="2" Grid.Column="0"/>
+                        <Label x:Name="currTitle" Foreground="LightGray" FontSize="11" Grid.Row="0" Grid.Column="1"/>
+                        <Label x:Name="currArtist" Foreground="LightGray" FontSize="11" Grid.Row="1" Grid.Column="1"/>
+                        <Label x:Name="currAlbum" Foreground="LightGray" FontSize="11" Grid.Row="2" Grid.Column="1"/>
                     </Grid>
                 </StackPanel>
                 <StackPanel Grid.Column="2">
-                    <Image/>
-                    <Label Content="Next Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="16" />
+                    <Image x:Name="nextImg" Height="110" Width="110" Margin="0,35,0,0"/>
+                    <Label Content="Next Song" Foreground="LightGray" HorizontalAlignment="Center" FontSize="13" />
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="22"/>
+                            <RowDefinition Height="22"/>
+                            <RowDefinition Height="22"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="Title: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="0" Grid.Column="0"/>
-                        <Label Content="Artist: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="1" Grid.Column="0"/>
-                        <Label Content="Album: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="16" Grid.Row="2" Grid.Column="0"/>
-                        <Label x:Name="nextTitle" Foreground="LightGray" FontSize="16" Grid.Row="0" Grid.Column="1"/>
-                        <Label x:Name="nextArtist" Foreground="LightGray" FontSize="16" Grid.Row="1" Grid.Column="1"/>
-                        <Label x:Name="nextAlbum" Foreground="LightGray" FontSize="16" Grid.Row="2" Grid.Column="1"/>
+                        <Label Content="Title: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="9" Grid.Row="0" Grid.Column="0"/>
+                        <Label Content="Artist: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="9" Grid.Row="1" Grid.Column="0"/>
+                        <Label Content="Album: " HorizontalAlignment="Right" Foreground="LightGray" FontSize="9" Grid.Row="2" Grid.Column="0"/>
+                        <Label x:Name="nextTitle" Foreground="LightGray" FontSize="9" Grid.Row="0" Grid.Column="1"/>
+                        <Label x:Name="nextArtist" Foreground="LightGray" FontSize="9" Grid.Row="1" Grid.Column="1"/>
+                        <Label x:Name="nextAlbum" Foreground="LightGray" FontSize="9" Grid.Row="2" Grid.Column="1"/>
                     </Grid>
                 </StackPanel>
             </Grid>
@@ -203,7 +203,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock Text="{Binding Path=Display}" Foreground="LightGray" FontSize="24"/>
+                        <TextBlock Text="{Binding Path=Display}" Foreground="LightGray" FontSize="15"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

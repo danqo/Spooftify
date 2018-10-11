@@ -33,7 +33,9 @@ namespace Spooftify
         private BitmapImage PrevButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPrevButton.png"));
         private BitmapImage NextButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyNextButton.png"));
 
+        private Song prevSong;
         private Song curSong;
+        private Song nextSong;
 
         private System.Timers.Timer myTimer;
         private TimeSpan timestamp = TimeSpan.Zero;
@@ -96,7 +98,8 @@ namespace Spooftify
         {
             if (SongListbox.SelectedItem != null)
             {
-                if(AccountManager.instance.CurrentPlaylist.FindSongIndex(SongListbox.SelectedItem as Song) == currentIndex)
+                int deleteIndex = AccountManager.instance.CurrentPlaylist.FindSongIndex(SongListbox.SelectedItem as Song);
+                if (deleteIndex == currentIndex)
                 {
                     if (SocketClientOut.waveOut != null)
                     {
@@ -109,10 +112,26 @@ namespace Spooftify
                             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
                             SocketClientOut.stopSong();
                             SeekBar.IsEnabled = false;
+
                         }
                     }
+                    prevSong = null;
+                    curSong = null;
+                    nextSong = null;
                 }
-                
+                else
+                {
+                    AccountManager.instance.CurrentPlaylist.deleteSong(SongListbox.SelectedItem as Song);
+                    SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
+                    SongListbox.Items.Refresh();
+                    if(deleteIndex < currentIndex)
+                        currentIndex--;
+                    if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                        nextSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1];
+                    if (currentIndex - 1 >= 0)
+                        prevSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1];
+                }
+
                 AccountManager.instance.CurrentPlaylist.deleteSong(SongListbox.SelectedItem as Song);
                 SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
                 SongListbox.Items.Refresh();
@@ -124,12 +143,22 @@ namespace Spooftify
         {
             if(curSong != null)
             {
+                BitmapImage imageCurrent = new BitmapImage();
+                imageCurrent.BeginInit();
+                imageCurrent.UriSource = new Uri(curSong.AlbumArt);
+                imageCurrent.EndInit();
+                curImg.Source = imageCurrent;
                 currTitle.Content = curSong.Title;
                 currArtist.Content = curSong.Artist;
                 currAlbum.Content = curSong.Album;
                 currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
                 if (currentIndex - 1 >= 0)
                 {
+                    BitmapImage imagePrev = new BitmapImage();
+                    imagePrev.BeginInit();
+                    imagePrev.UriSource = new Uri(prevSong.AlbumArt);
+                    imagePrev.EndInit();
+                    prevImg.Source = imagePrev;
                     PlayerPrevImage.IsEnabled = true;
                     PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
                     PlayerControlPrev.IsEnabled = true;
@@ -140,6 +169,7 @@ namespace Spooftify
                 }
                 else
                 {
+                    prevImg.Source = new BitmapImage(new Uri("Images/music-logo-design.png", UriKind.Relative));
                     PlayerPrevImage.IsEnabled = false;
                     PlayerPrevImage.Visibility = System.Windows.Visibility.Hidden;
                     PlayerControlPrev.IsEnabled = false;
@@ -151,6 +181,11 @@ namespace Spooftify
 
                 if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
                 {
+                    BitmapImage imageNext = new BitmapImage();
+                    imageNext.BeginInit();
+                    imageNext.UriSource = new Uri(nextSong.AlbumArt);
+                    imageNext.EndInit();
+                    nextImg.Source = imageNext;
                     PlayerNextImage.IsEnabled = true;
                     PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
                     PlayerControlNext.IsEnabled = true;
@@ -161,6 +196,7 @@ namespace Spooftify
                 }
                 else
                 {
+                    nextImg.Source = new BitmapImage(new Uri("Images/music-logo-design.png", UriKind.Relative));
                     PlayerNextImage.IsEnabled = false;
                     PlayerNextImage.Visibility = System.Windows.Visibility.Hidden;
                     PlayerControlNext.IsEnabled = false;
@@ -172,6 +208,9 @@ namespace Spooftify
             }
             else
             {
+                prevImg.Source = new BitmapImage(new Uri("Images/music-logo-design.png", UriKind.Relative));
+                curImg.Source = new BitmapImage(new Uri("Images/music-logo-design.png", UriKind.Relative));
+                nextImg.Source = new BitmapImage(new Uri("Images/music-logo-design.png", UriKind.Relative)); 
                 PlayerPlayPauseImage.Source = PlayButtonImg;
                 prevAlbum.Content = "None";
                 prevTitle.Content = "None";
@@ -440,10 +479,15 @@ namespace Spooftify
         {
             timestamp = new TimeSpan(0, (int)(SeekBar.Value / 60), (int)(SeekBar.Value % 60));
             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
-
+<<<<<<< HEAD
+            if (isChanged)
+=======
             if(isChanged)
             {
+                if (currentIndex + 1 == AccountManager.instance.CurrentPlaylist.Songs.Count - 1)
+                    nextSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1];
                 displayControls();
+                isChanged = false;
             }
             this.Dispatcher.Invoke(() =>
             {
@@ -459,12 +503,14 @@ namespace Spooftify
                         myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
+<<<<<<< HEAD
 
                         displayControls();
 
+=======
                         SeekBar.Value = 0;
                         displayControls();
-
+>>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                         SocketClientOut.buffering = true;
                         SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                         SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(curSong.Artist + " (" + curSong.Album + ") - " + curSong.Title));
@@ -483,10 +529,17 @@ namespace Spooftify
                             ThreadStart receiveStart = new ThreadStart(SocketClientOut.receivingSong);
                             receiveThread = new Thread(receiveStart);
                             SocketClientOut.buffering = true;
+<<<<<<< HEAD
                             SeekBar.Minimum = 0;
                             SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
                             SeekBar.TickFrequency = 1;
-                           
+=======
+                            
+                            SeekBar.Minimum = 0;
+                            SeekBar.Maximum = (total.Minutes * 60) + total.Seconds;
+                            SeekBar.TickFrequency = 1;
+                            
+>>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                             receiveThread.Start();
                             CurrentTimestampLabel.Content = (new TimeSpan(0, 0, 0)).ToString(TIMESTAMP_FORMAT);
                             myTimer.Start();
@@ -494,7 +547,11 @@ namespace Spooftify
                         }
 
                         PlayerPlayPauseImage.Source = PauseButtonImg;
-
+<<<<<<< HEAD
+                        //pauseResume.Content = "Pause";
+=======
+                        
+>>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                         
                     }
                     else
@@ -506,10 +563,11 @@ namespace Spooftify
                         SocketClientOut.waveOut.Stop();
                         displayControls();
                         SeekBar.Value = 0;
-
+<<<<<<< HEAD
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
-
+=======
+>>>>>>> bcf7f99134b79c278e1c8054468d1f6dfd6a2283
                     }
                     
                 }
@@ -527,6 +585,11 @@ namespace Spooftify
                 SocketClientOut.buffering = true;
                 string songName = selectSong;
                 curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
+                currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+                if (currentIndex - 1 >= 0)
+                    prevSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1];
+                if(currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                    nextSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex+1];
                 SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
                 SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
                 SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
@@ -573,7 +636,11 @@ namespace Spooftify
             //SocketClientOut.waveOut.Dispose();
             string songName = songSelected;
             curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
-            SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
+            currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+            if (currentIndex - 1 >= 0)
+                prevSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1];
+            if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                nextSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1]; SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("playMusic"));
             SocketClientOut.sendSongName(Encoding.ASCII.GetBytes(songName));
             SocketClientOut.sendStartTime(Encoding.ASCII.GetBytes(SeekBar.Value.ToString()));
             var msg = Encoding.ASCII.GetString(SocketClientOut.receiveAccess());

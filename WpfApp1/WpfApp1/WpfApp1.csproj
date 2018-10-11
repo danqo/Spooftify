@@ -135,10 +135,23 @@
     <Content Include="MusicLibrary\Foster the People-Pumped Up Kicks.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="MusicLibrary\Joji-Slow Dancing in the Dark.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="MusicLibrary\KAAN-Kaancepts.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+<<<<<<< HEAD
     <Content Include="MusicLibrary\Travis Scott-HOUSTONFORNICATION.mp3">
+=======
+    <Content Include="MusicLibrary\Gift for Nhan-Hope You Like It.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MusicLibrary\MGMT-Electric Feel.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MusicLibrary\Travis Scott- HOUSTONFORNICATION.mp3">
+>>>>>>> 92b7026c3713d45759cd9561e2a12fd4b738897d
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MusicLibrary\Travis Scott-5%25 TNT.mp3">
