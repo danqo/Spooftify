@@ -183,7 +183,6 @@ namespace WpfApp1
 
                 count++;
             } while (buffering);
-            PlayPage.constrolUsed = false;
 
             
         }

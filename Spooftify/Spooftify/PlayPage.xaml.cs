@@ -45,7 +45,7 @@ namespace Spooftify
         private ContextMenu cm;
 
         public static Boolean isChanged = false;
-        public static Boolean constrolUsed = false;
+        public static Boolean isPlaylistChange = false;
 
         /// <summary>
         /// constructor
@@ -65,6 +65,22 @@ namespace Spooftify
             {
                 PlaylistName.Content = AccountManager.instance.CurrentPlaylist.Name;
                 SongListbox.ItemsSource = AccountManager.instance.CurrentPlaylist.Songs;
+                if (isPlaylistChange)
+                {
+                    SocketClientOut.buffering = false;
+                    SeekBar.Value = 0;
+                    myTimer.Stop();
+                    timestamp = TimeSpan.Zero;
+                    CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+                    TotalTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+                    SocketClientOut.stopSong();
+                    prevSong = null;
+                    curSong = null;
+                    nextSong = null;
+                    PlayerPlayPauseImage.Source = PlayButtonImg;
+                    isPlaylistChange = false;
+                    displayControls();
+                }
                 SongListbox.Items.Refresh();
             }
         }
@@ -212,6 +228,14 @@ namespace Spooftify
                 curImg.Source = new BitmapImage(new Uri("Images/music-logo-design.png", UriKind.Relative));
                 nextImg.Source = new BitmapImage(new Uri("Images/music-logo-design.png", UriKind.Relative)); 
                 PlayerPlayPauseImage.Source = PlayButtonImg;
+                PlayerNextImage.IsEnabled = true;
+                PlayerNextImage.Visibility = System.Windows.Visibility.Visible;
+                PlayerControlNext.IsEnabled = true;
+                PlayerControlNext.Visibility = System.Windows.Visibility.Visible;
+                PlayerPrevImage.IsEnabled = true;
+                PlayerPrevImage.Visibility = System.Windows.Visibility.Visible;
+                PlayerControlPrev.IsEnabled = true;
+                PlayerControlPrev.Visibility = System.Windows.Visibility.Visible;
                 prevAlbum.Content = "None";
                 prevTitle.Content = "None";
                 prevArtist.Content = "None";
@@ -436,7 +460,6 @@ namespace Spooftify
                 myTimer.Stop();
                 SocketClientOut.stopSong();
                 PlayerPlayPauseImage.Source = PlayButtonImg;
-                constrolUsed = true;
             }
         }
 
@@ -486,6 +509,44 @@ namespace Spooftify
             timestamp = new TimeSpan(0, (int)(SeekBar.Value / 60), (int)(SeekBar.Value % 60));
             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
 
+            if (isPlaylistChange)
+            {
+                if (SocketClientOut.waveOut != null)
+                {
+                    if (SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Playing || SocketClientOut.waveOut.PlaybackState == NAudio.Wave.PlaybackState.Paused)
+                    {
+                        SocketClientOut.buffering = false;
+                        SeekBar.Value = 0;
+                        myTimer.Stop();
+                        timestamp = TimeSpan.Zero;
+                        CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+                        SocketClientOut.stopSong();
+                        prevSong = null;
+                        curSong = null;
+                        nextSong = null;
+                        PlayerPlayPauseImage.Source = PlayButtonImg;
+                    }
+                    else
+                    {
+                        if (SeekBar.Value != 0)
+                        {
+                            SocketClientOut.buffering = false;
+                            SeekBar.Value = 0;
+                            myTimer.Stop();
+                            timestamp = TimeSpan.Zero;
+                            CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
+                            SocketClientOut.stopSong();
+                            prevSong = null;
+                            curSong = null;
+                            nextSong = null;
+                            PlayerPlayPauseImage.Source = PlayButtonImg;
+                        }
+                    }
+                }
+                isPlaylistChange = false;
+                displayControls();
+            }
+
             if(isChanged)
             {
                 if (currentIndex + 1 == AccountManager.instance.CurrentPlaylist.Songs.Count - 1)
@@ -507,7 +568,9 @@ namespace Spooftify
                         myTimer.Stop();
                         SongListbox.SelectedIndex = currentIndex + 1;
                         curSong = (Song) SongListbox.Items[currentIndex + 1];
-
+                        currentIndex++;
+                        if (currentIndex + 1 < AccountManager.instance.CurrentPlaylist.Songs.Count)
+                            nextSong = (Song)SongListbox.Items[currentIndex + 1];
                         SeekBar.Value = 0;
                         displayControls();
                         SocketClientOut.buffering = true;

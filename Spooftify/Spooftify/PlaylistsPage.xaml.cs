@@ -114,6 +114,11 @@ namespace Spooftify
             }
             if (PlaylistListBox.SelectedItem != null)
             {
+                Playlist checkPL = PlaylistListBox.SelectedItem as Playlist;
+                if(AccountManager.instance.CurrentPlaylist != null && !AccountManager.instance.CurrentPlaylist.Name.Equals(checkPL.Name))
+                {
+                    PlayPage.isPlaylistChange = true;
+                }
                 AccountManager.instance.CurrentPlaylist = PlaylistListBox.SelectedItem as Playlist;
                 ApplicationManager.instance.MainPage.LoadPlayPage();
             }
