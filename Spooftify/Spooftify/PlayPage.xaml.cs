@@ -141,6 +141,7 @@ namespace Spooftify
                     prevSong = null;
                     curSong = null;
                     nextSong = null;
+                    SocketClientOut.waveOut = null;
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                     isPlaylistChange = false;
                     isShuffle = false;
