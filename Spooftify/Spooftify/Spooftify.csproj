@@ -193,5 +193,19 @@
     <Resource Include="Images\SpooftifyPrevButton.png" />
     <Resource Include="Images\SpooftifyStopButton.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SpooftifyLoopButtonOff.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SpooftifyLoopButtonOn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SpooftifyShuffleButtonOff.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\SpooftifyShuffleButtonOn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
