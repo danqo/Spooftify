@@ -176,6 +176,7 @@
                     <Label x:Name="TotalTimestampLabel" Content="00:00" Foreground="LightGray" FontSize="16" Visibility="Visible"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                    <Button x:Name="LoopButton" Height="25" Background="Black" Foreground="LightGray" Content="Loop: Off" Margin="5,5,5,5" Width="80" Click="LoopButton_Click"/>
                     <Button x:Name="PlayerControlPrev" Click="PlayerControlPrev_Click" Margin="5" Background="Black" BorderThickness="0">
                         <Viewbox Height="30">
                             <Image x:Name="PlayerPrevImage" Source="Images/SpooftifyPrevButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -196,6 +197,7 @@
                             <Image x:Name="PlayerNextImage" Source="Images/SpooftifyNextButton.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Viewbox>
                     </Button>
+                    <Button x:Name="ShuffleButton" Height="25" Background="Black" Foreground="LightGray" Content="Shuffle: Off" Margin="5,5,5,5" Width="80" Click="ShuffleButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
