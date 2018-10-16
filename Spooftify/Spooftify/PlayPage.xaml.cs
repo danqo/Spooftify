@@ -32,6 +32,10 @@ namespace Spooftify
         private BitmapImage StopButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyStopButton.png"));
         private BitmapImage PrevButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyPrevButton.png"));
         private BitmapImage NextButtonImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyNextButton.png"));
+        private BitmapImage ShuffleOffImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyShuffleButtonOff.png"));
+        private BitmapImage ShuffleOnImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyShuffleButtonOn.png"));
+        private BitmapImage LoopOffImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyLoopButtonOff.png"));
+        private BitmapImage LoopOnImg = new BitmapImage(new Uri("pack://application:,,,/Images/" + "SpooftifyLoopButtonOn.png"));
 
         private Song prevSong;
         private Song curSong;
@@ -140,11 +144,9 @@ namespace Spooftify
                     PlayerPlayPauseImage.Source = PlayButtonImg;
                     isPlaylistChange = false;
                     isShuffle = false;
-                    ShuffleButton.Content = "Shuffle: Off";
-                    ShuffleButton.Background = Brushes.Black;
+                    PlayerShuffleImage.Source = ShuffleOffImg;
                     isLoop = false;
-                    LoopButton.Content = "Loop: Off";
-                    LoopButton.Background = Brushes.Black;
+                    PlayerLoopImage.Source = LoopOffImg;
                     displayControls();
                 }
                 if (isChanged)
@@ -1133,21 +1135,19 @@ namespace Spooftify
 
         private async void ShuffleButton_Click(object sender, RoutedEventArgs e)
         {
-            if(ShuffleButton.Content.ToString() == "Shuffle: Off")
+            if(!isShuffle)
             {
                 currentShuffleIndex = 0;
-                ShuffleButton.Content = "Shuffle: On";
-                ShuffleButton.Background = Brushes.DarkGreen;
+                PlayerShuffleImage.Source = ShuffleOnImg;
                 isShuffle = true;
                 await randomGeneratorAsync();
                 displayShuffleControls();
             }
-            else if(ShuffleButton.Content.ToString() == "Shuffle: On")
+            else if(isShuffle)
             {
                 isShuffle = false;
-                ShuffleButton.Content = "Shuffle: Off";
-                ShuffleButton.Background = Brushes.Black;
-                if (currentIndex >= 0)
+                PlayerShuffleImage.Source = ShuffleOffImg;
+                if (currentIndex > 0)
                     prevSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex - 1];
                 if (!isLoop && currentIndex == 0)
                     prevSong = null;
@@ -1165,11 +1165,10 @@ namespace Spooftify
 
         private async void LoopButton_Click(object sender, RoutedEventArgs e)
         {
-            if(LoopButton.Content.ToString() == "Loop: Off")
+            if(!isLoop)
             {
                 isLoop = true;
-                LoopButton.Content = "Loop: On";
-                LoopButton.Background = Brushes.DarkGreen;
+                PlayerLoopImage.Source = LoopOnImg;
                 if (!isShuffle && curSong != null)
                 {
                     if (currentIndex == 0)
@@ -1188,12 +1187,11 @@ namespace Spooftify
                     displayShuffleControls();
                 }
             }
-            else if(LoopButton.Content.ToString() == "Loop: On")
+            else if(isLoop)
             {
                 isLoop = false;
-                LoopButton.Content = "Loop: Off";
-                LoopButton.Background = Brushes.Black;
-                if(!isShuffle && curSong != null)
+                PlayerLoopImage.Source = LoopOffImg;
+                if (!isShuffle && curSong != null)
                 {
                     if (currentIndex == 0)
                     {
