@@ -145,9 +145,21 @@ namespace Spooftify
                     isLoop = false;
                     LoopButton.Content = "Loop: Off";
                     LoopButton.Background = Brushes.Black;
-                    ShuffleButton.Content = "Shuffle: Off";
-                    LoopButton.Content = "Loop: Off";
                     displayControls();
+                }
+                if (isChanged)
+                {
+                    nextSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1];
+                    if (currentIndex == 0 && isLoop)
+                        prevSong = AccountManager.instance.CurrentPlaylist.Songs[AccountManager.instance.CurrentPlaylist.Songs.Count-1];
+                    if (!isShuffle)
+                        displayControls();
+                    if (!isLoop && isShuffle)
+                    {
+                        shuffledPL.Add(AccountManager.instance.CurrentPlaylist.Songs[shuffledPL.Count - 1]);
+                        displayShuffleControls();
+                    }
+                    isChanged = false;
                 }
                 SongListbox.Items.Refresh();
             }
@@ -803,19 +815,7 @@ namespace Spooftify
             timestamp = new TimeSpan(0, (int)(SeekBar.Value / 60), (int)(SeekBar.Value % 60));
             CurrentTimestampLabel.Content = timestamp.ToString(TIMESTAMP_FORMAT);
 
-            if(isChanged)
-            {
-                if (currentIndex + 1 == AccountManager.instance.CurrentPlaylist.Songs.Count - 1)
-                    nextSong = AccountManager.instance.CurrentPlaylist.Songs[currentIndex + 1];
-                if(!isShuffle)
-                    displayControls();
-                if (!isLoop && isShuffle)
-                {
-                    shuffledPL.Add(AccountManager.instance.CurrentPlaylist.Songs[shuffledPL.Count - 1]);
-                    displayShuffleControls();
-                }
-                isChanged = false;
-            }
+            
             this.Dispatcher.Invoke(() =>
             {
                 if (CurrentTimestampLabel.Content.Equals(TotalTimestampLabel.Content) && !isShuffle)
@@ -897,7 +897,12 @@ namespace Spooftify
                 {
                     prevSong = null;
                 }
-                nextSong = (Song)SongListbox.Items[currentIndex + 1];
+                if (currentIndex < AccountManager.instance.CurrentPlaylist.Songs.Count - 1)
+                    nextSong = (Song)SongListbox.Items[currentIndex + 1];
+                else if (isLoop && currentIndex == AccountManager.instance.CurrentPlaylist.Songs.Count - 1)
+                    nextSong = (Song)SongListbox.Items[0];
+                else if (!isLoop && currentIndex == AccountManager.instance.CurrentPlaylist.Songs.Count - 1)
+                    nextSong = null;
                 SeekBar.Value = 0;
                 displayControls();
             }
