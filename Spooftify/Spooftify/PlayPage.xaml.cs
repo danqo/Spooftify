@@ -547,10 +547,10 @@ namespace Spooftify
                     currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
                     SongListbox.SelectedIndex = currentIndex;
                     Random rnd = new Random();
-                    prevShuffle = rnd.Next(shuffledPL.Count);
+                    prevShuffle = rnd.Next(AccountManager.instance.CurrentPlaylist.Songs.Count);
                     while (prevShuffle == nextShuffle || prevShuffle == currentIndex)
                     {
-                        prevShuffle = rnd.Next(shuffledPL.Count);
+                        prevShuffle = rnd.Next(AccountManager.instance.CurrentPlaylist.Songs.Count);
                     }
                     prevSong = AccountManager.instance.CurrentPlaylist.Songs[nextShuffle];
                     SongListbox.SelectedIndex = currentIndex;
@@ -713,10 +713,10 @@ namespace Spooftify
                     currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
                     SongListbox.SelectedIndex = currentIndex;
                     Random rnd = new Random();
-                    nextShuffle = rnd.Next(shuffledPL.Count);
+                    nextShuffle = rnd.Next(AccountManager.instance.CurrentPlaylist.Songs.Count);
                     while (nextShuffle == prevShuffle || nextShuffle == currentIndex)
                     {
-                        nextShuffle = rnd.Next(shuffledPL.Count);
+                        nextShuffle = rnd.Next(AccountManager.instance.CurrentPlaylist.Songs.Count);
                     }
                     nextSong = AccountManager.instance.CurrentPlaylist.Songs[nextShuffle];
                     SongListbox.SelectedIndex = currentIndex;
@@ -921,10 +921,10 @@ namespace Spooftify
                     currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
                     SongListbox.SelectedIndex = currentIndex;
                     Random rnd = new Random();
-                    nextShuffle = rnd.Next(shuffledPL.Count);
+                    nextShuffle = rnd.Next(AccountManager.instance.CurrentPlaylist.Songs.Count);
                     while(nextShuffle == prevShuffle || nextShuffle == currentIndex)
                     {
-                        nextShuffle = rnd.Next(shuffledPL.Count);
+                        nextShuffle = rnd.Next(AccountManager.instance.CurrentPlaylist.Songs.Count);
                     }
                     nextSong = AccountManager.instance.CurrentPlaylist.Songs[nextShuffle];
                     displayShuffleControls();
