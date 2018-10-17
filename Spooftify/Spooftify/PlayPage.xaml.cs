@@ -159,7 +159,9 @@ namespace Spooftify
                         displayControls();
                     if (!isLoop && isShuffle)
                     {
-                        shuffledPL.Add(AccountManager.instance.CurrentPlaylist.Songs[shuffledPL.Count - 1]);
+                        shuffledPL.Add(AccountManager.instance.CurrentPlaylist.Songs[AccountManager.instance.CurrentPlaylist.Songs.Count - 1]);
+                        if(currentShuffleIndex < shuffledPL.Count - 1)
+                            nextSong = shuffledPL[currentShuffleIndex + 1];
                         displayShuffleControls();
                     }
                     isChanged = false;
@@ -572,7 +574,14 @@ namespace Spooftify
                 }
                 else
                 {
-                    currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(prevSong);
+                    currentShuffleIndex--;
+                    nextSong = shuffledPL[currentShuffleIndex + 1];
+                    curSong = shuffledPL[currentShuffleIndex];
+                    if (currentShuffleIndex > 0)
+                        prevSong = shuffledPL[currentShuffleIndex - 1];
+                    if (currentShuffleIndex == 0)
+                        prevSong = null;
+                    currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
                     SongListbox.SelectedIndex = currentIndex;
                 }
             }
@@ -597,7 +606,7 @@ namespace Spooftify
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PlayerControlPlayPause_Click(object sender, RoutedEventArgs e)
+        private async void PlayerControlPlayPause_Click(object sender, RoutedEventArgs e)
         {
             if (SocketClientOut.waveOut != null)
             {
@@ -652,6 +661,11 @@ namespace Spooftify
                 try
                 {
                     string songName = SongListbox.SelectedItem.ToString();
+                    curSong = AccountManager.instance.CurrentPlaylist.Songs.Where(x => (x.Artist + " (" + x.Album + ") - " + x.Title).Equals(songName)).SingleOrDefault();
+                    currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
+
+                    if (isShuffle)
+                        await randomGeneratorAsync();
                     songPlay(songName);
                 }
                 catch
@@ -738,7 +752,14 @@ namespace Spooftify
                 }
                 else
                 {
+                    prevSong = shuffledPL[currentShuffleIndex];
+                    currentShuffleIndex++;
                     currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(nextSong);
+                    curSong = shuffledPL[currentShuffleIndex];
+                    if(currentShuffleIndex < shuffledPL.Count - 1)
+                        nextSong = shuffledPL[currentShuffleIndex + 1];
+                    if (currentShuffleIndex == shuffledPL.Count - 1)
+                        nextSong = null;
                     SongListbox.SelectedIndex = currentIndex;
                 }
             }
@@ -916,7 +937,10 @@ namespace Spooftify
                     currentShuffleIndex++;
                     curSong = shuffledPL[currentShuffleIndex];
                     prevSong = shuffledPL[currentShuffleIndex - 1];
-                    nextSong = shuffledPL[currentShuffleIndex + 1];
+                    if (currentShuffleIndex < shuffledPL.Count - 1)
+                        nextSong = shuffledPL[currentShuffleIndex + 1];
+                    if (currentShuffleIndex == shuffledPL.Count - 1)
+                        nextSong = null;
                     currentIndex = AccountManager.instance.CurrentPlaylist.Songs.IndexOf(curSong);
                     SongListbox.SelectedIndex = currentIndex;
                     displayShuffleControls();
