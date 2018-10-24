@@ -18,6 +18,7 @@ namespace WpfApp1
         public static TcpListener tcpDeers;
         public static Socket currentSocket;
         public static Stream ms;
+        public static ASCIIEncoding asen;
         //----merging///
         public static Boolean buffering;
         public static UserCollection everyUser;
@@ -83,7 +84,7 @@ namespace WpfApp1
         }
         public static void privateTCPSocket(object socket)
         {
-            ASCIIEncoding asen = new ASCIIEncoding();
+            asen = new ASCIIEncoding();
             var s = socket as Socket;
             currentSocket = s;
             byte[] b = new byte[1024];
@@ -97,9 +98,9 @@ namespace WpfApp1
                 string st = "The string was recieved by the server.";
                 s.Send(asen.GetBytes(st));
                 //--receiving song
-                Mp3Frame frame;
+                
                 ms = new MemoryStream();
-                var sw = new StreamWriter(ms);
+                
                
                 while (true)
                 {
@@ -107,12 +108,7 @@ namespace WpfApp1
                     k = s.Receive(receivedData);
                     if (asen.GetString(receivedData, 0, k) != "done")
                     {
-                        //rwrite to stream   
                         ms.Write(receivedData, 0, k);
-                        //sw.Write(receivedData);
-                        //ms.Position = 0;
-                        //frame = Mp3Frame.LoadFromStream(ms, true);
-                        //send message to keep it coming
                         s.Send(asen.GetBytes("ok"));
                     }
                     else
@@ -201,6 +197,9 @@ namespace WpfApp1
             var buffer1 = new byte[16384 * 4];
             var nameOfTheSong = privatePort.Receive(ref privateEP);
             var startPoint = privatePort.Receive(ref privateEP);
+            currentSocket.Send(asen.GetBytes("songRequest"));
+            currentSocket.Send(nameOfTheSong);
+            Thread.Sleep(1000);
             Song sendingSong = null;
             try
             {
