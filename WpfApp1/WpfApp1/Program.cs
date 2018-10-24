@@ -14,6 +14,11 @@ namespace WpfApp1
 {
     class SocketServerOut
     {
+        //---merging///
+        public static TcpListener tcpDeers;
+        public static Socket currentSocket;
+        public static Stream ms;
+        //----merging///
         public static Boolean buffering;
         public static UserCollection everyUser;
         public static UdpClient udpServer;
@@ -25,7 +30,21 @@ namespace WpfApp1
         {
             udpServer = new UdpClient(11000);
             remoteEP = new IPEndPoint(IPAddress.Any, 11000);
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
 
+            Console.WriteLine("Starting TCP listener...");
+
+            tcpDeers = new TcpListener(ipAddress, 500);
+
+            tcpDeers.Start();
+
+            Console.WriteLine("The server is running at port 500...");
+            Console.WriteLine("The local End point is  :" +
+                              tcpDeers.LocalEndpoint);
+            Console.WriteLine("Waiting for a connection.....");
+            ThreadStart TCPThread = new ThreadStart(privateTCP);
+            Thread childTCPThread = new Thread(TCPThread);
+            childTCPThread.Start();
 
             string mediaFolder = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "MusicLibrary");
             byte[] data;
@@ -51,6 +70,60 @@ namespace WpfApp1
 
             
 
+        }
+        public static void privateTCP()
+        {
+            while (true)
+            {
+                Socket s = tcpDeers.AcceptSocket();
+                Console.WriteLine("Connection accepted from " + s.RemoteEndPoint);
+                Thread childThread = new Thread(new ParameterizedThreadStart(privateTCPSocket));
+                childThread.Start(s);
+            }
+        }
+        public static void privateTCPSocket(object socket)
+        {
+            ASCIIEncoding asen = new ASCIIEncoding();
+            var s = socket as Socket;
+            currentSocket = s;
+            byte[] b = new byte[1024];
+            byte[] receivedData = new byte[2000];
+            while (true)
+            {
+                //receiving message
+                int k = s.Receive(b);
+                Console.WriteLine("Recieved user name: " + asen.GetString(b, 0, k) + "With end point as: " + s.RemoteEndPoint);
+                //sending st string
+                string st = "The string was recieved by the server.";
+                s.Send(asen.GetBytes(st));
+                //--receiving song
+                Mp3Frame frame;
+                ms = new MemoryStream();
+                var sw = new StreamWriter(ms);
+               
+                while (true)
+                {
+                    //receive mp3 raw data  
+                    k = s.Receive(receivedData);
+                    if (asen.GetString(receivedData, 0, k) != "done")
+                    {
+                        //rwrite to stream   
+                        ms.Write(receivedData, 0, k);
+                        //sw.Write(receivedData);
+                        //ms.Position = 0;
+                        //frame = Mp3Frame.LoadFromStream(ms, true);
+                        //send message to keep it coming
+                        s.Send(asen.GetBytes("ok"));
+                    }
+                    else
+                    {
+                        Console.WriteLine("received " + ms.Length + "bytes");
+                        ms.Position = 0;
+                        break;
+                    }
+                }
+               
+            }
         }
         public static void privateUDP()
         {
@@ -142,7 +215,9 @@ namespace WpfApp1
             if (sendingSong != null)
             {
                 int startTime = Int32.Parse(Encoding.ASCII.GetString(startPoint));
-                Mp3FileReader reader = new Mp3FileReader(mediaFolder + "\\" + sendingSong.Directory);
+
+                //Mp3FileReader reader = new Mp3FileReader(mediaFolder + "\\" + sendingSong.Directory);
+                Mp3FileReader reader = new Mp3FileReader(ms);
                 var b = Encoding.ASCII.GetBytes(reader.TotalTime.ToString());
                 privatePort.Send(b, b.Length, privateEP);
                 reader.CurrentTime = TimeSpan.FromSeconds(startTime);

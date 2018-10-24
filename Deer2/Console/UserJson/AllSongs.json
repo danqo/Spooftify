@@ -1,0 +1,34 @@
+{
+  "Name": "All Songs",
+  "Songs": [
+    {
+      "Title": "Hope You Like It",
+      "Artist": "Gift for Nhan",
+      "Extension": ".mp3",
+      "Album": "Memes",
+      "AlbumArt": "http://www.jmkxyy.com/middle-finger-icon-for-iphone/middle-finger-icon-for-iphone-29.jpg"
+    },
+    {
+      "Title": "LaTaTa",
+      "Artist": "(G)I-DLE",
+      "Extension": ".mp3",
+      "Album": "I Am",
+      "AlbumArt": "https://kpopreviewed.files.wordpress.com/2018/05/gidle-iam-2.jpg?w=515&h=515"
+    },
+    {
+      "Title": "Selfish High Heels",
+      "Artist": "Yung Bae",
+      "Extension": ".mp3",
+      "Album": "Japanese Disco Edits",
+      "AlbumArt": "https://images-na.ssl-images-amazon.com/images/I/51o1XNqW-RL._SS500.jpg"
+
+    },
+    {
+      "Title": "COFFEE BEAN",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
+    }
+  ]
+}
