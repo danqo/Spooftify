@@ -1,0 +1,25 @@
+LaTaTa; MD5(Title+Artist); (G)I-DLE; I Am
+Bang Bang Bang; MD5(Title+Artist); Big Bang; Made Series
+Pumped Up Kicks; MD5(Title+Artist); Foster the People; Torches
+Slow Dancing in the Dark; MD5(Title+Artist); Joji; Ballads 1
+Kaancepts; MD5(Title+Artist); KAAN; 112199?
+Electric Feel; MD5(Title+Artist); MGMT; Oracular Spectacular
+Baam; MD5(Title+Artist); MoMoLand; Fun to the World
+5% TNT; MD5(Title+Artist); Travis Scott; Astroworld
+Astrothunder; MD5(Title+Artist); Travis Scott; Astroworld
+Butterfly Effect; MD5(Title+Artist); Travis Scott; Astroworld
+Can't Say; MD5(Title+Artist); Travis Scott; Astroworld
+Carousel; MD5(Title+Artist); Travis Scott; Astroworld
+Coffee Bean; MD5(Title+Artist); Travis Scott; Astroworld
+Houstonfornication; MD5(Title+Artist); Travis Scott; Astroworld
+NC-17; MD5(Title+Artist); Travis Scott; Astroworld
+No Bystanders; MD5(Title+Artist); Travis Scott; Astroworld
+R.I.P. Screw; MD5(Title+Artist); Travis Scott; Astroworld
+Sicko Mode; MD5(Title+Artist); Travis Scott; Astroworld
+Skeletons; MD5(Title+Artist); Travis Scott; Astroworld
+Stargazing; MD5(Title+Artist); Travis Scott; Astroworld
+Stop Trying to be God; MD5(Title+Artist); Travis Scott; Astroworld
+Wake Up; MD5(Title+Artist); Travis Scott; Astroworld
+Who? What?; MD5(Title+Artist); Travis Scott; Astroworld
+Yosemite; MD5(Title+Artist); Travis Scott; Astroworld
+Selfish High Heels; MD5(Title+Artist); Yung Bae; Japanese Disco Edits
