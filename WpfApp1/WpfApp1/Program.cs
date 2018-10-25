@@ -243,7 +243,7 @@ namespace WpfApp1
                     {
                         c.Send(asen.GetBytes("songRequest"));
                         c.Send(nameOfTheSong);
-                        Thread.Sleep(1000);
+                        Thread.Sleep(2000);
                         break;
                     }
 
