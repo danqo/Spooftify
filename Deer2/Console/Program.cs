@@ -36,20 +36,22 @@ namespace ConsoleDeer1
                 ASCIIEncoding asen = new ASCIIEncoding();
                 byte[] ba = asen.GetBytes(username);
                 byte[] request = new byte[tcpclnt.ReceiveBufferSize];
-                //---sending---
-                Console.WriteLine("Transmitting.....");
+                //---sending--- (1) all songs json
+
                 stm.Write(ba, 0, ba.Length);
-                //---receiving
+                Console.WriteLine("Transmitting songs json");
+                stm.Write(asen.GetBytes(allSongSt), 0, allSongSt.Length);
+                //---receiving (2)
                 while (true)
                 {
                     int byteRead = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
                     Console.WriteLine(asen.GetString(request, 0, byteRead));
-                    //---- sending song
+                    //---- sending song (3)
                     if (asen.GetString(request, 0, byteRead) == "songRequest")
                     {
                         int songLength = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
-                        
-                        var sendingSong = allSongs.Songs.FirstOrDefault(x => x.ToString() == asen.GetString(request,0,songLength));
+
+                        var sendingSong = allSongs.Songs.FirstOrDefault(x => x.ToString() == asen.GetString(request, 0, songLength));
                         Mp3FileReader reader = new Mp3FileReader(mediaFolder + "\\" + sendingSong.Directory);
                         Mp3Frame mp3Frame = reader.ReadNextFrame();
 
@@ -75,6 +77,7 @@ namespace ConsoleDeer1
                         stm.Write(asen.GetBytes("done"), 0, 4);
                         Console.WriteLine("Total packet sent: " + total);
                         Console.WriteLine("------Stop Sending------");
+
                     }
                 }
             }

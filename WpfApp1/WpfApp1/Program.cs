@@ -19,6 +19,8 @@ namespace WpfApp1
         public static Socket currentSocket;
         public static Stream ms;
         public static ASCIIEncoding asen;
+        public static Dictionary<string, List<object>> dict = new Dictionary<string, List<object>>();
+        
         //----merging///
         public static Boolean buffering;
         public static UserCollection everyUser;
@@ -27,8 +29,17 @@ namespace WpfApp1
         public static byte[] portAddress;
         public static string allSongSt = File.ReadAllText(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\AllSongs.json"));
         public static Playlist allSongs = JsonConvert.DeserializeObject<Playlist>(allSongSt);
+        public static Playlist deerSongs = new Playlist("deer");
         static void Main(string[] args)
         {
+            /*
+            Console.WriteLine("--Trying out Dictionary");
+            string str = "Name of the song";
+            List<object> b = new List<object>();
+            b.Add(buffering);
+            dict[str] = b;
+            b.Add(buffering);
+            */
             udpServer = new UdpClient(11000);
             remoteEP = new IPEndPoint(IPAddress.Any, 11000);
             IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
@@ -87,19 +98,41 @@ namespace WpfApp1
             asen = new ASCIIEncoding();
             var s = socket as Socket;
             currentSocket = s;
-            byte[] b = new byte[1024];
+            byte[] b = new byte[2048];
             byte[] receivedData = new byte[2000];
+            //receiving message(1) user name and json files
+            int k = s.Receive(b);
+
+            Console.WriteLine("Recieved user name: " + asen.GetString(b, 0, k) + "With end point as: " + s.RemoteEndPoint);
+            k = s.Receive(b);
+            string allSongSt = asen.GetString(b, 0, k);
+            Playlist allSongs = JsonConvert.DeserializeObject<Playlist>(allSongSt);
+            foreach (var song in allSongs.Songs)
+
+            {
+                if (dict.ContainsKey(song.ToString()))
+                {
+                    dict[song.ToString()].Add(s);
+                }
+                else
+                {
+
+                    List<object> d = new List<object>();
+                    deerSongs.addSong(song); 
+                    dict[song.ToString()] = d;
+                    d.Add(s);
+                }
+
+            }
+            //sending st string(2)
+            string st = "The string was recieved by the server.";
+            s.Send(asen.GetBytes(st));
+            ms = new MemoryStream();
             while (true)
             {
-                //receiving message
-                int k = s.Receive(b);
-                Console.WriteLine("Recieved user name: " + asen.GetString(b, 0, k) + "With end point as: " + s.RemoteEndPoint);
-                //sending st string
-                string st = "The string was recieved by the server.";
-                s.Send(asen.GetBytes(st));
+                
                 //--receiving song
                 
-                ms = new MemoryStream();
                 
                
                 while (true)
@@ -118,7 +151,8 @@ namespace WpfApp1
                         break;
                     }
                 }
-               
+             
+
             }
         }
         public static void privateUDP()
@@ -173,7 +207,7 @@ namespace WpfApp1
                     privatePort.Send(b, b.Length, privateEP);
 
 
-                    b = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(allSongs));
+                    b = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(deerSongs));
                     privatePort.Send(b, b.Length, privateEP);
                     
                     counter++;
@@ -197,9 +231,26 @@ namespace WpfApp1
             var buffer1 = new byte[16384 * 4];
             var nameOfTheSong = privatePort.Receive(ref privateEP);
             var startPoint = privatePort.Receive(ref privateEP);
-            currentSocket.Send(asen.GetBytes("songRequest"));
-            currentSocket.Send(nameOfTheSong);
-            Thread.Sleep(1000);
+            Console.WriteLine("The name of the requested song is: "+ asen.GetString(nameOfTheSong));
+            Console.WriteLine("starting point of the song is" + asen.GetString(startPoint));
+            if (dict.ContainsKey(asen.GetString(nameOfTheSong)))
+            {
+                var b = dict[asen.GetString(nameOfTheSong)] ;
+                foreach(var d  in b)
+                {
+                    var c = d as Socket;
+                    if (c.Connected)
+                    {
+                        c.Send(asen.GetBytes("songRequest"));
+                        c.Send(nameOfTheSong);
+                        Thread.Sleep(1000);
+                        break;
+                    }
+
+                }
+                
+            }
+            
             Song sendingSong = null;
             try
             {
@@ -239,6 +290,7 @@ namespace WpfApp1
                     {
                         Console.WriteLine(" Sending Song: " + sendingSong.ToString());
                         Console.WriteLine("Total packet sent: " + total);
+                        
                     }
 
                     count1 = count1 + 1;
@@ -246,8 +298,10 @@ namespace WpfApp1
 
                 }
                 privatePort.Send(Encoding.ASCII.GetBytes("done"), 4, privateEP);
+                ms = new MemoryStream();
                 Console.WriteLine("Total packet sent: " + total);
                 Console.WriteLine("------Stop Sending------");
+                
 
             }
         }
