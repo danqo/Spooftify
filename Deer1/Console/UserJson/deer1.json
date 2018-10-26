@@ -1,0 +1,28 @@
+{
+  "Username": "deer1",
+  "Name": "Nhan Nguyen",
+  "Email": "nhannguyen683@gmail.com",
+  "Birthday": "03/07/1994",
+  "Playlists": [
+    {
+      "Name": "nhanList",
+      "Songs": [
+        {
+          "Title": "BangBangBang",
+          "Artist": "BigBang",
+          "Extension": ".mp3",
+          "Album": "Made Series",
+          "AlbumArt": "http://cjklyrics.net/file/album/big-bang1-made.jpg"
+        },
+        {
+          "Title": "Baam",
+          "Artist": "MoMoLand",
+          "Extension": ".mp3",
+          "Album": "Fun to the World",
+          "AlbumArt": "https://pre00.deviantart.net/2ea1/th/pre/f/2018/184/4/4/momoland_baam___fun_to_the_world_album_cover_by_lealbum-dcfe3x1.jpg"
+        }
+      ]
+    }
+  ],
+  "AvatarURI": "https://scontent-lax3-1.xx.fbcdn.net/v/t1.15752-9/43426724_326248884817979_8238936648956510208_n.png?_nc_cat=102&oh=080401d72b1bf9d8cf76b5498e7a7566&oe=5C626F5F"
+}

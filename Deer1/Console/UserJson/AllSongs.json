@@ -1,0 +1,26 @@
+{
+  "Name": "All Songs",
+  "Songs": [
+    {
+      "Title": "BangBangBang",
+      "Artist": "BigBang",
+      "Extension": ".mp3",
+      "Album": "Made Series",
+      "AlbumArt": "http://cjklyrics.net/file/album/big-bang1-made.jpg"
+    },
+    {
+      "Title": "Baam",
+      "Artist": "MoMoLand",
+      "Extension": ".mp3",
+      "Album": "Fun to the World",
+      "AlbumArt": "https://pre00.deviantart.net/2ea1/th/pre/f/2018/184/4/4/momoland_baam___fun_to_the_world_album_cover_by_lealbum-dcfe3x1.jpg"
+    },
+    {
+      "Title": "COFFEE BEAN",
+      "Artist": "Travis Scott",
+      "Extension": ".mp3",
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
+    }
+  ]
+}

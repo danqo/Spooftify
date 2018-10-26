@@ -24,7 +24,7 @@
                 </Style>
             </Label.Resources>
         </Label>
-        <TextBox x:Name="SearchTextBox" Grid.Row="1" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="450" Height="50" FontSize="24" TextChanged="SearchTextBox_TextChanged" Padding="16,0,0,0" Tag="False">
+        <TextBox x:Name="SearchTextBox" Grid.Row="1" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="450" Height="50" FontSize="24" TextChanged="SearchTextBox_TextChanged" Padding="16,0,0,0" Tag="False" KeyUp="SearchTextBox_KeyUp">
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="24"/>

@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1;
 using System.Threading;
-
+using Newtonsoft.Json;
 namespace Spooftify
 {
     /// <summary>
@@ -46,7 +46,7 @@ namespace Spooftify
             {
                 textBox.Tag = (!String.IsNullOrWhiteSpace(textBox.Text)).ToString();
             }
-            FilterSearch();
+            //FilterSearch();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Spooftify
         /// <param name="e"></param>
         private void SearchByComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FilterSearch();
+            //FilterSearch();
         }
 
         /// <summary>
@@ -171,6 +171,39 @@ namespace Spooftify
                 AccountManager.instance.Acct.FindPlaylist(cmItem.Header.ToString()).RemoveEquivSong(SearchListBox.SelectedItem as Song);
                 AddRemoveSongMsg.Content = String.Format("{0} removed from {1}!", (SearchListBox.SelectedItem as Song).Title, cmItem.Header);
                 AddRemoveSongMsg.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if(!String.IsNullOrWhiteSpace((string)SearchTextBox.Text))
+                {
+                    Playlist availableSongs ;
+                    var asen = new ASCIIEncoding();
+                    SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("searchTitle"));
+                    SocketClientOut.sendSongName(Encoding.ASCII.GetBytes((string)SearchTextBox.Text));
+                    var found = SocketClientOut.receiveAccess();
+                    if(asen.GetString(found) == "Found")
+                    {
+                        var playlistofSong = SocketClientOut.receiveAccess();
+                        availableSongs = JsonConvert.DeserializeObject<Playlist>(asen.GetString(playlistofSong));
+                        foreach (var b in availableSongs.Songs)
+                        {
+                            searchQuery.addSong(b);
+                        }
+
+                    }
+                    else if (asen.GetString(found) == "NotFound")
+                    {
+                        MessageBox.Show("no song title was matched with the keywork: " + (string)SearchTextBox.Text);
+
+                    }
+                    FilterSearch();
+                    
+
+                }      
             }
         }
     }

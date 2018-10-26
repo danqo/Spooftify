@@ -20,7 +20,9 @@ namespace WpfApp1
         public static Stream ms;
         public static ASCIIEncoding asen;
         public static Dictionary<string, List<object>> dict = new Dictionary<string, List<object>>();
-        
+        //public static bool found = false;
+        public static string found = "";
+        public static byte[] peertoclient = new byte[3000];
         //----merging///
         public static Boolean buffering;
         public static UserCollection everyUser;
@@ -44,16 +46,11 @@ namespace WpfApp1
             remoteEP = new IPEndPoint(IPAddress.Any, 11000);
             IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
 
-            Console.WriteLine("Starting TCP listener...");
+            Console.WriteLine("Starting TCP listener for Peers and UDP listener for clients");
 
             tcpDeers = new TcpListener(ipAddress, 500);
 
             tcpDeers.Start();
-
-            Console.WriteLine("The server is running at port 500...");
-            Console.WriteLine("The local End point is  :" +
-                              tcpDeers.LocalEndpoint);
-            Console.WriteLine("Waiting for a connection.....");
             ThreadStart TCPThread = new ThreadStart(privateTCP);
             Thread childTCPThread = new Thread(TCPThread);
             childTCPThread.Start();
@@ -103,55 +100,69 @@ namespace WpfApp1
             //receiving message(1) user name and json files
             int k = s.Receive(b);
 
-            Console.WriteLine("Recieved user name: " + asen.GetString(b, 0, k) + "With end point as: " + s.RemoteEndPoint);
+            Console.WriteLine("Recieved deer name: " + asen.GetString(b, 0, k) + " With end point as: " + s.RemoteEndPoint);
             k = s.Receive(b);
-            string allSongSt = asen.GetString(b, 0, k);
-            Playlist allSongs = JsonConvert.DeserializeObject<Playlist>(allSongSt);
-            foreach (var song in allSongs.Songs)
-
+            string deerType = asen.GetString(b, 0, k);
+            Console.WriteLine("The deer hold the songs under catagory: " +deerType);
+            if (dict.ContainsKey(deerType))
+                dict[deerType].Add(s);
+            else
             {
-                if (dict.ContainsKey(song.ToString()))
-                {
-                    dict[song.ToString()].Add(s);
-                }
-                else
-                {
-
-                    List<object> d = new List<object>();
-                    deerSongs.addSong(song); 
-                    dict[song.ToString()] = d;
-                    d.Add(s);
-                }
-
+                List<object> d = new List<object>(); 
+                dict[deerType] = d;
+                d.Add(s);
             }
+
             //sending st string(2)
-            string st = "The string was recieved by the server.";
-            s.Send(asen.GetBytes(st));
+            //string st = "The string was recieved by the server.";
+            //s.Send(asen.GetBytes(st));
             ms = new MemoryStream();
             while (true)
             {
+
+                //--receiving request
                 
-                //--receiving song
+                k = s.Receive(receivedData);
                 
-                
-               
-                while (true)
+                Console.WriteLine("Receiving a request from peer: " + Encoding.ASCII.GetString(receivedData, 0, k));
+
+                if (asen.GetString(receivedData, 0, k) == "SongFile")
                 {
-                    //receive mp3 raw data  
-                    k = s.Receive(receivedData);
-                    if (asen.GetString(receivedData, 0, k) != "done")
+                    while (true)
                     {
-                        ms.Write(receivedData, 0, k);
-                        s.Send(asen.GetBytes("ok"));
-                    }
-                    else
-                    {
-                        Console.WriteLine("received " + ms.Length + "bytes");
-                        ms.Position = 0;
-                        break;
+                        //receive mp3 raw data  
+                        k = s.Receive(receivedData);
+                        if (asen.GetString(receivedData, 0, k) != "done")
+                        {
+                            ms.Write(receivedData, 0, k);
+                            s.Send(asen.GetBytes("ok"));
+                        }
+                        else
+                        {
+                            Console.WriteLine("received " + ms.Length + "bytes");
+                            ms.Position = 0;
+                            break;
+                        }
                     }
                 }
-             
+                else if (asen.GetString(receivedData, 0, k) == "searchTitle")
+                {
+                    Console.WriteLine("Peer to server responded for the request serach title");
+                    k = s.Receive(receivedData);
+                    if(asen.GetString(receivedData, 0, k) == "Found")
+                    {
+                        Console.WriteLine("Peer to server: list of the song that matched the keyword");
+                        found = asen.GetString(receivedData, 0, k);
+                        k = s.Receive(receivedData);
+                        var c = asen.GetString(receivedData, 0, k);
+                        peertoclient = asen.GetBytes(c);
+                    }
+                    else if (asen.GetString(receivedData, 0, k) == "NotFound")
+                        found = asen.GetString(receivedData, 0, k);
+                }
+
+
+
 
             }
         }
@@ -166,12 +177,14 @@ namespace WpfApp1
             {
                 
                 var request = privatePort.Receive(ref privateEP);
-                Console.WriteLine("Receiving a request: " + Encoding.ASCII.GetString(request));
+                Console.WriteLine("Receiving a request from client: " + Encoding.ASCII.GetString(request));
                 if (Encoding.ASCII.GetString(request) == "login")
                     login(privatePort, privateEP);
                 if (Encoding.ASCII.GetString(request) == "playMusic")
                     playMusic(privatePort, privateEP);
-                if(Encoding.ASCII.GetString(request) == "logout")
+                if (Encoding.ASCII.GetString(request) == "searchTitle")
+                    searchTitle(privatePort, privateEP);
+                if (Encoding.ASCII.GetString(request) == "logout")
                 {
 
                     logout(privatePort, privateEP);
@@ -181,6 +194,57 @@ namespace WpfApp1
                 
 
             }
+        }
+        public static void searchTitle(UdpClient privatePort, IPEndPoint privateEP)
+        {
+
+            byte[] data = new byte[3000];
+            asen = new ASCIIEncoding();
+            //receiving title of the song from client
+            var title = privatePort.Receive(ref privateEP);
+            var stringTitle = asen.GetString(title);
+            //check for which type of the song based on the first letter of the title;
+            var checkType = stringTitle.ToUpper()[0];
+            string typestr = "";
+            if ((int)checkType < 71 && (int)checkType > 64)
+                typestr = "A-F";
+            else if ((int)checkType <= 79 && (int)checkType >= 71)
+                typestr = "G-O";
+            if ((int)checkType <= 90 && (int)checkType >= 80)
+                typestr = "P-Z";
+            Console.WriteLine("Search song with title: " +stringTitle + " Which start with " + stringTitle.ToUpper()[0] + "under category " + typestr);
+            if (dict.ContainsKey(typestr))
+            {
+                foreach (var socket in dict[typestr])
+                {
+                    var b = socket as Socket;
+                    if(b.Connected)
+                    {
+                        Console.WriteLine("Ask connected peers under [A-Z] to show client de way");
+                        Console.WriteLine("sending serachtitle message and part of string song title");
+                        b.Send(asen.GetBytes("searchTitle"));
+                        b.Send(asen.GetBytes(stringTitle));
+                        //int k = b.Receive(data);
+                        Thread.Sleep(1000);
+ 
+                    }
+                }
+            }
+            if (found == "Found")
+            {
+                
+                Console.WriteLine("Server to Client: peers found de song");
+                privatePort.Send(asen.GetBytes("Found"), 5, privateEP);
+                //receive json playlist
+                //send json playlist to client
+                privatePort.Send(peertoclient, peertoclient.Length, privateEP);         
+            }
+            else if (found == "NotFound")
+            {
+                Console.WriteLine("Server to Client: peers found no song");
+                privatePort.Send(asen.GetBytes("NotFound"), 8, privateEP);
+            }
+
         }
         public static void login(UdpClient privatePort, IPEndPoint privateEP)
         {
@@ -233,9 +297,28 @@ namespace WpfApp1
             var startPoint = privatePort.Receive(ref privateEP);
             Console.WriteLine("The name of the requested song is: "+ asen.GetString(nameOfTheSong));
             Console.WriteLine("starting point of the song is" + asen.GetString(startPoint));
-            if (dict.ContainsKey(asen.GetString(nameOfTheSong)))
+            Song sendingSong = null;
+            try
             {
-                var b = dict[asen.GetString(nameOfTheSong)] ;
+                sendingSong = allSongs.Songs.Where(x => x.ToString() == Encoding.ASCII.GetString(nameOfTheSong)).Single();
+            }
+            catch
+            {
+                var msg = Encoding.ASCII.GetBytes("Error occurred: Couldn't find this song in our library");
+                privatePort.Send(msg, msg.Length, privateEP);
+            }
+            string typestr = "";
+            var checkType = sendingSong.Title[0];
+            if ((int)checkType < 71 && (int)checkType > 64)
+                typestr = "A-F";
+            else if ((int)checkType <= 79 && (int)checkType >= 71)
+                typestr = "G-O";
+            if ((int)checkType <= 90 && (int)checkType >= 80)
+                typestr = "P-Z";
+
+            if (dict.ContainsKey(typestr))
+            {
+                var b = dict[typestr] ;
                 foreach(var d  in b)
                 {
                     var c = d as Socket;
@@ -250,17 +333,8 @@ namespace WpfApp1
                 }
                 
             }
-            
-            Song sendingSong = null;
-            try
-            {
-                sendingSong = allSongs.Songs.Where(x => x.ToString() == Encoding.ASCII.GetString(nameOfTheSong)).Single();
-            }
-            catch
-            {
-                var msg = Encoding.ASCII.GetBytes("Error occurred: Couldn't find this song in our library");
-                privatePort.Send(msg, msg.Length, privateEP);
-            }
+
+           
             privatePort.Send(Encoding.ASCII.GetBytes("granted"), 7, privateEP);
             if (sendingSong != null)
             {
