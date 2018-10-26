@@ -75,12 +75,6 @@
     <Content Include="MusicLibrary\%28G%29I-DLE-LaTaTa.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MusicLibrary\Travis Scott-COFFEE BEAN.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MusicLibrary\Yung Bae-Selfish High Heels.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

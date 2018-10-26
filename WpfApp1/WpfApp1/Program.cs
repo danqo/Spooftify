@@ -112,7 +112,11 @@ namespace WpfApp1
                 dict[deerType] = d;
                 d.Add(s);
             }
-
+            Console.WriteLine("Available catagory and numbers of peers in charge of it: ");
+            foreach(var e in dict)
+            {
+                Console.WriteLine(e.Key + " : " + e.Value.Count);
+            }
             //sending st string(2)
             //string st = "The string was recieved by the server.";
             //s.Send(asen.GetBytes(st));
@@ -213,7 +217,7 @@ namespace WpfApp1
                     var b = socket as Socket;
                     if(b.Connected)
                     {
-                        Console.WriteLine("Ask connected peers under [A-Z] to show client de way");
+                        Console.WriteLine("Ask connected peers under ["+ typestr + "] to show client de way");
                         Console.WriteLine("sending serachtitle message and part of string song title");
                         b.Send(asen.GetBytes("searchTitle"));
                         b.Send(asen.GetBytes(stringTitle));
