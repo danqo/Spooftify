@@ -149,16 +149,16 @@ namespace WpfApp1
                 {
                     Console.WriteLine("Peer to server responded for the request serach title");
                     k = s.Receive(receivedData);
-                    if(asen.GetString(receivedData, 0, k) == "Found")
+                    if(asen.GetString(receivedData, 0, 5) == "Found")
                     {
                         Console.WriteLine("Peer to server: list of the song that matched the keyword");
-                        found = asen.GetString(receivedData, 0, k);
+                        found = asen.GetString(receivedData, 0, 5);
                         k = s.Receive(receivedData);
                         var c = asen.GetString(receivedData, 0, k);
-                        peertoclient = asen.GetBytes(c);
+                        peertoclient = asen.GetBytes(c);// maybe we have to reset this one everytime
                     }
-                    else if (asen.GetString(receivedData, 0, k) == "NotFound")
-                        found = asen.GetString(receivedData, 0, k);
+                    else if (asen.GetString(receivedData, 0, 5) == "NotFo")
+                        found = asen.GetString(receivedData, 0, 8);
                 }
 
 

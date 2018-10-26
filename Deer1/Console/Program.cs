@@ -115,12 +115,15 @@ namespace ConsoleDeer1
                             string stringJson = JsonConvert.SerializeObject(listSongFound);
                             stm.Write(asen.GetBytes(stringJson), 0, stringJson.Length);
                             Console.WriteLine("Send Found message and playlist object");
+                            listSongFound.Songs.Clear();
                         }
                         else
                         {
+
                             stm.Write(asen.GetBytes("NotFound"), 0, 8);
                             Console.WriteLine("can't find a matching song with this keyword: " + stringpart);
                         }
+                       
                     }
                 }
             }
