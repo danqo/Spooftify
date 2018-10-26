@@ -180,28 +180,23 @@ namespace Spooftify
             {
                 if(!String.IsNullOrWhiteSpace((string)SearchTextBox.Text))
                 {
+                    searchQuery.Songs.Clear();
                     Playlist availableSongs ;
                     var asen = new ASCIIEncoding();
                     SocketClientOut.sendActionRequest(Encoding.ASCII.GetBytes("searchTitle"));
                     SocketClientOut.sendSongName(Encoding.ASCII.GetBytes((string)SearchTextBox.Text));
-                    var found = SocketClientOut.receiveAccess();
-                    if(asen.GetString(found) == "Found")
+                    var playlistofSong = SocketClientOut.receiveAccess();
+                    availableSongs = JsonConvert.DeserializeObject<Playlist>(asen.GetString(playlistofSong));
+                    foreach (var b in availableSongs.Songs)
                     {
-                        var playlistofSong = SocketClientOut.receiveAccess();
-                        availableSongs = JsonConvert.DeserializeObject<Playlist>(asen.GetString(playlistofSong));
-                        foreach (var b in availableSongs.Songs)
-                        {
-                            searchQuery.addSong(b);
-                        }
-
+                        searchQuery.addSong(b);
                     }
-                    else if (asen.GetString(found) == "NotFound")
-                    {
-                        MessageBox.Show("no song title was matched with the keywork: " + (string)SearchTextBox.Text);
 
-                    }
-                    FilterSearch();
+
+                    SearchListBox.ItemsSource = searchQuery.Songs;
+                    SearchListBox.Items.Refresh();
                     
+
 
                 }      
             }

@@ -148,17 +148,10 @@ namespace WpfApp1
                 else if (asen.GetString(receivedData, 0, k) == "searchTitle")
                 {
                     Console.WriteLine("Peer to server responded for the request serach title");
+ 
                     k = s.Receive(receivedData);
-                    if(asen.GetString(receivedData, 0, 5) == "Found")
-                    {
-                        Console.WriteLine("Peer to server: list of the song that matched the keyword");
-                        found = asen.GetString(receivedData, 0, 5);
-                        k = s.Receive(receivedData);
-                        var c = asen.GetString(receivedData, 0, k);
-                        peertoclient = asen.GetBytes(c);// maybe we have to reset this one everytime
-                    }
-                    else if (asen.GetString(receivedData, 0, 5) == "NotFo")
-                        found = asen.GetString(receivedData, 0, 8);
+                    var c = asen.GetString(receivedData, 0, k);
+                    peertoclient = asen.GetBytes(c);// maybe we have to reset this one everytime
                 }
 
 
@@ -230,20 +223,11 @@ namespace WpfApp1
                     }
                 }
             }
-            if (found == "Found")
-            {
-                
-                Console.WriteLine("Server to Client: peers found de song");
-                privatePort.Send(asen.GetBytes("Found"), 5, privateEP);
-                //receive json playlist
-                //send json playlist to client
-                privatePort.Send(peertoclient, peertoclient.Length, privateEP);         
-            }
-            else if (found == "NotFound")
-            {
-                Console.WriteLine("Server to Client: peers found no song");
-                privatePort.Send(asen.GetBytes("NotFound"), 8, privateEP);
-            }
+            var songjsonToClient = JsonConvert.DeserializeObject<Playlist>(asen.GetString(peertoclient)); // testing purpose
+            Console.WriteLine("Server to Client: json song object");
+            privatePort.Send(peertoclient, peertoclient.Length, privateEP);         
+            
+
 
         }
         public static void login(UdpClient privatePort, IPEndPoint privateEP)

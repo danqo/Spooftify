@@ -107,22 +107,13 @@ namespace ConsoleDeer1
                             }
                         }
                         Console.WriteLine("With keyword: " + stringpart + ", we found " + listSongFound.Songs.Count + " song(s)");
-                        if (listSongFound.Songs.Count != 0)
-                        {
-                            
-                            // sending found message to server (1)
-                            stm.Write(asen.GetBytes("Found"), 0, 5);
-                            string stringJson = JsonConvert.SerializeObject(listSongFound);
-                            stm.Write(asen.GetBytes(stringJson), 0, stringJson.Length);
-                            Console.WriteLine("Send Found message and playlist object");
-                            listSongFound.Songs.Clear();
-                        }
-                        else
-                        {
 
-                            stm.Write(asen.GetBytes("NotFound"), 0, 8);
-                            Console.WriteLine("can't find a matching song with this keyword: " + stringpart);
-                        }
+                        string stringJson = JsonConvert.SerializeObject(listSongFound);
+                        stm.Write(asen.GetBytes(stringJson), 0, stringJson.Length);
+                        Console.WriteLine("Send Found message and playlist object");
+                        listSongFound.Songs.Clear();
+
+
                        
                     }
                 }
