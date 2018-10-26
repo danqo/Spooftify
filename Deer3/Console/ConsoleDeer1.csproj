@@ -72,10 +72,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MusicLibrary\%28G%29I-DLE-LaTaTa.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MusicLibrary\Travis Scott-COFFEE BEAN.mp3">
+    <Content Include="MusicLibrary\Travis Scott-SKELETONS.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="MusicLibrary\Yung Bae-Selfish High Heels.mp3">

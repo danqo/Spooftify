@@ -2,11 +2,11 @@
   "Name": "All Songs",
   "Songs": [
     {
-      "Title": "LaTaTa",
-      "Artist": "(G)I-DLE",
+      "Title": "SKELETONS",
+      "Artist": "Travis Scott",
       "Extension": ".mp3",
-      "Album": "I Am",
-      "AlbumArt": "https://kpopreviewed.files.wordpress.com/2018/05/gidle-iam-2.jpg?w=515&h=515"
+      "Album": "ASTROWORLD",
+      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     },
     {
       "Title": "Selfish High Heels",
@@ -15,13 +15,6 @@
       "Album": "Japanese Disco Edits",
       "AlbumArt": "https://images-na.ssl-images-amazon.com/images/I/51o1XNqW-RL._SS500.jpg"
 
-    },
-    {
-      "Title": "COFFEE BEAN",
-      "Artist": "Travis Scott",
-      "Extension": ".mp3",
-      "Album": "ASTROWORLD",
-      "AlbumArt": "https://i.redd.it/wmz0gkv8lcd11.jpg"
     }
   ]
 }

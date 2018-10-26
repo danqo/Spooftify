@@ -2,6 +2,13 @@
   "Name": "All Songs",
   "Songs": [
     {
+      "Title": "Hope You Like It",
+      "Artist": "Gift for Nhan",
+      "Extension": ".mp3",
+      "Album": "Memes",
+      "AlbumArt": "http://www.jmkxyy.com/middle-finger-icon-for-iphone/middle-finger-icon-for-iphone-29.jpg"
+    },
+    {
       "Title": "LaTaTa",
       "Artist": "(G)I-DLE",
       "Extension": ".mp3",

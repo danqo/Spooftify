@@ -21,6 +21,14 @@ namespace ConsoleDeer1
         public static string mediaFolder = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "MusicLibrary");
         static void Main(string[] args)
         {
+            string typestr = "";
+            var checkType = allSongs.Songs[0].Title[0];
+            if ((int)checkType < 71 && (int)checkType > 64)
+                typestr = "A-F";
+            else if ((int)checkType <= 79 && (int)checkType >= 71)
+                typestr = "G-O";
+            if ((int)checkType <= 90 && (int)checkType >= 80)
+                typestr = "P-Z";
             Console.WriteLine("Enter to start the connection from peer to server: ");
             Console.ReadLine();
             TcpClient tcpclnt = new TcpClient();
@@ -40,15 +48,19 @@ namespace ConsoleDeer1
 
                 stm.Write(ba, 0, ba.Length);
                 Console.WriteLine("Transmitting songs json");
-                stm.Write(asen.GetBytes(allSongSt), 0, allSongSt.Length);
+                stm.Write(asen.GetBytes(typestr), 0, typestr.Length);
                 //---receiving (2)
+
                 while (true)
                 {
                     int byteRead = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
                     Console.WriteLine(asen.GetString(request, 0, byteRead));
-                    //---- sending song (3)
+                    //---- sending songfile message (3)
                     if (asen.GetString(request, 0, byteRead) == "songRequest")
                     {
+
+                        stm.Write(asen.GetBytes("SongFile"), 0, 8);
+                        //----sending song(4)
                         int songLength = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
 
                         var sendingSong = allSongs.Songs.FirstOrDefault(x => x.ToString() == asen.GetString(request, 0, songLength));
@@ -77,6 +89,31 @@ namespace ConsoleDeer1
                         stm.Write(asen.GetBytes("done"), 0, 4);
                         Console.WriteLine("Total packet sent: " + total);
                         Console.WriteLine("------Stop Sending------");
+
+                    }
+                    else if (asen.GetString(request, 0, byteRead) == "searchTitle")
+                    {
+                        stm.Write(asen.GetBytes("searchTitle"), 0, "searchTitle".Length);
+
+                        Playlist listSongFound = new Playlist("foundSongs");
+                        int partLength = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
+                        string stringpart = asen.GetString(request, 0, partLength);
+
+                        foreach (Song s in allSongs.Songs)
+                        {
+                            if (s.Title.ToLower().Contains(stringpart.ToLower()))
+                            {
+                                listSongFound.addSong(s);
+                            }
+                        }
+                        Console.WriteLine("With keyword: " + stringpart + ", we found " + listSongFound.Songs.Count + " song(s)");
+
+                        string stringJson = JsonConvert.SerializeObject(listSongFound);
+                        stm.Write(asen.GetBytes(stringJson), 0, stringJson.Length);
+                        Console.WriteLine("Send Found message and playlist object");
+                        listSongFound.Songs.Clear();
+
+
 
                     }
                 }
