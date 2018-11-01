@@ -18,6 +18,7 @@ namespace WpfApp1
         public static TcpListener tcpDeers;
         public static Socket currentSocket;
         public static Stream ms;
+        public static string currSongInMs = "";
         public static ASCIIEncoding asen;
         public static Dictionary<string, List<object>> dict = new Dictionary<string, List<object>>();
         //public static bool found = false;
@@ -32,6 +33,7 @@ namespace WpfApp1
         public static string allSongSt = File.ReadAllText(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\AllSongs.json"));
         public static Playlist allSongs = JsonConvert.DeserializeObject<Playlist>(allSongSt);
         public static Playlist deerSongs = new Playlist("deer");
+
         static void Main(string[] args)
         {
             /*
@@ -304,8 +306,10 @@ namespace WpfApp1
             if ((int)checkType <= 90 && (int)checkType >= 80)
                 typestr = "P-Z";
 
-            if (dict.ContainsKey(typestr))
+            if (dict.ContainsKey(typestr) && !Encoding.ASCII.GetString(nameOfTheSong).Equals(currSongInMs))
+            //if (dict.ContainsKey(typestr))
             {
+                ms = new MemoryStream();
                 var b = dict[typestr] ;
                 foreach(var d  in b)
                 {
@@ -317,12 +321,10 @@ namespace WpfApp1
                         Thread.Sleep(2000);
                         break;
                     }
-
                 }
-                
+                currSongInMs = Encoding.ASCII.GetString(nameOfTheSong);
             }
 
-           
             privatePort.Send(Encoding.ASCII.GetBytes("granted"), 7, privateEP);
             if (sendingSong != null)
             {
@@ -360,7 +362,7 @@ namespace WpfApp1
 
                 }
                 privatePort.Send(Encoding.ASCII.GetBytes("done"), 4, privateEP);
-                ms = new MemoryStream();
+                //ms = new MemoryStream();
                 Console.WriteLine("Total packet sent: " + total);
                 Console.WriteLine("------Stop Sending------");
                 

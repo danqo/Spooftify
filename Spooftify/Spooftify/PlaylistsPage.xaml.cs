@@ -163,6 +163,7 @@ namespace Spooftify
                 AddPlaylistMsg.Content = REMOVED_PLAYLIST_MSG;
                 AddPlaylistMsg.Foreground = Brushes.Green;
                 AddPlaylistMsg.Visibility = Visibility.Visible;
+                PlayPage.isPlaylistChange = true;
             }
         }
 
