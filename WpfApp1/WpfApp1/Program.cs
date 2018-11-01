@@ -127,9 +127,15 @@ namespace WpfApp1
             {
 
                 //--receiving request
-                
-                k = s.Receive(receivedData);
-                
+
+                try
+                {
+                    k = s.Receive(receivedData);
+                }
+                catch
+                {
+                    break;
+                }
                 Console.WriteLine("Receiving a request from peer: " + Encoding.ASCII.GetString(receivedData, 0, k));
 
                 if (asen.GetString(receivedData, 0, k) == "SongFile")
@@ -212,23 +218,42 @@ namespace WpfApp1
             if ((int)checkType <= 90 && (int)checkType >= 80)
                 typestr = "P-Z";
             Console.WriteLine("Search song with title: " +stringTitle + " Which start with " + stringTitle.ToUpper()[0] + "under category " + typestr);
+            Console.WriteLine("Ask connected peers under [" + typestr + "] to show client de way");
+            List<object> removeLater = new List<object>();
             if (dict.ContainsKey(typestr))
             {
                 foreach (var socket in dict[typestr])
                 {
+                    int count = 0;
                     var b = socket as Socket;
-                    if(b.Connected)
+                    if (b.Connected)
                     {
-                        Console.WriteLine("Ask connected peers under ["+ typestr + "] to show client de way");
+                        Console.WriteLine("This peer is still active");
                         Console.WriteLine("sending serachtitle message and part of string song title");
                         b.Send(asen.GetBytes("searchTitle"));
                         b.Send(asen.GetBytes(stringTitle));
                         //int k = b.Receive(data);
                         Thread.Sleep(1000);
- 
+                        break;
+
+                    }
+                    else
+                    {
+
+                        Console.WriteLine("The peer at index: " + count + " is disconnected");
+                        Console.WriteLine("Look for the next peer");
+                        removeLater.Add(socket);
+                        //dict[typestr].Remove(socket);
                     }
                 }
             }
+            foreach (var b in removeLater)
+            {
+                Console.WriteLine("Remove" + removeLater.Count() + " disconnected peer from the list");
+                dict[typestr].Remove(b);
+                Console.WriteLine("current connected peer for " + typestr + ": " + dict[typestr].Count);
+            }
+            removeLater.Clear();
             var songjsonToClient = JsonConvert.DeserializeObject<Playlist>(asen.GetString(peertoclient)); // testing purpose
             Console.WriteLine("Server to Client: json song object");
             privatePort.Send(peertoclient, peertoclient.Length, privateEP);         
