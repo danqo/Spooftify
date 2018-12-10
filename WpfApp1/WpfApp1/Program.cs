@@ -20,6 +20,7 @@ namespace WpfApp1
         public static Stream ms;
         public static ASCIIEncoding asen;
         public static Dictionary<string, List<object>> dict = new Dictionary<string, List<object>>();
+        
         //public static bool found = false;
         public static string found = "";
         public static byte[] peertoclient = new byte[3000];
@@ -32,8 +33,10 @@ namespace WpfApp1
         public static string allSongSt = File.ReadAllText(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\AllSongs.json"));
         public static Playlist allSongs = JsonConvert.DeserializeObject<Playlist>(allSongSt);
         public static Playlist deerSongs = new Playlist("deer");
+        public static List<Song> peerSongList = new List<Song>();
         static void Main(string[] args)
         {
+            
             /*
             Console.WriteLine("--Trying out Dictionary");
             string str = "Name of the song";
@@ -42,6 +45,8 @@ namespace WpfApp1
             dict[str] = b;
             b.Add(buffering);
             */
+            Console.WindowWidth = 120;
+            //Console.SetWindowPosition(5, 0);
             udpServer = new UdpClient(11000);
             remoteEP = new IPEndPoint(IPAddress.Any, 11000);
             IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
@@ -49,12 +54,14 @@ namespace WpfApp1
             Console.WriteLine("Starting TCP listener for Peers and UDP listener for clients");
 
             tcpDeers = new TcpListener(ipAddress, 500);
-
             tcpDeers.Start();
             ThreadStart TCPThread = new ThreadStart(privateTCP);
             Thread childTCPThread = new Thread(TCPThread);
             childTCPThread.Start();
 
+            ThreadStart commandThread = new ThreadStart(commandServer);
+            Thread childCommandThread = new Thread(commandServer);
+            childCommandThread.Start();
             string mediaFolder = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "MusicLibrary");
             byte[] data;
 
@@ -79,6 +86,122 @@ namespace WpfApp1
 
             
 
+        }
+        public static void commandServer()
+        {
+            Socket s;
+            Console.WriteLine("Enter command: (talk, stop)");
+            string b = Console.ReadLine();
+            while (b != "stop")
+            {
+                if (b == "talk")
+                {
+
+                    Console.WriteLine("Enter Which category you wanna talk to: (A-F), all");
+                    b = Console.ReadLine();
+                    if (b == "all")
+                    {
+                        Console.WriteLine("Enter command: (check, send)");
+                        string c = Console.ReadLine();
+                        if (c == "send")
+                        {
+                            foreach (var song in peerSongList)
+                            {
+                                var checkType = song.Title[0];
+                                string typestr = "";
+                                if ((int)checkType < 71 && (int)checkType > 64)
+                                    typestr = "A-F";
+                                else if ((int)checkType <= 79 && (int)checkType >= 71)
+                                    typestr = "G-O";
+                                if ((int)checkType <= 90 && (int)checkType >= 80)
+                                    typestr = "P-Z";
+                                Console.WriteLine("Sending song: " + song.Title + " to deer [" + typestr + "]");
+
+                                var sock = dict[typestr][0] as Socket;
+                                sock.Send(asen.GetBytes("add"));
+                                sock.Send(asen.GetBytes(JsonConvert.SerializeObject(song)));
+                            }
+                        }
+                        else if(c== "map")
+                        {
+                           
+                            Console.WriteLine("Sort by: (title, album, artist");
+                            c = Console.ReadLine();
+                            foreach (var d in dict)
+                            {
+                                foreach (var sock in dict[d.Key])
+                                {
+                                    s = sock as Socket;
+                                    byte[] data = new byte[1024];
+                                    s.Send(asen.GetBytes("map"));
+                                    s.Send(asen.GetBytes(c));
+
+                                }
+                            }
+                           
+                        }
+                        else
+                        {
+                            foreach (var d in dict)
+                            {
+                                foreach (var sock in dict[d.Key])
+                                {
+                                    //Socket d = new Socket(SocketType.Stream, ProtocolType.Tcp);
+
+                                    //privatePort.Send(Encoding.ASCII.GetBytes("granted"), 7, privateEP);
+                                    s = sock as Socket;
+                                    byte[] data = new byte[1024];
+                                    s.Send(asen.GetBytes(c));
+                                    //s.Send(asen.GetBytes(JsonConvert.SerializeObject(s))); 
+
+                                    //receiving message(1) user name and json files
+                                    //int k = s.Receive(data);
+                                    //Console.WriteLine("Receiving from " + d.Key + ": " + asen.GetString(data));
+                                    // if(asen.GetString)
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+
+
+                        byte[] receivedData = new byte[2048];
+                        while (true)
+                        {
+                            int d = -1;
+                            try
+                            {
+                                d = dict[b].Count;
+                            }
+                            catch
+                            {
+                                Console.WriteLine("This category isn't available currently, please choose a different one: ");
+                                b = Console.ReadLine();
+                            }
+                            if (d != -1)
+                                break;
+                        }
+
+                        asen = new ASCIIEncoding();
+                        foreach (var sock in dict[b])
+                        {
+                            //Socket d = new Socket(SocketType.Stream, ProtocolType.Tcp);
+
+                            //privatePort.Send(Encoding.ASCII.GetBytes("granted"), 7, privateEP);
+                            Console.WriteLine("Enter command: (check, hello)");
+                            string c = Console.ReadLine();
+                            s = sock as Socket;
+                            byte[] data = new byte[1024];
+                            s.Send(asen.GetBytes(c));
+                            //s.Send(asen.GetBytes(JsonConvert.SerializeObject(s))); 
+                        }
+                    }
+                }
+                Console.WriteLine("Enter command: (talk, stop)");
+                b = Console.ReadLine();
+            }
+            
         }
         public static void privateTCP()
         {
@@ -125,9 +248,15 @@ namespace WpfApp1
             {
 
                 //--receiving request
-                
-                k = s.Receive(receivedData);
-                
+
+                try
+                {
+                    k = s.Receive(receivedData);
+                }
+                catch
+                {
+                    break;
+                }
                 Console.WriteLine("Receiving a request from peer: " + Encoding.ASCII.GetString(receivedData, 0, k));
 
                 if (asen.GetString(receivedData, 0, k) == "SongFile")
@@ -157,7 +286,22 @@ namespace WpfApp1
                     var c = asen.GetString(receivedData, 0, k);
                     peertoclient = asen.GetBytes(c);// maybe we have to reset this one everytime
                 }
-
+                else if(asen.GetString(receivedData, 0, k) == "good")
+                {
+                    Console.WriteLine("The peer under categorey [" + deerType + "] is in the good shape");
+                }
+                else if(asen.GetString(receivedData, 0, k) == "bad")
+                {
+                    Console.WriteLine("The peer under categorey [" + deerType + "] is in the bad shape");
+                    k = s.Receive(receivedData);
+                    var sendingSongs = JsonConvert.DeserializeObject<List<Song>>(asen.GetString(receivedData));
+                    foreach(var song in sendingSongs)
+                    {
+                        peerSongList.Add(song);
+                    }
+                   
+                    
+                }
 
 
 
@@ -210,23 +354,42 @@ namespace WpfApp1
             if ((int)checkType <= 90 && (int)checkType >= 80)
                 typestr = "P-Z";
             Console.WriteLine("Search song with title: " +stringTitle + " Which start with " + stringTitle.ToUpper()[0] + "under category " + typestr);
+            Console.WriteLine("Ask connected peers under [" + typestr + "] to show client de way");
+            List<object> removeLater = new List<object>();
             if (dict.ContainsKey(typestr))
             {
                 foreach (var socket in dict[typestr])
                 {
+                    int count = 0;
                     var b = socket as Socket;
                     if(b.Connected)
                     {
-                        Console.WriteLine("Ask connected peers under ["+ typestr + "] to show client de way");
+                        Console.WriteLine("This peer is still active");
                         Console.WriteLine("sending serachtitle message and part of string song title");
                         b.Send(asen.GetBytes("searchTitle"));
                         b.Send(asen.GetBytes(stringTitle));
                         //int k = b.Receive(data);
                         Thread.Sleep(1000);
+                        break;
  
+                    }
+                    else
+                    {
+                        
+                        Console.WriteLine("The peer at index: " + count + " is disconnected");
+                        Console.WriteLine("Look for the next peer");
+                        removeLater.Add(socket);
+                        //dict[typestr].Remove(socket);
                     }
                 }
             }
+            foreach(var b in removeLater)
+            {
+                Console.WriteLine("Remove"+ removeLater.Count()+ " disconnected peer from the list");
+                dict[typestr].Remove(b);
+                Console.WriteLine("current connected peer for " + typestr+ ": " +dict[typestr].Count);
+            }
+            removeLater.Clear();
             var songjsonToClient = JsonConvert.DeserializeObject<Playlist>(asen.GetString(peertoclient)); // testing purpose
             Console.WriteLine("Server to Client: json song object");
             privatePort.Send(peertoclient, peertoclient.Length, privateEP);         

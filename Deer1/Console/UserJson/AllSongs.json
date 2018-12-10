@@ -1,6 +1,7 @@
 {
   "Name": "All Songs",
   "Songs": [
+
     {
       "Title": "BangBangBang",
       "Artist": "BigBang",
@@ -14,6 +15,13 @@
       "Extension": ".mp3",
       "Album": "Fun to the World",
       "AlbumArt": "https://pre00.deviantart.net/2ea1/th/pre/f/2018/184/4/4/momoland_baam___fun_to_the_world_album_cover_by_lealbum-dcfe3x1.jpg"
+    },
+    {
+      "Title": "Hope You Like It",
+      "Artist": "Testing",
+      "Extension": ".mp3",
+      "Album": "Memes",
+      "AlbumArt": "http://www.jmkxyy.com/middle-finger-icon-for-iphone/middle-finger-icon-for-iphone-29.jpg"
     },
     {
       "Title": "COFFEE BEAN",
