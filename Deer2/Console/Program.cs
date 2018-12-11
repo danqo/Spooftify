@@ -17,16 +17,12 @@ namespace ConsoleDeer1
     class Program
     {
         public static SortedDictionary<string, List<string>> dict = new SortedDictionary<string, List<string>>();
-        
 
         public static string allSongSt = File.ReadAllText(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\AllSongs.json"));
         public static Playlist allSongs = JsonConvert.DeserializeObject<Playlist>(allSongSt);
         public static string mediaFolder = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "MusicLibrary");
         static void Main(string[] args)
         {
-       
-           
-
             Mapper mapper = new Mapper();
             List<Song> goodSongs = new List<Song>();
             string typestr = "";
@@ -181,8 +177,8 @@ namespace ConsoleDeer1
                     }
                     else if (asen.GetString(request, 0, byteRead) == "map")
                     {
-                        mapper.clear();
                         byteRead = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
+                        mapper.clear();
                         DFS.Map(asen.GetString(request, 0, byteRead), mapper);
                         mapper.printMap();
                     }

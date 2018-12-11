@@ -124,17 +124,18 @@ namespace WpfApp1
                         }
                         else if(c== "map")
                         {
-                           
-                            Console.WriteLine("Sort by: (title, album, artist");
-                            c = Console.ReadLine();
+
+                            Console.WriteLine("Which text file i'm looking for: Song, Album, Artist");
+                            b = Console.ReadLine();
                             foreach (var d in dict)
                             {
+                                
                                 foreach (var sock in dict[d.Key])
                                 {
+
                                     s = sock as Socket;
-                                    byte[] data = new byte[1024];
                                     s.Send(asen.GetBytes("map"));
-                                    s.Send(asen.GetBytes(c));
+                                    s.Send(asen.GetBytes(b));
 
                                 }
                             }

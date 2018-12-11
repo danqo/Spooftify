@@ -20,41 +20,18 @@ namespace ConsoleDeer1
         {
             mapper.emitMapReduce();
         }
-        public static void Map(string type, Mapper mapper)
+        public static void Map(string filename, Mapper mapper)
         {
-            if (type == "title")
+
+            System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\" + filename+"txt"));
+            string line;
+            while ((line = file.ReadLine()) != null)
             {
-                System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\Songs.txt"));
-                string line;
-                while ((line = file.ReadLine()) != null)
-                {
-                    string[] words = line.Split(',');
-                    mapper.emitMap(words[2], words[0] + "," + words[1]);
-                }
-                file.Close();
+                string[] words = line.Split(',');
+                mapper.emitMap(words[2], words[0] + "-" + words[1]);
             }
-            else if (type == "artist")
-            {
-                System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\Songs.txt"));
-                string line;
-                while ((line = file.ReadLine()) != null)
-                {
-                    string[] words = line.Split(',');
-                    mapper.emitMap(words[0], words[1] + "," + words[2]);
-                }
-                file.Close();
-            }
-            else if (type == "album")
-            {
-                System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\Songs.txt"));
-                string line;
-                while ((line = file.ReadLine()) != null)
-                {
-                    string[] words = line.Split(',');
-                    mapper.emitMap(words[1], words[0] + "," + words[2]);
-                }
-                file.Close();
-            }
+            file.Close();
+
         }
     }
 }

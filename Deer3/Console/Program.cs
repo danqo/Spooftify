@@ -177,8 +177,8 @@ namespace ConsoleDeer1
                     }
                     else if (asen.GetString(request, 0, byteRead) == "map")
                     {
-                        mapper.clear();
                         byteRead = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
+                        mapper.clear();
                         DFS.Map(asen.GetString(request, 0, byteRead), mapper);
                         mapper.printMap();
                     }
