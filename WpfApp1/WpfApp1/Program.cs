@@ -36,6 +36,13 @@ namespace WpfApp1
         public static Playlist deerSongs = new Playlist("deer");
 
         public static List<Song> peerSongList = new List<Song>();
+        public static List<string> redisInvIndexList = new List<string>();
+
+        public static int peerCounter = 0;
+        public static int mapCounter = 0;
+        public static int reduceCounter = 0;
+        public static int completedCounter = 0;
+        public static List<string> distfs = new List<string> { "Titles.txt", "Artists.txt", "Albums.txt" };
 
         static void Main(string[] args)
         {
@@ -93,7 +100,7 @@ namespace WpfApp1
         public static void commandServer()
         {
             Socket s;
-            Console.WriteLine("Enter command: (talk, stop)");
+            Console.WriteLine("Enter command: (talk, stop, mapreduce)");
             string b = Console.ReadLine();
             while (b != "stop")
             {
@@ -125,7 +132,7 @@ namespace WpfApp1
                                 sock.Send(asen.GetBytes(JsonConvert.SerializeObject(song)));
                             }
                         }
-                        else if(c== "map")
+                        else if(c == "map")
                         {
                            
                             Console.WriteLine("Sort by: (title, album, artist");
@@ -201,7 +208,66 @@ namespace WpfApp1
                         }
                     }
                 }
-                Console.WriteLine("Enter command: (talk, stop)");
+                if (b == "mapreduce")
+                {
+                    foreach (string type in distfs)
+                    {
+                        ResetMapReduce();
+                        Console.WriteLine("Telling peers to execute map...");
+                        // tell all peers to execute map
+                        foreach (var d in dict)
+                        {
+                            foreach (var sock in dict[d.Key])
+                            {
+                                s = sock as Socket;
+                                s.Send(asen.GetBytes("executeMap"));
+                                s.Send(asen.GetBytes(type));
+                            }
+                        }
+                        Console.WriteLine("Waiting for peers' response to redistribute incorrect index values...");
+                        // wait for peer responses
+                        while (mapCounter != peerCounter)
+                        {
+                            WaitTwoSec().Wait();
+                            Console.WriteLine("Waiting for " + (peerCounter - mapCounter).ToString() + " more peer(s).");
+                        }
+                        Console.WriteLine("Redistributing index values to peers...");
+                        // redistribute to peers
+                        foreach (string index in redisInvIndexList)
+                        {
+                            var checkType = index[0];
+                            string typestr = "";
+                            if ((int)checkType < 71 && (int)checkType > 64)
+                                typestr = "A-F";
+                            else if ((int)checkType <= 79 && (int)checkType >= 71)
+                                typestr = "G-O";
+                            if ((int)checkType <= 90 && (int)checkType >= 80)
+                                typestr = "P-Z";
+                            Console.WriteLine("Sending index: " + index + " to deer [" + typestr + "]");
+                            var sock = dict[typestr][0] as Socket;
+                            sock.Send(asen.GetBytes("addToMap"));
+                            sock.Send(asen.GetBytes(index));
+                        }
+                        WaitTwoSec().Wait();
+                        Console.WriteLine("Telling peers to execute reduce...");
+                        // tell all peers to execute reduce
+                        foreach (var d in dict)
+                        {
+                            foreach (var sock in dict[d.Key])
+                            {
+                                s = sock as Socket;
+                                s.Send(asen.GetBytes("executeReduce"));
+                            }
+                        }
+                        while (reduceCounter != peerCounter)
+                        {
+                            WaitTwoSec().Wait();
+                            Console.WriteLine("Waiting for " + (peerCounter - reduceCounter).ToString() + " more peer(s).");
+                        }
+                        Console.WriteLine("Map Reduce for " + type + " complete!");
+                    }
+                }
+                Console.WriteLine("Enter command: (talk, stop, mapreduce)");
                 b = Console.ReadLine();
             }
             
@@ -213,6 +279,8 @@ namespace WpfApp1
                 Socket s = tcpDeers.AcceptSocket();
                 Console.WriteLine("Connection accepted from " + s.RemoteEndPoint);
                 Thread childThread = new Thread(new ParameterizedThreadStart(privateTCPSocket));
+                peerCounter += 1;
+                Console.WriteLine("Total number of peers connected: " + peerCounter);
                 childThread.Start(s);
             }
         }
@@ -304,9 +372,19 @@ namespace WpfApp1
                    
                     
                 }
-
-
-
+                else if(asen.GetString(receivedData, 0, k) == "sending invalid entry")
+                {
+                    k = s.Receive(receivedData);
+                    redisInvIndexList.Add(asen.GetString(receivedData, 0, k));
+                }
+                else if(asen.GetString(receivedData, 0, k) == "done mapping")
+                {
+                    mapCounter += 1;
+                }
+                else if (asen.GetString(receivedData, 0, k) == "done reducing")
+                {
+                    reduceCounter += 1;
+                }
             }
         }
         public static void privateUDP()
@@ -546,6 +624,17 @@ namespace WpfApp1
         {
 
             privatePort.Send(Encoding.ASCII.GetBytes("done"), 4, privateEP);
+        }
+        public static async Task WaitTwoSec()
+        {
+            await Task.Delay(1000);
+        }
+        public static void ResetMapReduce()
+        {
+            redisInvIndexList.Clear();
+            mapCounter = 0;
+            reduceCounter = 0;
+            completedCounter = 0;
         }
     }
 }

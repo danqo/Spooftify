@@ -21,6 +21,7 @@ namespace ConsoleDeer1
         public static string allSongSt = File.ReadAllText(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\AllSongs.json"));
         public static Playlist allSongs = JsonConvert.DeserializeObject<Playlist>(allSongSt);
         public static string mediaFolder = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "MusicLibrary");
+        public static string fn = "";
         static void Main(string[] args)
         {
             Mapper mapper = new Mapper();
@@ -119,7 +120,7 @@ namespace ConsoleDeer1
                         stm.Write(asen.GetBytes(stringJson), 0, stringJson.Length);
                         Console.WriteLine("Send Found message and playlist object");
                         listSongFound.Songs.Clear();
-                    }
+                    }/**
                     else if (asen.GetString(request, 0, byteRead) == "check")
                     {
                         //SortedSet<string> g = new SortedSet<string>();
@@ -151,7 +152,7 @@ namespace ConsoleDeer1
                                 else
                                 {
                                     dict[b.Title].Add(b.ToString());
-                                }*/
+                                }
                             }
                             else
                             {
@@ -177,10 +178,12 @@ namespace ConsoleDeer1
                     }
                     else if (asen.GetString(request, 0, byteRead) == "map")
                     {
-                        mapper.clear();
+                        //DFS.Clear(mapper);
+                        //mapper.clear();
                         byteRead = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
-                        DFS.Map(asen.GetString(request, 0, byteRead), mapper);
-                        mapper.printMap();
+                        //DFS.Map(asen.GetString(request, 0, byteRead), mapper);
+                        //DFS.Print(mapper);
+                        //mapper.printMap();
                     }
 
                     else if (asen.GetString(request, 0, byteRead) == "hello")
@@ -190,7 +193,8 @@ namespace ConsoleDeer1
                     else if (asen.GetString(request, 0, byteRead) == "reduce")
                     {
                         Console.WriteLine("Receiving reduce from server");
-                        mapper.emitMapReduce();
+                        //DFS.Reduce(mapper);
+                       
 
                     }
 
@@ -202,6 +206,48 @@ namespace ConsoleDeer1
                         goodSongs.Add(songObject);
                         //mapper.emitAdd(songObject);
                         //mapper.printMap();
+                    }*/
+                    else if (asen.GetString(request, 0, byteRead) == "executeMap")
+                    {
+                        Console.WriteLine("Executing map...");
+                        // first reset mapper
+                        DFS.Clear(mapper);
+                        byteRead = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
+                        fn = asen.GetString(request, 0, byteRead);
+                        List<string> invalidEntries = DFS.Map(mapper, fn);
+                        // print contents after mapping is complete
+                        Console.WriteLine("Count after mapping: " + DFS.Count(mapper));
+                        DFS.Print(mapper);
+                        // tell server mapping is complete with list of bad entries
+                        foreach (var entry in invalidEntries)
+                        {
+                            stm.Write(asen.GetBytes("sending invalid entry"), 0, 21);
+                            stm.Write(asen.GetBytes(entry), 0, entry.Length);
+                        }
+                        Console.WriteLine("Done mapping");
+                        stm.Write(asen.GetBytes("done mapping"), 0, 12);
+                        //var invalidJson = JsonConvert.SerializeObject(invalidEntries);
+                        //stm.Write(asen.GetBytes(invalidJson), 0, invalidJson.Length);
+                    }
+                    else if (asen.GetString(request, 0, byteRead) == "addToMap")
+                    {
+                        byteRead = stm.Read(request, 0, tcpclnt.ReceiveBufferSize);
+                        string newEntry = asen.GetString(request, 0, byteRead);
+                        Console.WriteLine("Adding" + newEntry + "to map...");
+                        DFS.AddToMap(mapper, newEntry);
+                    }
+                    else if (asen.GetString(request, 0, byteRead) == "executeReduce")
+                    {
+                        Console.WriteLine("Count after adding: " + DFS.Count(mapper));
+                        Console.WriteLine("Executing reduce...");
+                        DFS.Reduce(mapper);
+                        // print contents after reducing is complete
+                        Console.WriteLine("Count after reducing: " + DFS.Count(mapper));
+                        DFS.Print(mapper);
+                        DFS.Write(mapper, fn);
+                        // send message done reducing
+                        Console.WriteLine("Done reducing");
+                        stm.Write(asen.GetBytes("done reducing"), 0, 13);
                     }
                 }
             }

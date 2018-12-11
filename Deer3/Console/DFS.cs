@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,53 +9,94 @@ namespace ConsoleDeer1
 {
     public static class DFS
     {
+        const char START_LETTER = 'P';
+        const char END_LETTER = 'Z';
         public static void Clear(Mapper mapper)
         {
-            mapper.clear();
+            mapper.getMap().Clear();
         }
+
         public static void Print(Mapper mapper)
         {
-            mapper.printMap();
+            foreach (string key in mapper.getMap().Keys)
+            {
+                Console.WriteLine(key);
+                foreach (string value in mapper.getMap()[key])
+                {
+                    Console.WriteLine("\t\t" + value);
+                }
+            }
         }
+
         public static void Reduce(Mapper mapper)
         {
-            mapper.emitMapReduce();
+            mapper.reduce();
         }
-        public static void Map(string type, Mapper mapper)
+
+        public static List<string> Map(Mapper mapper, string fn)
         {
-            if (type == "title")
+            List<string> invalidEntries = new List<string>();
+            System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, ("UserJson\\" + fn)));
+            string line;
+            while ((line = file.ReadLine()) != null)
             {
-                System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\Songs.txt"));
-                string line;
-                while ((line = file.ReadLine()) != null)
+                Console.WriteLine(line);
+                if (lineBelongs(line))
                 {
-                    string[] words = line.Split(',');
-                    mapper.emitMap(words[2], words[0] + "-" + words[1]);
+                    AddToMap(mapper, line);
                 }
-                file.Close();
+                else
+                {
+                    invalidEntries.Add(line);
+                }
             }
-            else if (type == "artist")
+            file.Close();
+            return invalidEntries;
+        }
+
+        public static bool lineBelongs(string line)
+        {
+            char firstChar = line.ToUpper()[0];
+            return firstChar.CompareTo(START_LETTER) >= 0 && firstChar.CompareTo(END_LETTER) <= 0;
+        }
+
+        public static void AddToMap(Mapper mapper, string line)
+        {
+            char[] delimiterChars = { ':', ';' };
+            string[] entries = line.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < entries.Length; i++)
             {
-                System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\Songs.txt"));
-                string line;
-                while ((line = file.ReadLine()) != null)
+                if (i != 0)
                 {
-                    string[] words = line.Split(',');
-                    mapper.emitMap(words[0], words[1] + "-" + words[2]);
+                    mapper.map(entries[0], entries[i]);
                 }
-                file.Close();
             }
-            else if (type == "album")
+        }
+
+        public static int Count(Mapper mapper)
+        {
+            int counter = 0;
+            foreach (string key in mapper.getMap().Keys)
             {
-                System.IO.StreamReader file = new System.IO.StreamReader(System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, "UserJson\\Songs.txt"));
-                string line;
-                while ((line = file.ReadLine()) != null)
-                {
-                    string[] words = line.Split(',');
-                    mapper.emitMap(words[1], words[0] + "-" + words[2]);
-                }
-                file.Close();
+                counter += mapper.getMap()[key].Count;
             }
+            return counter;
+        }
+
+        public static void Write(Mapper mapper, string fn)
+        {
+            List<string> lines = new List<string>();
+            string path = System.IO.Path.Combine(System.Windows.Forms.Application.StartupPath, ("UserJson\\New" + fn));
+            foreach (var dictKey in mapper.getMap().Keys)
+            {
+                string lineValue = "";
+                foreach (var dictValue in mapper.getMap()[dictKey])
+                {
+                    lineValue += dictValue + ";";
+                }
+                lines.Add(dictKey + ":" + lineValue);
+            }
+            File.WriteAllLines(path, lines);
         }
     }
 }
